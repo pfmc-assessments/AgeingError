@@ -1,0 +1,9 @@
+Package: nwfscAgeingError
+Type: Package
+Title: Ageing error
+Version: 1.0
+Date: 2012-11-14
+Author: James T. Thorson, Ian J. Stewart, and Andre E. Punt
+Maintainer: James Thorson <James.Thorson@noaa.gov>
+Description: This package uses double read data to estimate ageing imprecision and bias from fishery otoliths
+License: GPL-2
