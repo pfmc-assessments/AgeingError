@@ -6,9 +6,13 @@
 #
 #################
 
-#install.packages("nwfscAgeingError", repos="http://R-Forge.R-project.org")
+# Install package
+install.packages("devtools")
+library("devtools")
+install_github("nwfsc-assess/nwfscAgeingError")
+
+# Load package
 library(nwfscAgeingError)
-#updateAgeingErrorCode()
 
 # File where the Punt et al. (2008) model (pre-compiled in ADMB) resides
 SourceFile = paste(system.file("executables", package="nwfscAgeingError"),"/",sep="")
