@@ -1,6 +1,6 @@
 
 RunFn <-
-function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile, EffSampleSize=0, Intern=TRUE, AdmbFile=NULL, JustWrite=FALSE, CallType="system"){
+function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile, EffSampleSize=0, Intern=TRUE, AdmbFile=NULL, JustWrite=FALSE, CallType="system", ExtraArgs=" -est"){
 
   # Copy ADMB file 
   if(!is.null(AdmbFile)) file.copy(from=paste(AdmbFile,"agemat.exe",sep=""), to=paste(SaveFile,"agemat.exe",sep=""), overwrite=TRUE)
@@ -102,8 +102,8 @@ function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, Min
   # Run ADMB file
   if(JustWrite==FALSE){
     setwd(SaveFile)
-    if(CallType=="shell") Output = shell("agemat.exe -est",intern=Intern)   # This may need to have the location pasted onto it depending upon file structure
-    if(CallType=="system") Output = system("agemat.exe -est",intern=Intern)
+    if(CallType=="shell") Output = shell( paste0("agemat.exe",ExtraArgs),intern=Intern)   # This may need to have the location pasted onto it depending upon file structure
+    if(CallType=="system") Output = system( paste0("agemat.exe",ExtraArgs),intern=Intern)
     #Admb = scan(paste(SaveFile,"agemat.par",sep=""),comment.char="#",quiet=TRUE)
   }
   #return(Output)
