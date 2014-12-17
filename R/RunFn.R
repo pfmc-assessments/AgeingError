@@ -11,6 +11,11 @@ function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, Min
     if( (SigOpt[ReaderI]==5 | SigOpt[ReaderI]==6) & is.na(KnotAges[[ReaderI]][1]) ) stop("Must specify KnotAges for any reader with SigOpt 5 or 6")
   } 
   
+  # Check for specification errors
+  for(ReaderI in 1:Nreaders){
+    if( (SigOpt[ReaderI]<0 & SigOpt[ReaderI]<=(-ReaderI)) | (BiasOpt[ReaderI]<0 & BiasOpt[ReaderI]<=(-ReaderI)) ) stop("Mirrored readers must mirror a lower numbered reader")
+  }
+  
   # Write DAT file
   write(c("# Maximum number of readers",Nreaders),file=paste(SaveFile,"agemat.dat",sep=""))
     write(c("# Number of data sets",NDataSets),file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE)
