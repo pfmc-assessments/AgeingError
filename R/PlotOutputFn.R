@@ -1,6 +1,6 @@
 
 PlotOutputFn <-
-function(Data, MaxAge, SaveFile, PlotType="PDF"){
+function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
 
   # Interpret inputs
   Nreaders = ncol(Data)-1
@@ -58,9 +58,14 @@ function(Data, MaxAge, SaveFile, PlotType="PDF"){
   if(PlotType=="PNG") png(paste(SaveFile,"True vs Reads (by reader).png",sep=""),width=Ncol*3,height=Nrow*3,units="in",res=200)
     par(mfrow=c(Nrow,Ncol),mar=c(3,3,2,0),mgp=c(1.5,0.25,0),tck=-0.02,oma=c(0,0,5,0)+0.1)
     for(ReadI in 1:Nreaders){
+      if( is.null(ReaderNames) ){
+        Main = paste("Reader",ReadI)
+      }else{
+        Main = ReaderNames[ReadI]
+      }
       Temp = cbind(TrueAge, Data[,ReadI+1]+0.5)   # Add 0.5 to match convention in Punt model that otoliths are read half way through year
       Temp = Temp[which(Data[,ReadI+1]!=-999),]   # Exclude rows with no read for this reader
-      plot(x=Temp[,1],y=Temp[,2],ylim=c(0,MaxAge),xlim=c(0,MaxAge),col=rgb(red=0,green=0,blue=0,alpha=0.2),xlab="Mode predicted age | parameters",ylab="Read age",lwd=2,main=paste("Reader",ReadI),pch=21,cex=0.2)
+      plot(x=Temp[,1],y=Temp[,2],ylim=c(0,MaxAge),xlim=c(0,MaxAge),col=rgb(red=0,green=0,blue=0,alpha=0.2),xlab="Mode predicted age | parameters",ylab="Read age",lwd=2,main=Main,pch=21,cex=0.2)
       lines(x=c(0,MaxAge),y=c(0,MaxAge), lwd=1,lty="dashed")
       lines(x=ErrorAndBiasArray['True_Age',,ReadI],y=ErrorAndBiasArray['Expected_age',,ReadI],type="l",col="red",lwd=1)
       lines(x=ErrorAndBiasArray['True_Age',,ReadI],y=ErrorAndBiasArray['SD',,ReadI],type="l",col="blue",lwd=1)
