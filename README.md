@@ -12,7 +12,7 @@ Please use R version >=3.1.1 and install the package:
     # Install package
     install.packages("devtools")
     library("devtools")
-    install_github("nwfsc-assess/nwfscAgeingError")
+    install_github("nwfsc-assess/nwfscAgeingError", ref="1.0.0")
     # Load package
     library(nwfscAgeingError)
 
