@@ -83,7 +83,19 @@ function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
     Aicc = Aic + 2*Df*(Df+1)/(n-Df-1) 
     Bic = 2*Nll + Df*log(n)
       
-  Output = list(Aic=Aic, Aicc=Aicc, Bic=Bic)
+  # Write definitions to file
+  for(ReadI in 1:Nreaders){
+    if( is.null(ReaderNames) ){
+      Main = paste("Reader",ReadI)
+    }else{
+      Main = ReaderNames[ReadI]
+    }
+    write.csv( ErrorAndBiasArray[,,ReadI], file=paste0(SaveFile,"SS3_format_",Main,".csv"))
+  }
+  
+  # Return stuff
+  ModelSelection = list("AIC"=Aic, "AICc"=Aicc, "BIC"=Bic)
+  Output = list("ModelSelection"=ModelSelection, "ErrorAndBiasArray"=ErrorAndBiasArray)
   return(Output)
 }
 
