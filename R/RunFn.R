@@ -1,6 +1,81 @@
+#' Run ageing error model
+#'
+#' Run the Punt et al. (2008) ADMB-based ageing error model from within R
+#'
+#' @param Data This is the data set as previously formatted. If the data has multiple
+#' rows with identical reads, this will cause an error and the "XXX.rep" file will
+#' have a properly formatted data matrix which can be cut-pasted into a "XXX.dat"
+#' file for use.
+#' @param SigOpt This a vector with one entry for each reader (i.e. Ncol-1 entries).
+#' Each entry specifies the functional form of reading error as a function of true
+#' age. Possible entries include:
+#' \itemize{
+#'   \item{"-1", "-2", "-3", etc: This will make this reader mirror the
+#'         estimated SD from another reader to it's left. "-1" causes it to
+#'         mirror the estimated SD for the first reader, etc. This number has
+#'         to be lower than the current entry number.}
+#'   \item{"0": No error (but potentially bias)}
+#'   \item{"1": Constant CV, i.e., a 1 parameter linear relationship of SD with
+#'         true age.}
+#'   \item{"2": Curvilinear SD, i.e., a 3 parameter Hollings-form relationship
+#'         of SD with true age}
+#'   \item{"3": Curvilinear with CV, i.e., a 3-parameter Hollings-form
+#'         relationship of CV with true age}
+#'   \item{"5": Spline with estimated slope at beginning and end (Number
+#'         of params = 2 + number of knots)}
+#'   \item{"6": Linear interpolation (1st knot must be 1 and last knot must
+#'         be MaxAge)}
+#' }
+#' @param KnotAges Ages associated with (necessary for options 5 or 6)
+#' @param BiasOpt This is a vector with one entry for each reader:
+#' \itemize{
+#'   \item{"-1", "-2", "-3": See SigOpt}
+#'   \item{"0": Unbiased}
+#'   \item{"1": Constant CV, i.e., a 1-parameter linear relationship of bias
+#'         with true age}
+#'   \item{"2": Curvilinear, i.e., a 2-parameter Hollings-form relationship
+#'         of bias with true age}
+#' }
+#' @param NDataSets This is generally "1" and other values are not implemented
+#' in the current R-code.
+#' @param MinAge The minimum possible "true" age
+#' @param MaxAge The maximum possible "true" age
+#' @param RefAge An arbitrarily chosen age from which "true" age-composition
+#' fixed-effects are calculated as an offset. This has no effect on the answer,
+#' but could potentially effect estimation speed.
+#' @param MinusAge The minimum age for which an age-specific age-composition is
+#' estimated. Ages below this MinusAge have "true" proportion-at-age (P_a)
+#' estimated as P_a = P_MinusAge*exp(beta*(MinusAge - a)), where beta is an
+#' estimated log-linear trend in the "true" proportion-at-age.
+#' If MinusAge = MinAge, beta is not estimated.
+#' @param PlusAge Identical to MinusAge except defining the age above with
+#' age-specific age-composition is not estimated.
+#' @param MaxSd An upper bound on possible values for the standard deviation
+#' of reading error
+#' @param MaxExpectedAge Set to MaxAge
+#' @param SaveFile Directory where "agemat.exe" is located and where all ADMB
+#' intermediate and output files should be located. If AdmbFile is specified
+#' then "agemat.exe" is copied from that directory to SaveFile
+#' @param EffSampleSize Indicating whether effective sample size should be
+#' calculated. Missing values in the data matrix will cause this to be
+#' ineffective, in which case this should be set to "0"
+#' @param Intern "TRUE" indicates that ADMB output should be displayed in R;
+#' "FALSE" does not.
+#' @param AdmbFile Optional directory from which "agemat.exe" is to be copied
+#' to SaveFile
+#' @param JustWrite Switch to allow data files to be written without running
+#' ADMB executable.
+#' @param CallType Either "system" or "shell" depending on Operating System
+#' or how R is being run.
+#' @param ExtraArgs Extra arguments passed to ADMB. Default is " -est".
+#' @author James T. Thorson, Ian J. Stewart, Andre E. Punt
+#' @export
+#' @seealso \code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
 
 RunFn <-
-function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile, EffSampleSize=0, Intern=TRUE, AdmbFile=NULL, JustWrite=FALSE, CallType="system", ExtraArgs=" -est"){
+  function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, MinusAge,
+           PlusAge, MaxSd, MaxExpectedAge, SaveFile, EffSampleSize=0, Intern=TRUE,
+           AdmbFile=NULL, JustWrite=FALSE, CallType="system", ExtraArgs=" -est"){
 
   # Copy ADMB file 
   if(!is.null(AdmbFile)) file.copy(from=paste(AdmbFile,"agemat.exe",sep=""), to=paste(SaveFile,"agemat.exe",sep=""), overwrite=TRUE)
