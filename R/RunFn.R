@@ -68,6 +68,7 @@
 #' @param CallType Either "system" or "shell" depending on Operating System
 #' or how R is being run.
 #' @param ExtraArgs Extra arguments passed to ADMB. Default is " -est".
+#' @param verbose Provide more feedback about function progress?
 #' @author James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export
 #' @seealso \code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
@@ -75,10 +76,23 @@
 RunFn <-
   function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge, MinusAge,
            PlusAge, MaxSd, MaxExpectedAge, SaveFile, EffSampleSize=0, Intern=TRUE,
-           AdmbFile=NULL, JustWrite=FALSE, CallType="system", ExtraArgs=" -est"){
+           AdmbFile=NULL, JustWrite=FALSE, CallType="system", ExtraArgs=" -est",
+           verbose=TRUE){
 
+  # add slash to end of directories so that nobody has to waste as much time
+  # debugging as Ian just did
+  SaveFile <- paste0(SaveFile, "/")
+    
   # Copy ADMB file 
-  if(!is.null(AdmbFile)) file.copy(from=paste(AdmbFile,"agemat.exe",sep=""), to=paste(SaveFile,"agemat.exe",sep=""), overwrite=TRUE)
+  if(!is.null(AdmbFile)){
+    AdmbFile <- paste0(AdmbFile, "/")
+    if(verbose){
+      cat("copying 'agemat.exe' from\n", AdmbFile,
+          "\nto\n", SaveFile,'\n')
+    }
+    file.copy(from=paste(AdmbFile,"agemat.exe",sep=""),
+              to=paste(SaveFile,"agemat.exe",sep=""), overwrite=TRUE)
+  }
   
   # Check for errors
   Nreaders = ncol(Data)-1
