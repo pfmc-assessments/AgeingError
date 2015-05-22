@@ -185,8 +185,8 @@ RunFn <-
     # Slopes
     write("\n# Min, Max, Init, Phase for slopes",file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE)
     for(DataSetI in 1:NDataSets){
-      if(MinAge>1) write.table(rMx(c(-10,0,0,1)),file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE,col.names=FALSE,row.names=FALSE)      
-      write.table(rMx(c(-10,0,0,1)),file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE,col.names=FALSE,row.names=FALSE)      
+      if(MaxAge > PlusAge) write.table(rMx(c(-10,0,0,1)),file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE,col.names=FALSE,row.names=FALSE)      
+      if(MinAge < MinusAge) write.table(rMx(c(-10,0,0,1)),file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE,col.names=FALSE,row.names=FALSE)      
     }    
   # Write dataset    
     write("\n# Data set",file=paste(SaveFile,"agemat.dat",sep=""),append=TRUE)
