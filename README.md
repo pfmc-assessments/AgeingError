@@ -23,6 +23,14 @@ Known installation/usage issues
 =============
 none
 
+Citing this package
+=============
+When using this software, please cite it as:
+
+* Thorson, James T. 2015. nwfscAgeingError: a user interface in R for the Punt et al. (2008) method for calculating ageing error and imprecision. Available from: http://github.com/nwfsc-assess/nwfscAgeingError/.
+
+and also please read and cite the Punt et al. (2008) paper below.
+
 Further reading
 =============
 The user manual (which may not include all current features) can found here:
