@@ -7,3 +7,4 @@ Author: James T. Thorson, Ian J. Stewart, and Andre E. Punt
 Maintainer: James Thorson <James.Thorson@noaa.gov>
 Description: This package uses double read data to estimate ageing imprecision and bias from fishery otoliths
 License: GPL-2
+RoxygenNote: 6.0.1

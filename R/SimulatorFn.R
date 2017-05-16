@@ -1,6 +1,32 @@
-
+#' Simulate double reading data
+#'
+#' A function to generate simulated double reading data with given properties
+#'
+#' @param Nreaders The number of ageing readers 
+#' @param M True natural mortality 
+#' @param SelexForm Form of selectivity 
+#' @param ErrorParams Error type 
+#' @param BiasParams Bias type 
+#' @param SelexParams Selectivity parameters 
+#' @param ReadsMat Matrix describing number of reads per reader combination 
+#' @param RecCv CV of recruitment 
+#' @param RecAr1 First-order autoregressive coefficient for recruitment 
+#' @param Amax True maximum age 
+#'
+#' @return Returns a simulated double read matrix 
+#'
+#' @author James T. Thorson
+#'
+#' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
+#' Quantifying age-reading error for use in fisheries stock assessments,
+#' with application to species in Australias southern and eastern scalefish
+#' and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
+#'
+#' @export
+#' 
 SimulatorFn <-
-function(Nreaders, M, SelexForm, ErrorParams, BiasParams, SelexParams, ReadsMat, RecCv=0.6, RecAr1=0.8, Amax=100){
+  function(Nreaders, M, SelexForm, ErrorParams, BiasParams, SelexParams,
+           ReadsMat, RecCv=0.6, RecAr1=0.8, Amax=100){
 
   RecDev = rnorm(Amax, mean=0, sd=RecCv)
     for(i in 2:length(RecDev)){RecDev[i] = RecDev[i]*sqrt(1-RecAr1) + RecDev[i-1]*sqrt(RecAr1)}

@@ -7,7 +7,7 @@ function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
   Ages = Nages = MaxAge+1
   
   # Read REP file
-  Rep = scan(paste(SaveFile,"agemat.rep",sep=""),comment.char="%", what="character", quiet=TRUE)
+  Rep = scan(file.path(SaveFile,"agemat.rep"),comment.char="%", what="character", quiet=TRUE)
     
   # Read Misclassification rates
   Grep = grep("reader#", Rep)
@@ -43,8 +43,8 @@ function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
   TrueAge = apply(AgeProbs, MARGIN=1, FUN=function(Vec){order(Vec[-length(Vec)],decreasing=TRUE)[1]})
   
   # Plot estimated age structure
-  if(PlotType=="PDF") pdf(paste(SaveFile,"Estimated vs Observed Age Structure.pdf",sep=""),width=6,height=6)
-  if(PlotType=="PNG") png(paste(SaveFile,"Estimated vs Observed Age Structure.png",sep=""),width=6,height=6,units="in",res=200)
+  if(PlotType=="PDF") pdf(file.path(SaveFile,"Estimated vs Observed Age Structure.pdf"),width=6,height=6)
+  if(PlotType=="PNG") png(file.path(SaveFile,"Estimated vs Observed Age Structure.png"),width=6,height=6,units="in",res=200)
     par(mar=c(3,3,2,0),mgp=c(1.5,0.25,0),tck=-0.02,oma=c(0,0,0,0)+0.1)
     plot(x=AgeStruct[,1],y=AgeStruct[,2],type="s",lwd=2,xlab="Age",ylab="Prop",main="Estimated=Black, Observed=Red")
     DataExpanded = Data[rep(1:nrow(Data),Data[,1]),-1]
@@ -54,8 +54,8 @@ function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
   # Plot true age against different age reads
   Ncol=ceiling(sqrt(Nreaders))
     Nrow=ceiling(Nreaders/Ncol)
-  if(PlotType=="PDF") pdf(paste(SaveFile,"True vs Reads (by reader).pdf",sep=""),width=Ncol*3,height=Nrow*3)
-  if(PlotType=="PNG") png(paste(SaveFile,"True vs Reads (by reader).png",sep=""),width=Ncol*3,height=Nrow*3,units="in",res=200)
+  if(PlotType=="PDF") pdf(file.path(SaveFile,"True vs Reads (by reader).pdf"),width=Ncol*3,height=Nrow*3)
+  if(PlotType=="PNG") png(file.path(SaveFile,"True vs Reads (by reader).png"),width=Ncol*3,height=Nrow*3,units="in",res=200)
     par(mfrow=c(Nrow,Ncol),mar=c(3,3,2,0),mgp=c(1.5,0.25,0),tck=-0.02,oma=c(0,0,5,0)+0.1)
     for(ReadI in 1:Nreaders){
       if( is.null(ReaderNames) ){
@@ -76,8 +76,8 @@ function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
   dev.off()
   
   ## AIC
-  Nll = as.numeric(scan(paste(SaveFile,"agemat.par",sep=""),comment.char="%", what="character", quiet=TRUE)[11])
-    Df = as.numeric(scan(paste(SaveFile,"agemat.par",sep=""),comment.char="%", what="character", quiet=TRUE)[6])
+  Nll = as.numeric(scan(file.path(SaveFile,"agemat.par"),comment.char="%", what="character", quiet=TRUE)[11])
+    Df = as.numeric(scan(file.path(SaveFile,"agemat.par"),comment.char="%", what="character", quiet=TRUE)[6])
     n = sum(ifelse(Data[,-1]==-999,0,1))
     Aic = 2*Nll + 2*Df
     Aicc = Aic + 2*Df*(Df+1)/(n-Df-1) 
@@ -90,7 +90,7 @@ function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
     }else{
       Main = ReaderNames[ReadI]
     }
-    write.csv( ErrorAndBiasArray[,,ReadI], file=paste0(SaveFile,"SS3_format_",Main,".csv"))
+    write.csv( ErrorAndBiasArray[,,ReadI], file=file.path(SaveFile,paste0("SS3_format_",Main,".csv")))
   }
   
   # Return stuff
