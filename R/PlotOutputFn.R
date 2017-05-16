@@ -1,4 +1,22 @@
-
+#'  Plot output
+#'
+#' Plots results from the fitted Ageing Error model
+#'
+#' @param Data Input data matrix
+#' @param MaxAge Maximum estimated age
+#' @param SaveFile Directory for fitted model 
+#' @param PlotType Type of saved plots, i.e. PDF or JPG
+#' @return Returns AIC, AICc, and BIC for fitted model
+#'
+#' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
+#' Quantifying age-reading error for use in fisheries stock assessments,
+#' with application to species in Australias southern and eastern scalefish
+#' and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
+#'
+#' @author James T. Thorson
+#'
+#' @export
+#' 
 PlotOutputFn <-
 function(Data, MaxAge, SaveFile, PlotType="PDF", ReaderNames=NULL){
 
