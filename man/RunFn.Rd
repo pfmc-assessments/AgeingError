@@ -10,14 +10,14 @@ RunFn(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge,
   CallType = "system", ExtraArgs = " -est", verbose = TRUE)
 }
 \arguments{
-\item{Data}{This is the data set as previously formatted. If the data has multiple
-rows with identical reads, this will cause an error and the "XXX.rep" file will
-have a properly formatted data matrix which can be cut-pasted into a "XXX.dat"
-file for use.}
+\item{Data}{This is the data set as previously formatted. If the data has
+multiple rows with identical reads, this will cause an error and the
+"XXX.rep" file will have a properly formatted data matrix which can be
+cut-pasted into a "XXX.dat" file for use.}
 
-\item{SigOpt}{This a vector with one entry for each reader (i.e. Ncol-1 entries).
-Each entry specifies the functional form of reading error as a function of true
-age. Possible entries include:
+\item{SigOpt}{This a vector with one entry for each reader (i.e. Ncol-1
+entries). Each entry specifies the functional form of reading error as
+a function of true age. Possible entries include:
 \itemize{
   \item{"-1", "-2", "-3", etc: This will make this reader mirror the
         estimated SD from another reader to it's left. "-1" causes it to

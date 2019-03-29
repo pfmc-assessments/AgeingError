@@ -1,11 +1,14 @@
 #' Plot output
 #'
-#' Plots results from the fitted Ageing Error model
+#' Plots age comparisons and results from the fitted Ageing Error model
 #'
 #' @param Data Input data matrix
 #' @param MaxAge Maximum estimated age
 #' @param SaveFile Directory for fitted model
 #' @param PlotType Type of saved plots, i.e. PDF or PNG
+#' @param ReaderNames Vector with names of each reader, defaults to
+#' "Reader 1", "Reader 2", etc.
+#' @param subplot Vector of which plots to create.
 #' @return Returns AIC, AICc, and BIC for fitted model
 #'
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
@@ -13,17 +16,23 @@
 #' with application to species in Australias southern and eastern scalefish
 #' and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
 #'
-#' @author James T. Thorson
+#' @author James T. Thorson, Ian G. Taylor
 #'
 #' @export
 #'
 PlotOutputFn <-
-  function(Data, MaxAge, SaveFile, PlotType = "PNG", ReaderNames = NULL)
+  function(Data, MaxAge, SaveFile, PlotType = "PNG", subplot=1:3,
+           ReaderNames = NULL)
 {
 
   # Interpret inputs
   Nreaders <- ncol(Data)-1
   Ages <- Nages <- MaxAge+1
+
+  # Reader names
+  if( is.null(ReaderNames) ){
+    ReaderNames <- paste("Reader", 1:Nreaders)
+  }
 
   # Read REP file
   Rep <- scan(file.path(SaveFile,"agemat.rep"),
@@ -77,7 +86,7 @@ PlotOutputFn <-
       } # end loop over readers
     } # end loop over ages
   } # end loop over rows of data
-  
+
   # Remove MaxAge before calculating "TrueAge"
   # because the MaxAge is a plus-group, and ends up with
   # maximum probability for most ages in the upper tail
@@ -85,76 +94,109 @@ PlotOutputFn <-
                    FUN = function(Vec){order(Vec[-length(Vec)],
                        decreasing = TRUE)[1]})
 
-  # Plot estimated age structure
-  if(PlotType == "PDF"){
-    pdf(file.path(SaveFile, "Estimated vs Observed Age Structure.pdf"),
-        width = 6, height = 6)
-  }
-  if(PlotType == "PNG"){
-    png(file.path(SaveFile, "Estimated vs Observed Age Structure.png"),
-        width = 6, height = 6, units = "in", res = 200)
-  }
-  par(mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0),
-      tck = -0.02, oma = c(0, 0, 0, 0)+0.1)
-  plot(x = AgeStruct[, 1], y = AgeStruct[, 2], type = "s", lwd = 2,
-       xlab = "Age", ylab = "Prop", main = "Estimated=Black, Observed=Red")
   DataExpanded <- Data[rep(1:nrow(Data), Data[, 1]), -1]
   DataExpanded[DataExpanded == -999] <- NA
-  hist(as.matrix(DataExpanded),
-       add = TRUE, freq = FALSE, breaks = seq(0, MaxAge, by = 1),
-       col = rgb(red=1, green=0, blue=0, alpha=0.30))
-  dev.off()
 
-  # Plot true age against different age reads
-  Ncol <- ceiling(sqrt(Nreaders))
-  Nrow <- ceiling(Nreaders/Ncol)
-  if(PlotType == "PDF"){
-    pdf(file.path(SaveFile, "True vs Reads (by reader).pdf"),
-        width = Ncol*3, height = Nrow*3)
-  }
-  if(PlotType == "PNG"){
-    png(file.path(SaveFile, "True vs Reads (by reader).png"),
-        width = Ncol*3, height = Nrow*3, units = "in", res = 200)
-  }
-  par(mfrow = c(Nrow, Ncol), mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0),
-      tck = -0.02, oma = c(0, 0, 5, 0)+0.1)
-  for(ReadI in 1:Nreaders){
-    if( is.null(ReaderNames) ){
-      Main <- paste("Reader", ReadI)
-    }else{
-      Main <- ReaderNames[ReadI]
+  ####################################################################
+  # Plot comparison of data for each pair of readers
+
+  if(1 %in% subplot){
+    if(PlotType == "PDF"){
+      pdf(paste0(ReaderNames[ireader],
+                 " vs ", ReaderNames[ireader], ".pdf"),
+          width = 6, height = 6)
     }
-    # Add 0.5 to match convention in Punt model that otoliths are read
-    # half way through year
-    Temp <- cbind(TrueAge, Data[, ReadI+1]+0.5)
-    # Exclude rows with no read for this reader
-    Temp <- Temp[which(Data[, ReadI+1] != -999), ]  
-    plot(x = Temp[, 1], y = Temp[, 2],
-         ylim = c(0, MaxAge), xlim = c(0, MaxAge),
-         col = rgb(red=0, green=0, blue=0, alpha=0.2),
-         xlab = "Mode predicted age | parameters",
-         ylab = "Read age", lwd = 2, main = Main, pch = 21, cex = 0.2)
-    lines(x = c(0, MaxAge), y = c(0, MaxAge), lwd = 1, lty = "dashed")
-    lines(x = ErrorAndBiasArray['True_Age', , ReadI],
-          y = ErrorAndBiasArray['Expected_age', , ReadI],
-          type = "l", col = "red", lwd = 1)
-    lines(x = ErrorAndBiasArray['True_Age', , ReadI],
-          y = ErrorAndBiasArray['SD', , ReadI],
-          type = "l", col = "blue", lwd = 1)
-    lines(x = ErrorAndBiasArray['True_Age', , ReadI],
-          y = ErrorAndBiasArray['Expected_age', , ReadI] +
-            2*ErrorAndBiasArray['SD', , ReadI],
-          type = "l", col = "red", lwd = 1, lty = "dashed")
-    lines(x = ErrorAndBiasArray['True_Age', , ReadI],
-          y = ErrorAndBiasArray['Expected_age', , ReadI] -
-            2*ErrorAndBiasArray['SD', , ReadI],
-          type = "l", col = "red", lwd = 1, lty = "dashed")
-  }
-  mtext(side = 3, outer = TRUE,
-        text = paste0("Reads(dot), Sd(blue), expected_read(red solid line),\n",
-            " and 95% CI for expected_read(red dotted line)"),
-        line = 1)
-  dev.off()
+
+    # make plots of input data for each reader pair
+    for(ireader in 1:(Nreaders-1)){
+      for(jreader in (ireader+1):Nreaders){
+        ageing_comparison(xvec = DataExpanded[,ireader],
+                          yvec = DataExpanded[,jreader],
+                          xlab = ReaderNames[ireader],
+                          ylab = ReaderNames[jreader],
+                          maxage = max(Data.in[,-1], na.rm=TRUE),
+                          png = (PlotType == "PNG"),
+                          SaveFile = SaveFile,
+                          filename = paste0(ReaderNames[ireader],
+                              " vs ", ReaderNames[ireader], ".png"),
+                          verbose = FALSE)
+      }
+    }
+  } # end check for whether subplot 1 was requested
+
+  ####################################################################
+  # Plot estimated age structure
+
+  if(2 %in% subplot){
+    if(PlotType == "PDF"){
+      pdf(file.path(SaveFile, "Estimated vs Observed Age Structure.pdf"),
+          width = 6, height = 6)
+    }
+    if(PlotType == "PNG"){
+      png(file.path(SaveFile, "Estimated vs Observed Age Structure.png"),
+          width = 6, height = 6, units = "in", res = 200)
+    }
+    par(mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0),
+        tck = -0.02, oma = c(0, 0, 0, 0)+0.1)
+    plot(x = AgeStruct[, 1], y = AgeStruct[, 2], type = "s", lwd = 2,
+         xlab = "Age", ylab = "Prop", main = "Estimated=Black, Observed=Red")
+    hist(as.matrix(DataExpanded),
+         add = TRUE, freq = FALSE, breaks = seq(0, MaxAge, by = 1),
+         col = rgb(red=1, green=0, blue=0, alpha=0.30))
+    dev.off()
+  } # end check for whether subplot was requested
+
+  ####################################################################
+  # Plot true age against different age reads
+
+  if(3 %in% subplot){
+    Ncol <- ceiling(sqrt(Nreaders))
+    Nrow <- ceiling(Nreaders/Ncol)
+    if(PlotType == "PDF"){
+      pdf(file.path(SaveFile, "True vs Reads (by reader).pdf"),
+          width = Ncol*3, height = Nrow*3)
+    }
+    if(PlotType == "PNG"){
+      png(file.path(SaveFile, "True vs Reads (by reader).png"),
+          width = Ncol*3, height = Nrow*3, units = "in", res = 200)
+    }
+    par(mfrow = c(Nrow, Ncol), mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0),
+        tck = -0.02, oma = c(0, 0, 5, 0)+0.1)
+    for(ReadI in 1:Nreaders){
+      Main <- ReaderNames[ReadI]
+
+      # Add 0.5 to match convention in Punt model that otoliths are read
+      # half way through year
+      Temp <- cbind(TrueAge, Data[, ReadI+1]+0.5)
+      # Exclude rows with no read for this reader
+      Temp <- Temp[which(Data[, ReadI+1] != -999), ]
+      plot(x = Temp[, 1], y = Temp[, 2],
+           ylim = c(0, MaxAge), xlim = c(0, MaxAge),
+           col = rgb(red=0, green=0, blue=0, alpha=0.2),
+           xlab = "Mode predicted age | parameters",
+           ylab = "Read age", lwd = 2, main = Main, pch = 21, cex = 0.2)
+      lines(x = c(0, MaxAge), y = c(0, MaxAge), lwd = 1, lty = "dashed")
+      lines(x = ErrorAndBiasArray['True_Age', , ReadI],
+            y = ErrorAndBiasArray['Expected_age', , ReadI],
+            type = "l", col = "red", lwd = 1)
+      lines(x = ErrorAndBiasArray['True_Age', , ReadI],
+            y = ErrorAndBiasArray['SD', , ReadI],
+            type = "l", col = "blue", lwd = 1)
+      lines(x = ErrorAndBiasArray['True_Age', , ReadI],
+            y = ErrorAndBiasArray['Expected_age', , ReadI] +
+              2*ErrorAndBiasArray['SD', , ReadI],
+            type = "l", col = "red", lwd = 1, lty = "dashed")
+      lines(x = ErrorAndBiasArray['True_Age', , ReadI],
+            y = ErrorAndBiasArray['Expected_age', , ReadI] -
+              2*ErrorAndBiasArray['SD', , ReadI],
+            type = "l", col = "red", lwd = 1, lty = "dashed")
+    }
+    mtext(side = 3, outer = TRUE,
+          text = paste0("Reads(dot), Sd(blue), expected_read(red solid line),\n",
+              " and 95% CI for expected_read(red dotted line)"),
+          line = 1)
+    dev.off()
+  } # end check for whether subplot was requested
 
   ## AIC
   Nll <- as.numeric(scan(file.path(SaveFile, "agemat.par"),
@@ -170,11 +212,7 @@ PlotOutputFn <-
 
   # Write definitions to file
   for(ReadI in 1:Nreaders){
-    if( is.null(ReaderNames) ){
-      Main <- paste("Reader", ReadI)
-    }else{
-      Main <- ReaderNames[ReadI]
-    }
+    Main <- ReaderNames[ReadI]
     write.csv( ErrorAndBiasArray[, , ReadI],
               file = file.path(SaveFile, paste0("SS_format_", Main, ".csv")))
   }

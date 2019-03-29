@@ -1,10 +1,12 @@
 Package: nwfscAgeingError
 Type: Package
-Title: a user interface in R for the Punt et al. (2008) method for calculating ageing error and imprecision
-Version: 1.0
-Date: 
-Author: James T. Thorson, Ian J. Stewart, and Andre E. Punt
+Title: a user interface in R for the Punt et al. (2008)
+     method for calculating ageing error and imprecision
+Version: 1.2.0
+Date: 2019-02-14
+Author: James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor
 Maintainer: Kelli Faye Johnson <Kelli.Johnson@noaa.gov>
-Description: This package uses double read data to estimate ageing imprecision and bias from fishery otoliths
+Description: This package uses double read data to estimate
+     ageing imprecision and bias from fishery otoliths
 License: GPL-2
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

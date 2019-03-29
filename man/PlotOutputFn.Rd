@@ -4,7 +4,8 @@
 \alias{PlotOutputFn}
 \title{Plot output}
 \usage{
-PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PDF", ReaderNames = NULL)
+PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PNG", subplot = 1:3,
+  ReaderNames = NULL)
 }
 \arguments{
 \item{Data}{Input data matrix}
@@ -13,13 +14,18 @@ PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PDF", ReaderNames = NULL)
 
 \item{SaveFile}{Directory for fitted model}
 
-\item{PlotType}{Type of saved plots, i.e. PDF or JPG}
+\item{PlotType}{Type of saved plots, i.e. PDF or PNG}
+
+\item{subplot}{Vector of which plots to create.}
+
+\item{ReaderNames}{Vector with names of each reader, defaults to
+"Reader 1", "Reader 2", etc.}
 }
 \value{
 Returns AIC, AICc, and BIC for fitted model
 }
 \description{
-Plots results from the fitted Ageing Error model
+Plots age comparisons and results from the fitted Ageing Error model
 }
 \references{
 Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
@@ -28,5 +34,5 @@ with application to species in Australias southern and eastern scalefish
 and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
 }
 \author{
-James T. Thorson
+James T. Thorson, Ian G. Taylor
 }

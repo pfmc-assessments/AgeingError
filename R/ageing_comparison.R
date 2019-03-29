@@ -18,6 +18,7 @@
 #' @param filename File name for PNG file.
 #' @param SaveFile directory where plot will be saved.
 #' NULL value will make it go to working directory.
+#' @param verbose Report messages as function runs.
 #' @author Ian G. Taylor
 #' @export
 
@@ -31,7 +32,8 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
                               title=NULL,
                               png=FALSE,
                               filename="ageing_comparison.png",
-                              SaveFile=NULL){
+                              SaveFile=NULL,
+                              verbose=TRUE){
   # get counts of each pair
   df1 <- as.data.frame(table(xvec,yvec), stringsAsFactors=FALSE)
   df1$xvec <- as.numeric(df1$xvec)
@@ -53,7 +55,9 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
     if(is.null(SaveFile)){
       SaveFile <- getwd()
     }
-    message('writing image to', file.path(SaveFile, filename))
+    if(verbose){
+      message('writing image to', file.path(SaveFile, filename))
+    }
     png(file.path(SaveFile, filename), width=6.5, height=6.5, pointsize=10,
         res=300, units='in')
   }
