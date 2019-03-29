@@ -14,6 +14,10 @@
 #' @param xlab label for xvec
 #' @param ylab label for yvec
 #' @param title Optional title to add at top of plot
+#' @param png Save plot to PNG file?
+#' @param filename File name for PNG file.
+#' @param SaveFile directory where plot will be saved.
+#' NULL value will make it go to working directory.
 #' @author Ian G. Taylor
 #' @export
 
@@ -24,7 +28,10 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
                               hist=TRUE, hist.frac=.1,
                               xlab="Age reader A",
                               ylab="Age reader B",
-                              title=NULL){
+                              title=NULL,
+                              png=FALSE,
+                              filename="ageing_comparison.png",
+                              SaveFile=NULL){
   # get counts of each pair
   df1 <- as.data.frame(table(xvec,yvec), stringsAsFactors=FALSE)
   df1$xvec <- as.numeric(df1$xvec)
@@ -36,9 +43,23 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
   if(is.null(maxage)){
     maxage <- ceiling(max(xvec, yvec, na.rm=TRUE))
   }
+  # set regular vs. internal axes depending on whether min is 0
+  axs <- 'i'
+  if(min(xvec, yvec, na.rm=TRUE) == 0){
+    axs <- 'r'
+  }
+  # open PNG file if requested
+  if(png){
+    if(is.null(SaveFile)){
+      SaveFile <- getwd()
+    }
+    message('writing image to', file.path(SaveFile, filename))
+    png(file.path(SaveFile, filename), width=6.5, height=6.5, pointsize=10,
+        res=300, units='in')
+  }
   # make empty plot
   plot(0,type='n', xlim=c(0,maxage+1), ylim=c(0,maxage+1),
-       xlab=xlab, ylab=ylab, axes=F, xaxs='i', yaxs='i')
+       xlab=xlab, ylab=ylab, axes=F, xaxs=axs, yaxs=axs)
   # add 1 to 1 line
   abline(0, 1, col=1)
 
@@ -61,7 +82,12 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
   axis(1)
   axis(2)
   grid()
-  box()
+  # add lines at 0 if axes have padding around 0
+  if(axs == 'r'){
+    rect(xleft = 0, ybottom = 0, xright=par()$usr[2], ytop=par()$usr[4])
+  }else{
+    box()
+  }
   # add points
   points(df1[,1:2], col=col.pts, pch=16, cex=scale.pts*sqrt(df1[,3]))
   # add counts as text
@@ -70,4 +96,7 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
   }
   # add title
   title(title)
+  if(png){
+    dev.off()
+  }
 }
