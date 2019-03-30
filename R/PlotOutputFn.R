@@ -9,7 +9,9 @@
 #' @param ReaderNames Vector with names of each reader, defaults to
 #' "Reader 1", "Reader 2", etc.
 #' @param subplot Vector of which plots to create.
-#' @return Returns AIC, AICc, and BIC for fitted model
+#' @param dots Additional arguments passed to the
+#' \link{\code{ageing_comparison}} function.
+#' @return Returns AIC, AICc, and BIC for fitted model.
 #'
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
 #' Quantifying age-reading error for use in fisheries stock assessments,
@@ -22,7 +24,7 @@
 #'
 PlotOutputFn <-
   function(Data, MaxAge, SaveFile, PlotType = "PNG", subplot=1:3,
-           ReaderNames = NULL)
+           ReaderNames = NULL, ...)
 {
 
   # Interpret inputs
@@ -103,7 +105,7 @@ PlotOutputFn <-
   if(1 %in% subplot){
     if(PlotType == "PDF"){
       pdf(paste0(ReaderNames[ireader],
-                 " vs ", ReaderNames[ireader], ".pdf"),
+                 " vs ", ReaderNames[jreader], ".pdf"),
           width = 6, height = 6)
     }
 
@@ -114,12 +116,13 @@ PlotOutputFn <-
                           yvec = DataExpanded[,jreader],
                           xlab = ReaderNames[ireader],
                           ylab = ReaderNames[jreader],
-                          maxage = max(Data.in[,-1], na.rm=TRUE),
+                          maxage = max(DataExpanded, na.rm=TRUE),
                           png = (PlotType == "PNG"),
                           SaveFile = SaveFile,
                           filename = paste0(ReaderNames[ireader],
-                              " vs ", ReaderNames[ireader], ".png"),
-                          verbose = FALSE)
+                              " vs ", ReaderNames[jreader], ".png"),
+                          verbose = FALSE,
+                          ...)
       }
     }
   } # end check for whether subplot 1 was requested
@@ -140,6 +143,7 @@ PlotOutputFn <-
         tck = -0.02, oma = c(0, 0, 0, 0)+0.1)
     plot(x = AgeStruct[, 1], y = AgeStruct[, 2], type = "s", lwd = 2,
          xlab = "Age", ylab = "Prop", main = "Estimated=Black, Observed=Red")
+    browser()
     hist(as.matrix(DataExpanded),
          add = TRUE, freq = FALSE, breaks = seq(0, MaxAge, by = 1),
          col = rgb(red=1, green=0, blue=0, alpha=0.30))

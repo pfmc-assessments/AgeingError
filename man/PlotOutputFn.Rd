@@ -5,7 +5,7 @@
 \title{Plot output}
 \usage{
 PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PNG", subplot = 1:3,
-  ReaderNames = NULL)
+  ReaderNames = NULL, ...)
 }
 \arguments{
 \item{Data}{Input data matrix}
@@ -20,9 +20,12 @@ PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PNG", subplot = 1:3,
 
 \item{ReaderNames}{Vector with names of each reader, defaults to
 "Reader 1", "Reader 2", etc.}
+
+\item{dots}{Additional arguments passed to the
+\link{\code{ageing_comparison}} function.}
 }
 \value{
-Returns AIC, AICc, and BIC for fitted model
+Returns AIC, AICc, and BIC for fitted model.
 }
 \description{
 Plots age comparisons and results from the fitted Ageing Error model
