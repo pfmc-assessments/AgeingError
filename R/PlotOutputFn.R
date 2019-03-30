@@ -10,7 +10,7 @@
 #' "Reader 1", "Reader 2", etc.
 #' @param subplot Vector of which plots to create.
 #' @param dots Additional arguments passed to the
-#' \link{\code{ageing_comparison}} function.
+#' \code{\link{ageing_comparison}} function.
 #' @return Returns AIC, AICc, and BIC for fitted model.
 #'
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.

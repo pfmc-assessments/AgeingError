@@ -22,7 +22,7 @@ PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PNG", subplot = 1:3,
 "Reader 1", "Reader 2", etc.}
 
 \item{dots}{Additional arguments passed to the
-\link{\code{ageing_comparison}} function.}
+\code{\link{ageing_comparison}} function.}
 }
 \value{
 Returns AIC, AICc, and BIC for fitted model.
