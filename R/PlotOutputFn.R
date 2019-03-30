@@ -143,7 +143,6 @@ PlotOutputFn <-
         tck = -0.02, oma = c(0, 0, 0, 0)+0.1)
     plot(x = AgeStruct[, 1], y = AgeStruct[, 2], type = "s", lwd = 2,
          xlab = "Age", ylab = "Prop", main = "Estimated=Black, Observed=Red")
-    browser()
     hist(as.matrix(DataExpanded),
          add = TRUE, freq = FALSE, breaks = seq(0, MaxAge, by = 1),
          col = rgb(red=1, green=0, blue=0, alpha=0.30))
