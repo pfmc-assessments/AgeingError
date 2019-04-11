@@ -104,5 +104,5 @@ Run the Punt et al. (2008) ADMB-based ageing error model from within R
 \code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
 }
 \author{
-James T. Thorson, Ian J. Stewart, Andre E. Punt
+James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor
 }

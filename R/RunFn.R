@@ -69,7 +69,7 @@
 #' or how R is being run.
 #' @param ExtraArgs Extra arguments passed to ADMB. Default is " -est".
 #' @param verbose Provide more feedback about function progress?
-#' @author James T. Thorson, Ian J. Stewart, Andre E. Punt
+#' @author James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor
 #' @export
 #' @seealso \code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
 
@@ -87,12 +87,22 @@ RunFn <-
   # Copy ADMB file
   if(!is.null(AdmbFile)){
     AdmbFile <- paste0(AdmbFile, "/")
+    # Check for missing file before trying to copy
+    if(is.na(file.info(file.path(AdmbFile,"agemat.exe"))$size)){
+      warning("executable 'agemat.exe' not found in\n",
+              AdmbFile)
+    }
     if(verbose){
       cat("copying 'agemat.exe' from\n", AdmbFile,
           "\nto\n", SaveFile,'\n')
     }
     file.copy(from = file.path(AdmbFile,"agemat.exe"),
               to = file.path(SaveFile,"agemat.exe"), overwrite = TRUE)
+  }
+  # Check for missing file
+  if(is.na(file.info(file.path(SaveFile,"agemat.exe"))$size)){
+    stop("executable 'agemat.exe' not found in\n",
+         SaveFile)
   }
 
   # Check for errors
