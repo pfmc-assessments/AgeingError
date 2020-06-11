@@ -7,12 +7,9 @@ nwfscAgeingError
 Instructions
 =============
 
-Please use R version >=3.1.1 and install the package:
-
     # Install package
     install.packages("devtools")
-    library("devtools")
-    install_github("nwfsc-assess/nwfscAgeingError", ref="1.0.0")
+    devtools::install_github("nwfsc-assess/nwfscAgeingError")
     # Load package
     library(nwfscAgeingError)
 
@@ -27,7 +24,7 @@ Citing this package
 =============
 When using this software, please cite it as:
 
-* Thorson, James T, Stewart, Ian J, and Punt, Andre E. 2012. nwfscAgeingError: a user interface in R for the Punt et al. (2008) method for calculating ageing error and imprecision. Available from: http://github.com/nwfsc-assess/nwfscAgeingError/.
+* Thorson, J.T., Stewart, I.J., and Punt, A.E. 2012. nwfscAgeingError: a user interface in R for the Punt et al. (2008) method for calculating ageing error and imprecision. Available from: http://github.com/nwfsc-assess/nwfscAgeingError.
 
 and also please read and cite the Punt et al. (2008) paper below.
 
