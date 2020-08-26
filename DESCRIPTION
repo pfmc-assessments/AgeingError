@@ -1,7 +1,6 @@
 Package: nwfscAgeingError
 Type: Package
-Title: A user interface in R for the Punt et al. (2008)
-     method for calculating ageing error and imprecision
+Title: Source Code for Punt et al. (2008): Ageing Error and Imprecision
 Version: 1.3.0
 Authors@R: c(
   person(given = c("Kelli", "F."),
@@ -15,8 +14,11 @@ Authors@R: c(
   person(c("Ian", "G."), "Taylor", role = "aut"),
   person(c("Melissa", "A."), "Haltuch", role = "aut")
   )
-Description: This package uses double read data to estimate
-     ageing imprecision and bias from fishery otoliths.
+Description: Source code and examples for how to use double-read data to
+    estimate ageing imprecision and bias from fishery otoliths. The code
+    was developed for Punt et al. (2008) and updated in 2020.
+URL: http://github.com/nwfsc-assess/nwfscAgeingError
+BugReports: http://github.com/nwfsc-assess/nwfscAgeingError/issues
 License: GPL-2
 Encoding: UTF-8
 RoxygenNote: 6.1.0
