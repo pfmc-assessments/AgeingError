@@ -15,8 +15,8 @@ TOP_OF_MAIN_SECTION
   arrmblsize = 500000000;
   gradient_structure::set_GRADSTACK_BUFFER_SIZE(20000000);
   gradient_structure::set_CMPDIF_BUFFER_SIZE(15000000);
-  gradient_structure::set_MAX_NVAR_OFFSET(500);
-  gradient_structure::set_NUM_DEPENDENT_VARIABLES(500);
+  gradient_structure::set_MAX_NVAR_OFFSET(2000);
+  gradient_structure::set_NUM_DEPENDENT_VARIABLES(2000);
   time(&start);
   
   EchoFile.open("Echo.Out");
@@ -30,7 +30,7 @@ DATA_SECTION
  int IDcnt;
  int MaxCells
 
- !! cout << "Age-reading estimation; September 2013" << endl;
+ !! cout << "Age-reading estimation; August 2020" << endl;
  
  init_int MaxReader;
  !! EchoFile << "# Maximum readers: " << MaxReader << endl;
@@ -81,6 +81,7 @@ DATA_SECTION
  !!   if (Iperfect(IDataS) == 0) NDataSetWithoutPerfect += 1; else cout << "Age reader " << Iperfect(IDataS) << " is known age" << endl;
  !!
  !!  }
+ 
 
  // Set up bias estimation
  int NumBias;
@@ -216,11 +217,63 @@ DATA_SECTION
  init_int TestVal;
  !! if (TestVal != 123456) { cout << "Test Number is not 123456; it is " << TestVal << endl; exit(1); }
  !! EchoFile << TestVal << endl;
+
+ !! EchoFile << "Structure of the data set" << endl;
+ !! EchoFile << "Data set # Entries Reader boolean" << endl;
+ imatrix ReaderStruc(1,1000,-1,MaxReader);
+ !! ReaderStruc.initialize();
+ ivector Presense(1,MaxReader);
+ int NrowStruc;
+ int Ifound; int Jfound;
+ imatrix ReaderSumm(1,NDataSet,1,3);
+ !! ReaderSumm.initialize();
+ !! NrowStruc = 0;
+ !! for (IDataS=1;IDataS<=NDataSet;IDataS++)
+ !!  for (int II=1; II<=Npnt(IDataS);II++)
+ !!   {
+ !!    Presense.initialize();
+ !!    for (Ireader=1;Ireader<=Nread(IDataS);Ireader++)
+ !!     if (TheData(IDataS,II,Ireader) >= 0) Presense(Ireader) = ReadPnt(IDataS,Ireader);
+ !!    Ifound = 0;
+ !!    for (int JJ=1;JJ<=NrowStruc;JJ++)
+ !!     if (ReaderStruc(JJ,-1) == IDataS)
+ !!      {
+ !!       Jfound = 1;
+ !!       for (Ireader=1;Ireader<=Nread(IDataS);Ireader++)
+ !!        if (Presense(Ireader) != ReaderStruc(JJ,Ireader)) Jfound = 0;
+ !!       if (Jfound==1) Ifound = JJ;
+ !!      }
+ !!    if (Ifound==0)
+ !!     {
+ !!      NrowStruc += 1;
+ !!      ReaderStruc(NrowStruc,-1) = IDataS;
+ !!      ReaderStruc(NrowStruc,0) = 1;
+ !!      ReaderSumm(IDataS,3) += 1;
+ !!      for (Ireader=1;Ireader<=Nread(IDataS);Ireader++) ReaderStruc(NrowStruc,Ireader) = Presense(Ireader);
+ !!     }
+ !!    else
+ !!     {
+ !!      ReaderStruc(Ifound,0) += 1;
+ !!     }
+ !!   }
+ !! for (int II=1;II<=NrowStruc;II++) EchoFile << ReaderStruc(II) << endl;
+ int MaxReaderOpt;
+ !! for (int II=1;II<=NrowStruc;II++)
+ !!  {
+ !!   IDataS = ReaderStruc(NrowStruc,-1);
+ !!   ReaderSumm(IDataS,1) = IDataS;
+ !!   MaxReaderOpt = 0;
+ !!   for (Ireader=1;Ireader<=Nread(IDataS);Ireader++) if (ReaderStruc(NrowStruc,Ireader) >0) MaxReaderOpt += 1;
+ !!   if (MaxReaderOpt > ReaderSumm(IDataS,2)) ReaderSumm(IDataS,2) = MaxReaderOpt;
+ !!  }
+ !!  
+ !! EchoFile << "ReaderSumm" << endl;
+ !! EchoFile << ReaderSumm << endl;
  
  !! cout << "Number of reads by data set:       " << Nreads << endl;
  !! cout << "Data sets without perfect readers: " << NDataSetWithoutPerfect << endl;
  !! cout << "Minimum and Maximum Ages:          " << MiAge << " " << MaAge << endl;
-
+ 
 // =========================================================================
 // =========================================================================
 
@@ -331,9 +384,10 @@ PRELIMINARY_CALCS_SECTION
  MaxCells = 1;
  for (IDataSet=1;IDataSet<=NDataSet;IDataSet++)
   {
-   Ncells = 1; for (Ireader=1;Ireader<=Nread(IDataSet);Ireader++) Ncells *= (MaxAge+1);
+   Ncells = 1; for (Ireader=1;Ireader<=ReaderSumm(IDataS,2);Ireader++) { Ncells *= (MaxAge+1); }
    if (Ncells > MaxCells) MaxCells = Ncells;
   }
+ cout << "total cells " << MaxCells << endl; 
  
  cout << "Done Preliminary Calcs" << endl;
  
@@ -521,6 +575,7 @@ FUNCTION  Create_Bias_and_CV
    // Spline Parameters relate to the CV
    if (SigOption == 5)
     {
+     cout << "Spline" << endl;
      dvector x(1,nknots(Ireader));
      dvar_vector VyI(1,nknots(Ireader));
      for (II = 1; II<=nknots(Ireader);II++) 
@@ -737,110 +792,123 @@ REPORT_SECTION
  // find the effective sample sizes
  report << "Compute the effective sample sizes" << endl;
  report << "==================================" << endl;
+ int GroupPointer;
+ GroupPointer = 0;
  if (last_phase())
  for (IDataSet=1;IDataSet<=NDataSet;IDataSet++)
   {
    report << "Data set: " << IDataSet << endl;
-   report << "Line Readers Obs_probability Pred_Probability" << endl;
-   cout << "Here" << endl;
+   report << "Data_set Group Group Line Readers Obs Obs_probability Pred_Probability" << endl;
    Top = 0; Bot = 0; 
-
-   // Find the total number of combinations of ages (MaxAge+1)**number_of_readers
-   Ncells = 1; for (Iread=1;Iread<=Nread(IDataSet);Iread++) Ncells *= (MaxAge+1);
-   cout << IDataSet << " " << Ncells << endl;
    
-   TotalProb = 0;
-   
-   // Move through each possible combination of ages between 0 and MaxAge 
-   for (II=1;II<=Ncells;II++)
+   for (int Kgroup=1;Kgroup<=ReaderSumm(IDataSet,3);Kgroup++)
     {
+     GroupPointer += 1;
+   
+     // Find the total number of combinations of ages (MaxAge+1)**number_of_readers
+     Ncells = 1; for (Iread=1;Iread<=ReaderSumm(IDataS,2);Iread++) Ncells *= (MaxAge+1);
+   
+     // Move through each possible combination of ages between 0 and MaxAge 
+     TotalProb = 0;
+     for (II=1;II<=Ncells;II++)
+      {
      
-     // Find the ages for this "cell" 
-     Ndiv = II;
-     for (Iread=1;Iread<=Nread(IDataSet);Iread++)
-      {
-       DivJ = 1; for (Jread=Nread(IDataSet);Jread>=Iread+1;Jread--) DivJ *= (MaxAge+1);
-       DivI = (Ndiv-1)/DivJ;    
-       Ages(Iread) = DivI;
-       Ndiv = Ndiv - DivI*DivJ;
-      }
+       // Find the ages for this "cell" 
+       Ndiv = II;
+       for (Iread=1;Iread<=Nread(IDataSet);Iread++) Ages(Iread) = -1;
+       for (Iread=1;Iread<=Nread(IDataSet);Iread++)
+        if (ReaderStruc(GroupPointer,Iread) > 0)
+         {
+          DivJ = 1; 
+          for (Jread=Nread(IDataSet);Jread>=Iread+1;Jread--) 
+           if (ReaderStruc(GroupPointer,Jread) > 0) DivJ *= (MaxAge+1);
+          DivI = (Ndiv-1)/DivJ;    
+          Ages(Iread) = DivI;
+          Ndiv = Ndiv - DivI*DivJ;
+         }
       
-     // Find the probability for this cell, i.e. the probability of an ageing reading of Ages(1)&Ages(2)&...
-     if (Iperfect(IDataSet) == 0)
-      {
-       Prob1 = 0;
-       for (Age1=MinAge;Age1<=MaxAge;Age1++)
-        {
-         // Prior probability * product over readers
-         Prob2 = Aprob(IDataSet,Age1);
-         for (Ireader=1;Ireader<=Nread(IDataSet);Ireader++)
-          { 
-           Jreader = ReadPnt(IDataSet,Ireader);
-           AgeA = Ages(Ireader); 
-           Prob2 *= AgeErrOut(Jreader,Age1,AgeA); 
-          } 
-         Prob1 += Prob2; 
-        }
-       ProbStore(II) = Prob1; 
-       TotalProb += Prob1;   
-      }
-     else
-      {
-       // Product over readers
-       Age1 = Ages(1);
-       Prob1 = 1;
-       for (Ireader=2;Ireader<=Nread(IDataSet);Ireader++)
-        { 
-         Jreader = ReadPnt(IDataSet,Ireader);
-         AgeA = Ages(Ireader); 
-         Prob1 *= AgeErrOut(Ireader,Age1,AgeA); 
-        }
-       ProbStore(II) = Prob1; 
-       TotalProb += Prob1;   
-      }
-    }
-     
-    for (II=1;II<=Ncells;II++)
-     {
-      
-     // Find the ages for this "cell" 
-      Ndiv = II;
-      for (Iread=1;Iread<=Nread(IDataSet);Iread++)
+      // Find the probability for this cell, i.e. the probability of an ageing reading of Ages(1)&Ages(2)&...
+      if (Iperfect(IDataSet) == 0)
        {
-        DivJ = 1; for (Jread=Nread(IDataSet);Jread>=Iread+1;Jread--) DivJ *= (MaxAge+1);
-        DivI = (Ndiv-1)/DivJ;    
-        Ages(Iread) = DivI;
-        Ndiv = Ndiv - DivI*DivJ;
+        Prob1 = 0;
+        for (Age1=MinAge;Age1<=MaxAge;Age1++)
+         {
+          // Prior probability * product over readers
+          Prob2 = Aprob(IDataSet,Age1);
+          for (Ireader=1;Ireader<=Nread(IDataSet);Ireader++)
+           { 
+            Jreader = ReadPnt(IDataSet,Ireader);
+            AgeA = Ages(Ireader); 
+            if (AgeA >= 0) Prob2 *= AgeErrOut(Jreader,Age1,AgeA); 
+           } 
+          Prob1 += Prob2; 
+         }
+        ProbStore(II) = Prob1; 
+        TotalProb += Prob1;   
        }
-      
-      // Check for a match
-      Jfound = 0; Pobs = 0;
-      for (JJ=1;JJ<=Npnt(IDataSet);JJ++)
+      else
        {
-        // Set Ifound to 1 if the ages don't match properly
-        Ifound = 0;
-        for (Iread=1;Iread<=Nread(IDataSet);Iread++)
-         if (Ages(Iread) != int(TheData(IDataSet,JJ,Iread))) Ifound = 1;
-        // We have a match so store the results 
-        if (Ifound == 0)
-         { Pobs = TheData(IDataSet,JJ,0)/TotalN(IDataSet); Jfound = 1; KK = JJ; }
-        }
+        // Product over readers
+        Age1 = Ages(1);
+        Prob1 = 1;
+        for (Ireader=2;Ireader<=Nread(IDataSet);Ireader++)
+         { 
+          Jreader = ReadPnt(IDataSet,Ireader);
+          AgeA = Ages(Ireader); 
+          if (Age1 >=0 & AgeA >= 0) Prob1 *= AgeErrOut(Ireader,Age1,AgeA); 
+         }
+        ProbStore(II) = Prob1; 
+        TotalProb += Prob1;   
+       }
+      }
+     
+     // Now complute 
+     for (II=1;II<=Ncells;II++)
+      {
       
-      // Find the probability for this cell 
-      Pest = ProbStore(II) / TotalProb+1.0e-190; 
-      if (Jfound == 1) 
-       {
-        report << "Data Point: " << KK << " ";
-        for (Iread=1;Iread<=Nread(IDataSet); Iread++) report << Ages(Iread) << " ";
-        report << Pobs << " " << Pest << endl;
-       } 
+       // Find the ages for this "cell" 
+       Ndiv = II;
+       for (Iread=1;Iread<=Nread(IDataSet);Iread++) Ages(Iread) = -1;
+       for (Iread=1;Iread<=Nread(IDataSet);Iread++)
+        if (ReaderStruc(GroupPointer,Iread) > 0)
+         {
+          DivJ = 1; 
+          for (Jread=Nread(IDataSet);Jread>=Iread+1;Jread--) 
+           if (ReaderStruc(GroupPointer,Jread) > 0) DivJ *= (MaxAge+1);
+          DivI = (Ndiv-1)/DivJ;    
+          Ages(Iread) = DivI;
+          Ndiv = Ndiv - DivI*DivJ;
+         }
       
-      // Compute the effective sample size
-      Top += Pest*(1-Pest);
-      Bot += square(Pest-Pobs);
+       // Check for a match
+       Jfound = 0; Pobs = 0;
+       for (JJ=1;JJ<=Npnt(IDataSet);JJ++)
+        {
+         // Set Ifound to 1 if the ages don't match properly
+         Ifound = 0;
+         for (Iread=1;Iread<=Nread(IDataSet);Iread++)
+          if (Ages(Iread) != int(TheData(IDataSet,JJ,Iread)) & int(TheData(IDataSet,JJ,Iread)) >=0) Ifound = 1;
+         // We have a match so store the results 
+         if (Ifound == 0)
+          {  Pobs = TheData(IDataSet,JJ,0)/ReaderStruc(GroupPointer,0); Jfound = 1; KK = JJ; }
+         }
       
+       // Find the probability for this cell 
+       Pest = ProbStore(II) / TotalProb+1.0e-190; 
+       if (Jfound == 1) 
+        {
+         report << "Data Point: " << IDataSet << " " << GroupPointer << " " << Kgroup << " " << KK << " ";
+         for (Iread=1;Iread<=Nread(IDataSet); Iread++) report << Ages(Iread) << " ";
+         report << TheData(IDataSet,KK,0) << " " << Pobs << " " << Pest << " " << ReaderStruc(GroupPointer,0) << endl;
+        } 
+      
+       // Compute the effective sample size muliplier
+       Top += Pest*(1-Pest)/float(ReaderStruc(GroupPointer,0));
+       Bot += square(Pest-Pobs);
+      
+      }
      }
-    EffPred = Top/Bot;
+    EffPred = Top/Bot*TotalN(IDataSet);
     report << "Data_Set Predicted_EFF Assumed_Eff Sample_size" << endl;
     report << IDataSet << " " << EffPred << " " << EffN(IDataSet) << " " << TotalN(IDataSet) << endl;
     if (EffNOpt(IDataSet) < 0) EffN(IDataSet) = value(EffPred);

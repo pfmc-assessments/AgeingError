@@ -40,6 +40,7 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
   df1$yvec <- as.numeric(df1$yvec)
   # remove rows with count of zero
   df1 <- df1[df1[,3]!=0,]
+  if (length(df1[,1])==0) return()
   #print(df1)
   # get axis limits
   if(is.null(maxage)){

@@ -1,3 +1,5 @@
+source("ageing_comparison.r")
+
 #' Plot output
 #'
 #' Plots age comparisons and results from the fitted Ageing Error model
@@ -56,7 +58,7 @@ PlotOutputFn <-
   Grep <- grep("age-structure", Rep)
   AgeStruct <- matrix(as.numeric(Rep[Grep[1]+7+1:(2*Ages)]),
                       ncol = 2, byrow = TRUE)
-
+  
   # Input reader error and bias
   Grep <- grep("age", Rep)[3]
   Temp <- Rep[Grep+1:(5*Nages*Nreaders)]
@@ -75,14 +77,20 @@ PlotOutputFn <-
                     dim = c(nrow(Data), Ages),
                     dimnames = list(paste("Otolith", 1:nrow(Data)),
                         paste("TrueAge", 0:MaxAge)))
+  # Check AEP adjustment (lets discuss)
   OtI <- AgeI <- ReadI <- 1
   for(OtI in 1:nrow(Data)){
     for(AgeI in 1:Ages){
-      AgeProbs[OtI, AgeI] <- AgeStruct[AgeI, 2]
+      #AgeProbs[OtI, AgeI] <- AgeStruct[AgeI, 2]
+      AgeProbs[OtI, AgeI] <- 1
       for(ReadI in 1:Nreaders){
         if(Data[OtI, ReadI+1] != -999){
           AgeRead <- Data[OtI, ReadI+1]
-          AgeProbs[OtI, AgeI] <- AgeStruct[AgeI, 2] *
+          #AgeProbs[OtI, AgeI] <- AgeStruct[AgeI, 2] *
+          #  (MisclassArray[ReadI, AgeI, AgeRead+1])^Data[OtI, 1]
+          
+          # ANDRE: Ageread+1 because the first column is age0
+          AgeProbs[OtI, AgeI] <- AgeProbs[OtI, AgeI] *
             (MisclassArray[ReadI, AgeI, AgeRead+1])^Data[OtI, 1]
         } # end check for value other than -999
       } # end loop over readers
@@ -92,9 +100,10 @@ PlotOutputFn <-
   # Remove MaxAge before calculating "TrueAge"
   # because the MaxAge is a plus-group, and ends up with
   # maximum probability for most ages in the upper tail
+  # ANDRE - Found another issue - should be age-1 because the first age is zero
   TrueAge <- apply(AgeProbs, MARGIN = 1,
                    FUN = function(Vec){order(Vec[-length(Vec)],
-                       decreasing = TRUE)[1]})
+                       decreasing = TRUE)[1]})-1  
 
   DataExpanded <- Data[rep(1:nrow(Data), Data[, 1]), -1]
   DataExpanded[DataExpanded == -999] <- NA
@@ -117,6 +126,7 @@ PlotOutputFn <-
                           xlab = ReaderNames[ireader],
                           ylab = ReaderNames[jreader],
                           maxage = max(DataExpanded, na.rm=TRUE),
+                          hist=F,
                           png = (PlotType == "PNG"),
                           SaveFile = SaveFile,
                           filename = paste0(ReaderNames[ireader],
@@ -227,3 +237,11 @@ PlotOutputFn <-
                  "ErrorAndBiasArray" = ErrorAndBiasArray)
   return(Output)
 }
+
+File <- "D:\\NWFSC\\Ageing Error 2021\\Maia2\\AgeMat.dat"
+Nreader <- 6
+Data <- matrix(scan(File,skip=52,n=2494*7),ncol=7,byrow=T)
+SaveFile <- "D:\\NWFSC\\Ageing Error 2021\\Maia2"
+Output <- PlotOutputFn(Data, 100, SaveFile, PlotType = "PNG", subplot=1:3, ReaderNames = NULL)
+print(str(Output))
+    
