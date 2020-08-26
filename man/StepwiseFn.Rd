@@ -4,9 +4,21 @@
 \alias{StepwiseFn}
 \title{Stepwise model selection}
 \usage{
-StepwiseFn(SearchMat, Data, NDataSets, MinAge, MaxAge, RefAge, MaxSd,
-  MaxExpectedAge, SaveFile, EffSampleSize = 0, Intern = TRUE,
-  InformationCriterion = "AIC", SelectAges = TRUE)
+StepwiseFn(
+  SearchMat,
+  Data,
+  NDataSets,
+  MinAge,
+  MaxAge,
+  RefAge,
+  MaxSd,
+  MaxExpectedAge,
+  SaveFile,
+  EffSampleSize = 0,
+  Intern = TRUE,
+  InformationCriterion = "AIC",
+  SelectAges = TRUE
+)
 }
 \arguments{
 \item{SearchMat}{Description needed}

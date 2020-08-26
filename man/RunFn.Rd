@@ -4,10 +4,28 @@
 \alias{RunFn}
 \title{Run ageing error model}
 \usage{
-RunFn(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge,
-  MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile, EffSampleSize = 0,
-  Intern = TRUE, AdmbFile = NULL, JustWrite = FALSE,
-  CallType = "system", ExtraArgs = " -est", verbose = TRUE)
+RunFn(
+  Data,
+  SigOpt,
+  KnotAges,
+  BiasOpt,
+  NDataSets,
+  MinAge,
+  MaxAge,
+  RefAge,
+  MinusAge,
+  PlusAge,
+  MaxSd,
+  MaxExpectedAge,
+  SaveFile,
+  EffSampleSize = 0,
+  Intern = TRUE,
+  AdmbFile = NULL,
+  JustWrite = FALSE,
+  CallType = "system",
+  ExtraArgs = " -est",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{Data}{This is the data set as previously formatted. If the data has

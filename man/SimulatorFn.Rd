@@ -4,8 +4,18 @@
 \alias{SimulatorFn}
 \title{Simulate double reading data}
 \usage{
-SimulatorFn(Nreaders, M, SelexForm, ErrorParams, BiasParams, SelexParams,
-  ReadsMat, RecCv = 0.6, RecAr1 = 0.8, Amax = 100)
+SimulatorFn(
+  Nreaders,
+  M,
+  SelexForm,
+  ErrorParams,
+  BiasParams,
+  SelexParams,
+  ReadsMat,
+  RecCv = 0.6,
+  RecAr1 = 0.8,
+  Amax = 100
+)
 }
 \arguments{
 \item{Nreaders}{The number of ageing readers}

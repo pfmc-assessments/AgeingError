@@ -4,8 +4,15 @@
 \alias{PlotOutputFn}
 \title{Plot output}
 \usage{
-PlotOutputFn(Data, MaxAge, SaveFile, PlotType = "PNG", subplot = 1:3,
-  ReaderNames = NULL, ...)
+PlotOutputFn(
+  Data,
+  MaxAge,
+  SaveFile,
+  PlotType = "PNG",
+  subplot = 1:3,
+  ReaderNames = NULL,
+  ...
+)
 }
 \arguments{
 \item{Data}{Input data matrix}

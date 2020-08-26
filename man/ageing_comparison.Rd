@@ -4,12 +4,24 @@
 \alias{ageing_comparison}
 \title{Plot comparison of double age readings}
 \usage{
-ageing_comparison(xvec, yvec, scale.pts = 2, col.pts = grey(0.1, alpha
-  = 0.5), col.hist = rgb(0, 0, 0.5, alpha = 0.7), counts = TRUE,
-  maxage = NULL, hist = TRUE, hist.frac = 0.1,
-  xlab = "Age reader A", ylab = "Age reader B", title = NULL,
-  png = FALSE, filename = "ageing_comparison.png", SaveFile = NULL,
-  verbose = TRUE)
+ageing_comparison(
+  xvec,
+  yvec,
+  scale.pts = 2,
+  col.pts = grey(0.1, alpha = 0.5),
+  col.hist = rgb(0, 0, 0.5, alpha = 0.7),
+  counts = TRUE,
+  maxage = NULL,
+  hist = TRUE,
+  hist.frac = 0.1,
+  xlab = "Age reader A",
+  ylab = "Age reader B",
+  title = NULL,
+  png = FALSE,
+  filename = "ageing_comparison.png",
+  SaveFile = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{xvec}{vector of values from reader A}

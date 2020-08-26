@@ -1,5 +1,3 @@
-source("ageing_comparison.r")
-
 #' Plot output
 #'
 #' Plots age comparisons and results from the fitted Ageing Error model
@@ -237,11 +235,3 @@ PlotOutputFn <-
                  "ErrorAndBiasArray" = ErrorAndBiasArray)
   return(Output)
 }
-
-File <- "D:\\NWFSC\\Ageing Error 2021\\Maia2\\AgeMat.dat"
-Nreader <- 6
-Data <- matrix(scan(File,skip=52,n=2494*7),ncol=7,byrow=T)
-SaveFile <- "D:\\NWFSC\\Ageing Error 2021\\Maia2"
-Output <- PlotOutputFn(Data, 100, SaveFile, PlotType = "PNG", subplot=1:3, ReaderNames = NULL)
-print(str(Output))
-    
