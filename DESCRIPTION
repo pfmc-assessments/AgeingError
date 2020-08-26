@@ -1,8 +1,8 @@
 Package: nwfscAgeingError
 Type: Package
-Title: a user interface in R for the Punt et al. (2008)
+Title: A user interface in R for the Punt et al. (2008)
      method for calculating ageing error and imprecision
-Version: 1.2.1
+Version: 1.3.0
 Date: 2019-04-11
 Author: James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor
 Maintainer: Kelli Faye Johnson <Kelli.Johnson@noaa.gov>
