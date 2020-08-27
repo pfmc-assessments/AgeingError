@@ -104,4 +104,5 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
   if(png){
     dev.off()
   }
+  invisible(df1)
 }

@@ -108,18 +108,19 @@ PlotOutputFn <-
 
   ####################################################################
   # Plot comparison of data for each pair of readers
-
   if(1 %in% subplot){
-    if(PlotType == "PDF"){
-      pdf(paste0(ReaderNames[ireader],
-                 " vs ", ReaderNames[jreader], ".pdf"),
-          width = 6, height = 6)
-    }
 
     # make plots of input data for each reader pair
     for(ireader in 1:(Nreaders-1)){
       for(jreader in (ireader+1):Nreaders){
-        ageing_comparison(xvec = DataExpanded[,ireader],
+        if (PlotType == "PDF") {
+          pdfname <- paste0(ReaderNames[ireader],
+            " vs ", ReaderNames[jreader], ".pdf")
+          pdf(pdfname,
+            width = 6, height = 6)
+        }
+
+        out <- ageing_comparison(xvec = DataExpanded[,ireader],
                           yvec = DataExpanded[,jreader],
                           xlab = ReaderNames[ireader],
                           ylab = ReaderNames[jreader],
@@ -131,6 +132,12 @@ PlotOutputFn <-
                               " vs ", ReaderNames[jreader], ".png"),
                           verbose = FALSE,
                           ...)
+        if (PlotType == "PDF") {
+          dev.off()
+          if (is.null(out)) {
+            unlink(pdfname)
+          }
+        }
       }
     }
   } # end check for whether subplot 1 was requested
