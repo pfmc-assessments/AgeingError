@@ -119,7 +119,7 @@ function(SearchMat, Data, NDataSets, MinAge, MaxAge, RefAge, MaxSd, MaxExpectedA
           SaveFile <- paste0(SaveFile, .Platform$file.sep)
         }
         RunFile = paste(SaveFile,"Run\\",sep="")
-        dir.create(RunFile)
+        dir.create(RunFile, showWarnings = FALSE)
         file.copy(from=paste(SaveFile,"agemat.exe",sep=""), to=paste(RunFile,"agemat.exe",sep=""))
 
         # Increment Index
