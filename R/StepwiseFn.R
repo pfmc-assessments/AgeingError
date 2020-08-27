@@ -115,6 +115,9 @@ function(SearchMat, Data, NDataSets, MinAge, MaxAge, RefAge, MaxSd, MaxExpectedA
         if(all(ParamVecCurrent==ParamVecOpt)) ParamVecOptPreviouslyEstimates=TRUE
 
         # Make a new file for ADMB
+        if (!grepl(paste0(.Platform$file.sep, "$"), SaveFile)) {
+          SaveFile <- paste0(SaveFile, .Platform$file.sep)
+        }
         RunFile = paste(SaveFile,"Run\\",sep="")
         dir.create(RunFile)
         file.copy(from=paste(SaveFile,"agemat.exe",sep=""), to=paste(RunFile,"agemat.exe",sep=""))
