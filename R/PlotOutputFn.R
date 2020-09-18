@@ -125,7 +125,7 @@ PlotOutputFn <-
                           xlab = ReaderNames[ireader],
                           ylab = ReaderNames[jreader],
                           maxage = max(DataExpanded, na.rm=TRUE),
-                          hist=F,
+                          hist = TRUE,
                           png = (PlotType == "PNG"),
                           SaveFile = SaveFile,
                           filename = paste0(ReaderNames[ireader],
