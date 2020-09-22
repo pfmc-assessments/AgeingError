@@ -56,15 +56,25 @@ a function of true age. Possible entries include:
 
 \item{KnotAges}{Ages associated with (necessary for options 5 or 6)}
 
-\item{BiasOpt}{This is a vector with one entry for each reader:
-\itemize{
-  \item{"-1", "-2", "-3": See SigOpt}
-  \item{"0": Unbiased}
-  \item{"1": Constant CV, i.e., a 1-parameter linear relationship of bias
-        with true age}
-  \item{"2": Curvilinear, i.e., a 2-parameter Hollings-form relationship
-        of bias with true age}
-}}
+\item{BiasOpt}{A vector with one entry for each reader specifying the type
+of bias specific to each reader. Positive values lead to estimated
+parameters and negative values are used for shared parameters
+between readers. Parameter sharing is common when there is more
+than one reader in a lab working together to refine their methods
+such that they have matching techniques. The following types of bias
+options are available:
+\describe{
+  \item{0}{Unbiased}
+  \item{1}{Constant CV: a 1-parameter linear relationship of bias
+    with true age}
+  \item{2}{Curvilinear: a 2-parameter Hollings-form relationship
+    of bias with true age}
+}
+An example entry for the situation where you have seven readers and you assume
+that the first reader is unbiased, readers 2-7 have a curvilinear
+bias, reader 3 shares parameters with reader 2, reader 5 shares parameters
+with reader 4, and reader 7 shares parameters with reader 6 would look like
+\code{c(0, 2, -2, 2, -4, 2, -6)}.}
 
 \item{NDataSets}{This is generally "1" and other values are not implemented
 in the current R-code.}
