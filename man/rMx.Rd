@@ -11,7 +11,7 @@ rMx(Input)
 }
 \description{
 ## The function is currently defined as
-function (Input) 
+function (Input)
 {
   if (is.vector(Input)) {
       Output <- t(as.matrix(Input))

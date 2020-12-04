@@ -22,65 +22,75 @@
 #' @author Ian G. Taylor
 #' @export
 
-ageing_comparison <- function(xvec, yvec, scale.pts=2, 
-                              col.pts=grey(.1,alpha=.5),
-                              col.hist=rgb(0,0,.5,alpha=.7),
-                              counts=TRUE, maxage=NULL,
-                              hist=TRUE, hist.frac=.1,
-                              xlab="Age reader A",
-                              ylab="Age reader B",
-                              title=NULL,
-                              png=FALSE,
-                              filename="ageing_comparison.png",
-                              SaveFile=NULL,
-                              verbose=TRUE){
+ageing_comparison <- function(xvec, yvec, scale.pts = 2,
+                              col.pts = grey(.1, alpha = .5),
+                              col.hist = rgb(0, 0, .5, alpha = .7),
+                              counts = TRUE, maxage = NULL,
+                              hist = TRUE, hist.frac = .1,
+                              xlab = "Age reader A",
+                              ylab = "Age reader B",
+                              title = NULL,
+                              png = FALSE,
+                              filename = "ageing_comparison.png",
+                              SaveFile = NULL,
+                              verbose = TRUE) {
   # get counts of each pair
-  df1 <- as.data.frame(table(xvec,yvec), stringsAsFactors=FALSE)
+  df1 <- as.data.frame(table(xvec, yvec), stringsAsFactors = FALSE)
   df1$xvec <- as.numeric(df1$xvec)
   df1$yvec <- as.numeric(df1$yvec)
   # remove rows with count of zero
-  df1 <- df1[df1[,3]!=0,]
-  if (length(df1[,1])==0) return()
-  #print(df1)
+  df1 <- df1[df1[, 3] != 0, ]
+  if (length(df1[, 1]) == 0) {
+    return()
+  }
+  # print(df1)
   # get axis limits
-  if(is.null(maxage)){
-    maxage <- ceiling(max(xvec, yvec, na.rm=TRUE))
+  if (is.null(maxage)) {
+    maxage <- ceiling(max(xvec, yvec, na.rm = TRUE))
   }
   # set regular vs. internal axes depending on whether min is 0
-  axs <- 'i'
-  if(min(xvec, yvec, na.rm=TRUE) == 0){
-    axs <- 'r'
+  axs <- "i"
+  if (min(xvec, yvec, na.rm = TRUE) == 0) {
+    axs <- "r"
   }
   # open PNG file if requested
-  if(png){
-    if(is.null(SaveFile)){
+  if (png) {
+    if (is.null(SaveFile)) {
       SaveFile <- getwd()
     }
-    if(verbose){
-      message('writing image to', file.path(SaveFile, filename))
+    if (verbose) {
+      message("writing image to", file.path(SaveFile, filename))
     }
-    png(file.path(SaveFile, filename), width=6.5, height=6.5, pointsize=10,
-        res=300, units='in')
+    png(file.path(SaveFile, filename),
+      width = 6.5, height = 6.5, pointsize = 10,
+      res = 300, units = "in"
+    )
   }
   # make empty plot
-  plot(0,type='n', xlim=c(0,maxage+1), ylim=c(0,maxage+1),
-       xlab=xlab, ylab=ylab, axes=F, xaxs=axs, yaxs=axs)
+  plot(0,
+    type = "n", xlim = c(0, maxage + 1), ylim = c(0, maxage + 1),
+    xlab = xlab, ylab = ylab, axes = F, xaxs = axs, yaxs = axs
+  )
   # add 1 to 1 line
-  abline(0, 1, col=1)
+  abline(0, 1, col = 1)
 
   # add histograms along the sides if requested
-  # note: this system won't work 
-  if(hist){
-    hist.x <- hist(xvec, breaks=0:maxage, plot=FALSE)
-    hist.y <- hist(yvec, breaks=0:maxage, plot=FALSE)
-    scale.hist <- hist.frac*maxage/max(hist.x$counts, hist.y$counts, na.rm=TRUE)
-    for(i in 1:maxage){
-      rect(xleft=hist.x$breaks[i],               ybottom=0,
-           xright=hist.x$breaks[i+1],            ytop=scale.hist*hist.x$counts[i+1],
-           col=col.hist, border=FALSE)
-      rect(xleft=0,                              ybottom=hist.y$breaks[i],
-           xright=scale.hist*hist.y$counts[i+1], ytop=hist.y$breaks[i+1],
-           col=col.hist, border=FALSE)
+  # note: this system won't work
+  if (hist) {
+    hist.x <- hist(xvec, breaks = 0:maxage, plot = FALSE)
+    hist.y <- hist(yvec, breaks = 0:maxage, plot = FALSE)
+    scale.hist <- hist.frac * maxage / max(hist.x$counts, hist.y$counts, na.rm = TRUE)
+    for (i in 1:maxage) {
+      rect(
+        xleft = hist.x$breaks[i], ybottom = 0,
+        xright = hist.x$breaks[i + 1], ytop = scale.hist * hist.x$counts[i + 1],
+        col = col.hist, border = FALSE
+      )
+      rect(
+        xleft = 0, ybottom = hist.y$breaks[i],
+        xright = scale.hist * hist.y$counts[i + 1], ytop = hist.y$breaks[i + 1],
+        col = col.hist, border = FALSE
+      )
     }
   }
   # add axes and box around the figure
@@ -88,20 +98,20 @@ ageing_comparison <- function(xvec, yvec, scale.pts=2,
   axis(2)
   grid()
   # add lines at 0 if axes have padding around 0
-  if(axs == 'r'){
-    rect(xleft = 0, ybottom = 0, xright=par()$usr[2], ytop=par()$usr[4])
-  }else{
+  if (axs == "r") {
+    rect(xleft = 0, ybottom = 0, xright = par()$usr[2], ytop = par()$usr[4])
+  } else {
     box()
   }
   # add points
-  points(df1[,1:2], col=col.pts, pch=16, cex=scale.pts*sqrt(df1[,3]))
+  points(df1[, 1:2], col = col.pts, pch = 16, cex = scale.pts * sqrt(df1[, 3]))
   # add counts as text
-  if(counts){
-    text(df1[,1:2], col='white', lab=paste(df1[,3]), cex=scale.pts/3)
+  if (counts) {
+    text(df1[, 1:2], col = "white", lab = paste(df1[, 3]), cex = scale.pts / 3)
   }
   # add title
   title(title)
-  if(png){
+  if (png) {
     dev.off()
   }
   invisible(df1)

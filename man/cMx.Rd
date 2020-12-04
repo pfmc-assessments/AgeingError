@@ -11,7 +11,7 @@ cMx(Input)
 }
 \description{
 ## The function is currently defined as
-function (Input) 
+function (Input)
 {
   as.matrix(Input)
 }
