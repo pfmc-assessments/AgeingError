@@ -44,21 +44,34 @@ StepwiseFn(
 \item{Intern}{Description needed}
 
 \item{InformationCriterion}{Description needed}
+
+\item{SelectAges}{Description needed}
 }
 \description{
-Code for running stepwise model selection
+Code for running stepwise model selection.
 }
 \examples{
 
+example(RunFn)
 \dontrun{
-# Run initial model
-example(nwfscAgeingError)
+##### Run the model (MAY TAKE 5-10 MINUTES)
+fileloc <- file.path(tempdir(), "age")
+dir.create(fileloc, showWarnings = FALSE)
+RunFn(Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
+  BiasOpt = BiasOpt,
+  NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,
+  MinusAge = 1, PlusAge = 30, SaveFile = fileloc,
+  AdmbFile = file.path(system.file("executables",
+    package = "nwfscAgeingError"), .Platform$file.sep),
+  EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"
+)
+# Plot output
+PlotOutputFn(Data = AgeReads2, MaxAge = MaxAge,
+  SaveFile = fileloc, PlotType = "PDF"
+)
+}
 
-####################
-#
-# Stepwise selection
-#
-####################
+##### Stepwise selection
 
 # Parameters
 MaxAge <- ceiling(max(AgeReads2) / 10) * 10
@@ -69,9 +82,19 @@ StartMinusAge <- 1
 StartPlusAge <- 30
 
 # Define matrix explaining stepwise model selection options
-# One row for each reader + 2 rows for PlusAge (the age where the proportion-at-age begins to decrease exponentially with increasing age) and MinusAge (the age where the proportion-at-age begins to decrease exponentially with decreasing age)
-# Each element of a given row is a possible value to search across for that reader
-SearchMat <- array(NA, dim = c(Nreaders * 2 + 2, 7), dimnames = list(c(paste("Error_Reader", 1:Nreaders), paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"), paste("Option", 1:7)))
+# One row for each reader + 2 rows for
+# PlusAge (age where the proportion-at-age begins to
+# decrease exponentially with increasing age) and
+# MinusAge (the age where the proportion-at-age begins to
+# decrease exponentially with decreasing age)
+# Each element of a given row is a possible value to search
+# across for that reader
+SearchMat <- array(NA,
+  dim = c(Nreaders * 2 + 2, 7),
+  dimnames = list(c(paste("Error_Reader", 1:Nreaders),
+    paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"),
+    paste("Option", 1:7))
+)
 # Readers 1 and 3 search across options 1-3 for ERROR
 SearchMat[c(1, 3), 1:3] <- rep(1, 2) \%o\% c(1, 2, 3)
 # Reader 2 mirrors reader 1
@@ -87,19 +110,51 @@ SearchMat[7, 1:3] <- c(1, 2, 0)
 # Reader 4 mirrors reader 3
 SearchMat[8, 1] <- -3
 # MinusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-SearchMat[9, 1:7] <- c(StartMinusAge, StartMinusAge - 10, StartMinusAge - 4, StartMinusAge - 1, StartMinusAge + 1, StartMinusAge + 4, StartMinusAge + 10)
-SearchMat[9, 1:7] <- ifelse(SearchMat[9, 1:7] < MinAge, NA, SearchMat[9, 1:7])
+SearchMat[9, 1:7] <- c(
+  StartMinusAge,
+  StartMinusAge - 10,
+  StartMinusAge - 4,
+  StartMinusAge - 1,
+  StartMinusAge + 1,
+  StartMinusAge + 4,
+  StartMinusAge + 10
+)
+SearchMat[9, 1:7] <- ifelse(SearchMat[9,1:7] < MinAge,
+  NA, SearchMat[9, 1:7]
+)
 # PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-SearchMat[10, 1:7] <- c(StartPlusAge, StartPlusAge - 10, StartPlusAge - 4, StartPlusAge - 1, StartPlusAge + 1, StartPlusAge + 4, StartPlusAge + 10)
-SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge, NA, SearchMat[10, 1:7])
+SearchMat[10, 1:7] <- c(
+  StartPlusAge,
+  StartPlusAge - 10,
+  StartPlusAge - 4,
+  StartPlusAge - 1,
+  StartPlusAge + 1,
+  StartPlusAge + 4,
+  StartPlusAge + 10
+)
+SearchMat[10,1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
+  NA, SearchMat[10, 1:7])
 
 # Run model selection
 # This outputs a series of files
-# 1. "Stepwise - Model loop X.txt" -- Shows the AIC/BIC/AICc value for all different combinations of parameters arising from changing one parameter at a time according to SearchMat during loop X
-# 2. "Stepwise - Record.txt" -- The Xth row of IcRecord shows the record of the Information Criterion for all trials in loop X, while the Xth row of StateRecord shows the current selected values for all parameters at the end of loop X
+# 1. "Stepwise - Model loop X.txt" --
+#   Shows the AIC/BIC/AICc value for all different combinations
+#   of parameters arising from changing one parameter at a time
+#   according to SearchMat during loop X
+# 2. "Stepwise - Record.txt" --
+#   The Xth row of IcRecord shows the record of the
+#   Information Criterion for all trials in loop X,
+#   while the Xth row of StateRecord shows the current selected values
+#   for all parameters at the end of loop X
 # 3. Standard plots for each loop
-# WARNING: One run of this stepwise model building example can take 8+ hours, and should be run overnight
-StepwiseFn(SearchMat = SearchMat, Data = AgeReads2, NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10, MaxSd = 40, MaxExpectedAge = MaxAge + 10, SaveFile = DateFile, InformationCriterion = c("AIC", "AICc", "BIC")[3])
+# WARNING: One run of this stepwise model building example can take
+# 8+ hours, and should be run overnight
+\dontrun{
+StepwiseFn(SearchMat = SearchMat, Data = AgeReads2,
+  NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge,
+  RefAge = 10, MaxSd = 40, MaxExpectedAge = MaxAge + 10,
+  SaveFile = fileloc, InformationCriterion = c("AIC", "AICc", "BIC")[3]
+)
 }
 
 }

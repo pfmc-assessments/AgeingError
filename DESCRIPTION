@@ -1,7 +1,7 @@
 Package: nwfscAgeingError
 Type: Package
 Title: Source Code for Punt et al. (2008): Ageing Error and Imprecision
-Version: 1.3.0
+Version: 1.3.1
 Authors@R: c(
   person(given = c("Kelli", "F."),
     family = "Johnson",

@@ -6,10 +6,10 @@
 #' @param MaxAge Maximum estimated age
 #' @param SaveFile Directory for fitted model
 #' @param PlotType Type of saved plots, i.e. PDF or PNG
+#' @param subplot Vector of which plots to create.
 #' @param ReaderNames Vector with names of each reader, defaults to
 #' "Reader 1", "Reader 2", etc.
-#' @param subplot Vector of which plots to create.
-#' @param dots Additional arguments passed to the
+#' @param ... Additional arguments passed to the
 #' \code{\link{ageing_comparison}} function.
 #' @return Returns AIC, AICc, and BIC for fitted model.
 #'
@@ -137,7 +137,7 @@ PlotOutputFn <-
               ReaderNames[ireader],
               " vs ", ReaderNames[jreader], ".pdf"
             )
-            pdf(pdfname,
+            grDevices::pdf(pdfname,
               width = 6, height = 6
             )
           }
@@ -159,7 +159,7 @@ PlotOutputFn <-
             ...
           )
           if (PlotType == "PDF") {
-            dev.off()
+            grDevices::dev.off()
             if (is.null(out)) {
               unlink(pdfname)
             }
@@ -173,16 +173,18 @@ PlotOutputFn <-
 
     if (2 %in% subplot) {
       if (PlotType == "PDF") {
-        pdf(file.path(SaveFile, "Estimated vs Observed Age Structure.pdf"),
+        grDevices::pdf(
+          file.path(SaveFile, "Estimated vs Observed Age Structure.pdf"),
           width = 6, height = 6
         )
       }
       if (PlotType == "PNG") {
-        png(file.path(SaveFile, "Estimated vs Observed Age Structure.png"),
+        grDevices::png(
+          file.path(SaveFile, "Estimated vs Observed Age Structure.png"),
           width = 6, height = 6, units = "in", res = 200
         )
       }
-      par(
+      graphics::par(
         mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0),
         tck = -0.02, oma = c(0, 0, 0, 0) + 0.1
       )
@@ -190,11 +192,11 @@ PlotOutputFn <-
         x = AgeStruct[, 1], y = AgeStruct[, 2], type = "s", lwd = 2,
         xlab = "Age", ylab = "Prop", main = "Estimated=Black, Observed=Red"
       )
-      hist(as.matrix(DataExpanded),
+      graphics::hist(as.matrix(DataExpanded),
         add = TRUE, freq = FALSE, breaks = seq(0, MaxAge, by = 1),
-        col = rgb(red = 1, green = 0, blue = 0, alpha = 0.30)
+        col = grDevices::rgb(red = 1, green = 0, blue = 0, alpha = 0.30)
       )
-      dev.off()
+      grDevices::dev.off()
     } # end check for whether subplot was requested
 
     ####################################################################
@@ -204,16 +206,18 @@ PlotOutputFn <-
       Ncol <- ceiling(sqrt(Nreaders))
       Nrow <- ceiling(Nreaders / Ncol)
       if (PlotType == "PDF") {
-        pdf(file.path(SaveFile, "True vs Reads (by reader).pdf"),
+        grDevices::pdf(
+          file.path(SaveFile, "True vs Reads (by reader).pdf"),
           width = Ncol * 3, height = Nrow * 3
         )
       }
       if (PlotType == "PNG") {
-        png(file.path(SaveFile, "True vs Reads (by reader).png"),
+        grDevices::png(
+          file.path(SaveFile, "True vs Reads (by reader).png"),
           width = Ncol * 3, height = Nrow * 3, units = "in", res = 200
         )
       }
-      par(
+      graphics::par(
         mfrow = c(Nrow, Ncol), mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0),
         tck = -0.02, oma = c(0, 0, 5, 0) + 0.1
       )
@@ -228,35 +232,39 @@ PlotOutputFn <-
         plot(
           x = Temp[, 1], y = Temp[, 2],
           ylim = c(0, MaxAge), xlim = c(0, MaxAge),
-          col = rgb(red = 0, green = 0, blue = 0, alpha = 0.2),
+          col = grDevices::rgb(red = 0, green = 0, blue = 0, alpha = 0.2),
           xlab = "Mode predicted age | parameters",
           ylab = "Read age", lwd = 2, main = Main, pch = 21, cex = 0.2
         )
-        lines(x = c(0, MaxAge), y = c(0, MaxAge), lwd = 1, lty = "dashed")
-        lines(
+        graphics::lines(
+          x = c(0, MaxAge),
+          y = c(0, MaxAge),
+          lwd = 1, lty = "dashed"
+        )
+        graphics::lines(
           x = ErrorAndBiasArray["True_Age", , ReadI],
           y = ErrorAndBiasArray["Expected_age", , ReadI],
           type = "l", col = "red", lwd = 1
         )
-        lines(
+        graphics::lines(
           x = ErrorAndBiasArray["True_Age", , ReadI],
           y = ErrorAndBiasArray["SD", , ReadI],
           type = "l", col = "blue", lwd = 1
         )
-        lines(
+        graphics::lines(
           x = ErrorAndBiasArray["True_Age", , ReadI],
           y = ErrorAndBiasArray["Expected_age", , ReadI] +
             2 * ErrorAndBiasArray["SD", , ReadI],
           type = "l", col = "red", lwd = 1, lty = "dashed"
         )
-        lines(
+        graphics::lines(
           x = ErrorAndBiasArray["True_Age", , ReadI],
           y = ErrorAndBiasArray["Expected_age", , ReadI] -
             2 * ErrorAndBiasArray["SD", , ReadI],
           type = "l", col = "red", lwd = 1, lty = "dashed"
         )
       }
-      mtext(
+      graphics::mtext(
         side = 3, outer = TRUE,
         text = paste0(
           "Reads(dot), Sd(blue), expected_read(red solid line),\n",
@@ -264,7 +272,7 @@ PlotOutputFn <-
         ),
         line = 1
       )
-      dev.off()
+      grDevices::dev.off()
     } # end check for whether subplot was requested
 
     ## AIC
@@ -284,7 +292,7 @@ PlotOutputFn <-
     # Write definitions to file
     for (ReadI in 1:Nreaders) {
       Main <- ReaderNames[ReadI]
-      write.csv(ErrorAndBiasArray[, , ReadI],
+      utils::write.csv(ErrorAndBiasArray[, , ReadI],
         file = file.path(SaveFile, paste0("SS_format_", Main, ".csv"))
       )
     }

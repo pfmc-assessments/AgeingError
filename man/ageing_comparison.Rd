@@ -8,8 +8,8 @@ ageing_comparison(
   xvec,
   yvec,
   scale.pts = 2,
-  col.pts = grey(0.1, alpha = 0.5),
-  col.hist = rgb(0, 0, 0.5, alpha = 0.7),
+  col.pts = grDevices::grey(0.1, alpha = 0.5),
+  col.hist = grDevices::rgb(0, 0, 0.5, alpha = 0.7),
   counts = TRUE,
   maxage = NULL,
   hist = TRUE,
@@ -27,6 +27,8 @@ ageing_comparison(
 \item{xvec}{vector of values from reader A}
 
 \item{yvec}{vector of values from reader B}
+
+\item{scale.pts}{Documentation needed.}
 
 \item{col.pts}{color for points}
 

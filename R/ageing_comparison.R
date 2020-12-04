@@ -5,6 +5,7 @@
 #'
 #' @param xvec vector of values from reader A
 #' @param yvec vector of values from reader B
+#' @param scale.pts Documentation needed.
 #' @param col.pts color for points
 #' @param col.hist color for histograms
 #' @param counts include text within each bubble showing count of values?
@@ -23,8 +24,8 @@
 #' @export
 
 ageing_comparison <- function(xvec, yvec, scale.pts = 2,
-                              col.pts = grey(.1, alpha = .5),
-                              col.hist = rgb(0, 0, .5, alpha = .7),
+                              col.pts = grDevices::grey(.1, alpha = .5),
+                              col.hist = grDevices::rgb(0, 0, .5, alpha = .7),
                               counts = TRUE, maxage = NULL,
                               hist = TRUE, hist.frac = .1,
                               xlab = "Age reader A",
@@ -61,7 +62,7 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
     if (verbose) {
       message("writing image to", file.path(SaveFile, filename))
     }
-    png(file.path(SaveFile, filename),
+    grDevices::png(file.path(SaveFile, filename),
       width = 6.5, height = 6.5, pointsize = 10,
       res = 300, units = "in"
     )
@@ -72,21 +73,21 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
     xlab = xlab, ylab = ylab, axes = F, xaxs = axs, yaxs = axs
   )
   # add 1 to 1 line
-  abline(0, 1, col = 1)
+  graphics::abline(0, 1, col = 1)
 
   # add histograms along the sides if requested
   # note: this system won't work
   if (hist) {
-    hist.x <- hist(xvec, breaks = 0:maxage, plot = FALSE)
-    hist.y <- hist(yvec, breaks = 0:maxage, plot = FALSE)
+    hist.x <- graphics::hist(xvec, breaks = 0:maxage, plot = FALSE)
+    hist.y <- graphics::hist(yvec, breaks = 0:maxage, plot = FALSE)
     scale.hist <- hist.frac * maxage / max(hist.x$counts, hist.y$counts, na.rm = TRUE)
     for (i in 1:maxage) {
-      rect(
+      graphics::rect(
         xleft = hist.x$breaks[i], ybottom = 0,
         xright = hist.x$breaks[i + 1], ytop = scale.hist * hist.x$counts[i + 1],
         col = col.hist, border = FALSE
       )
-      rect(
+      graphics::rect(
         xleft = 0, ybottom = hist.y$breaks[i],
         xright = scale.hist * hist.y$counts[i + 1], ytop = hist.y$breaks[i + 1],
         col = col.hist, border = FALSE
@@ -94,25 +95,31 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
     }
   }
   # add axes and box around the figure
-  axis(1)
-  axis(2)
-  grid()
+  graphics::axis(1)
+  graphics::axis(2)
+  graphics::grid()
   # add lines at 0 if axes have padding around 0
   if (axs == "r") {
-    rect(xleft = 0, ybottom = 0, xright = par()$usr[2], ytop = par()$usr[4])
+    graphics::rect(xleft = 0, ybottom = 0,
+      xright = graphics::par()$usr[2], ytop = graphics::par()$usr[4]
+    )
   } else {
-    box()
+    graphics::box()
   }
   # add points
-  points(df1[, 1:2], col = col.pts, pch = 16, cex = scale.pts * sqrt(df1[, 3]))
+  graphics::points(df1[, 1:2], col = col.pts,
+    pch = 16, cex = scale.pts * sqrt(df1[, 3])
+  )
   # add counts as text
   if (counts) {
-    text(df1[, 1:2], col = "white", lab = paste(df1[, 3]), cex = scale.pts / 3)
+    graphics::text(df1[, 1:2], col = "white",
+      lab = paste(df1[, 3]), cex = scale.pts / 3
+    )
   }
   # add title
-  title(title)
+  graphics::title(title)
   if (png) {
-    dev.off()
+    grDevices::dev.off()
   }
   invisible(df1)
 }

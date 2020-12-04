@@ -9,21 +9,21 @@
 #' @param SigOpt This a vector with one entry for each reader (i.e. Ncol-1
 #' entries). Each entry specifies the functional form of reading error as
 #' a function of true age. Possible entries include:
-#' \itemize{
-#'   \item{"-1", "-2", "-3", etc: This will make this reader mirror the
+#' \describe{
+#'   \item{-X}{"-1", "-2", "-3", etc; this reader will mirror the
 #'         estimated SD from another reader to it's left. "-1" causes it to
 #'         mirror the estimated SD for the first reader, etc. This number has
 #'         to be lower than the current entry number.}
-#'   \item{"0": No error (but potentially bias)}
-#'   \item{"1": Constant CV, i.e., a 1 parameter linear relationship of SD with
+#'   \item{0}{No error (but potentially bias)}
+#'   \item{1}{Constant CV, i.e., a 1 parameter linear relationship of SD with
 #'         true age.}
-#'   \item{"2": Curvilinear SD, i.e., a 3 parameter Hollings-form relationship
+#'   \item{2}{Curvilinear SD, i.e., a 3 parameter Hollings-form relationship
 #'         of SD with true age}
-#'   \item{"3": Curvilinear with CV, i.e., a 3-parameter Hollings-form
+#'   \item{3}{Curvilinear CV, i.e., a 3-parameter Hollings-form
 #'         relationship of CV with true age}
-#'   \item{"5": Spline with estimated slope at beginning and end (Number
+#'   \item{5}{Spline with estimated slope at beginning and end (Number
 #'         of params = 2 + number of knots)}
-#'   \item{"6": Linear interpolation (1st knot must be 1 and last knot must
+#'   \item{6}{Linear interpolation (1st knot must be 1 and last knot must
 #'         be MaxAge)}
 #' }
 #' @param KnotAges Ages associated with (necessary for options 5 or 6)
@@ -35,7 +35,8 @@
 #' such that they have matching techniques. The following types of bias
 #' options are available:
 #' \describe{
-#'   \item{0}{Unbiased}
+#'   \item{-X}{Mirror the parmeters for reader X}
+#'   \item{0}{Unbiased, where at least one reader has to be unbiased}
 #'   \item{1}{Constant CV: a 1-parameter linear relationship of bias
 #'     with true age}
 #'   \item{2}{Curvilinear: a 2-parameter Hollings-form relationship
@@ -82,12 +83,80 @@
 #' @author James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor
 #' @export
 #' @seealso \code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
+#' @examples
+#' example(SimulatorFn)
+#' \dontrun{
+#' utils::write.csv(AgeReads,
+#'   file = file.path(getwd(), "Simulated_data_example.csv"))
+#' }
+#'
+#' ##### Format data
+#' Nreaders <- ncol(AgeReads)
+#' # Change NA to -999 (which the Punt software considers missing data)
+#' AgeReads <- ifelse(is.na(AgeReads), -999, AgeReads)
+#' 
+#' # Potentially eliminate rows that are only read once
+#' # These rows have no information about reading error, but are potentially
+#' # informative about latent age-structure. It is unknown whether eliminating
+#' # these rows degrades estimation of error and bias, and is currently
+#' # recommended to speed up computation
+#' if (FALSE) {
+#'   KeepRow <- ifelse(
+#'     rowSums(ifelse(AgeReads == -999, 0, 1), na.rm = TRUE) <= 1,
+#'     FALSE, TRUE
+#'   )
+#'   AgeReads <- AgeReads[KeepRow, ]
+#' }
+#' 
+#' # AgeReads2 is the correctly formatted data object
+#' AgeReads2 <- rMx(c(1, AgeReads[1, ]))
+#' 
+#' # Combine duplicate rows
+#' for (RowI in 2:nrow(AgeReads)) {
+#'   DupRow <- NA
+#'   for (PreviousRowJ in 1:nrow(AgeReads2)) {
+#'     if (all(
+#'       AgeReads[RowI,1:Nreaders] == AgeReads2[PreviousRowJ,1:Nreaders+1]
+#'     )) {
+#'       DupRow <- PreviousRowJ
+#'     }
+#'   }
+#'   if (is.na(DupRow)) {# Add new row to AgeReads2
+#'     AgeReads2 <- rbind(AgeReads2, c(1, AgeReads[RowI, ]))
+#'   }
+#'   if(!is.na(DupRow)){# Increment number of samples for previous duplicate
+#'     AgeReads2[DupRow,1] <- AgeReads2[DupRow,1] + 1
+#'   }
+#' }
+#' 
+#' ######## Determine settings for ADMB
+#' # Define minimum and maximum ages for integral across unobserved ages
+#' MinAge <- 1
+#' MaxAge <- ceiling(max(AgeReads2[,-1])/10)*10
+#' BiasOpt <- c(0, -1, 0, -3)
+#' SigOpt <- c(1, -1, 6, -3)
+#' # Necessary for SigOpt option 5 or 6
+#' KnotAges <- list(NA, NA, c(1, 10, 20, MaxAge), NA)
+#' 
+#' ##### Run the model (MAY TAKE 5-10 MINUTES)
+#' \dontrun{
+#' fileloc <- file.path(tempdir(), "age")
+#' dir.create(fileloc, showWarnings = FALSE)
+#' RunFn(Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
+#'   BiasOpt = BiasOpt,
+#'   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,
+#'   MinusAge = 1, PlusAge = 30, SaveFile = fileloc,
+#'   AdmbFile = file.path(system.file("executables",
+#'     package = "nwfscAgeingError"), .Platform$file.sep),
+#'   EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"
+#' )
+#' }
 
-RunFn <-
-  function(Data, SigOpt, KnotAges, BiasOpt, NDataSets, MinAge, MaxAge, RefAge,
-           MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile,
-           EffSampleSize = 0, Intern = TRUE, AdmbFile = NULL, JustWrite = FALSE,
-           CallType = "system", ExtraArgs = " -est", verbose = TRUE) {
+RunFn <- function(Data, SigOpt, KnotAges, BiasOpt, NDataSets,
+  MinAge, MaxAge, RefAge,
+  MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile,
+  EffSampleSize = 0, Intern = TRUE, AdmbFile = NULL, JustWrite = FALSE,
+  CallType = "system", ExtraArgs = " -est", verbose = TRUE) {
 
     # add slash to end of directories so that nobody has to waste as much time
     # debugging as Ian just did
@@ -146,7 +215,7 @@ RunFn <-
       write(x = x, file = file, append = append)
     }
     writeTable <- function(x, file = datfile, append = TRUE) {
-      write.table(
+      utils::write.table(
         x = x, file = file, append = append,
         row.names = FALSE, col.names = FALSE
       )

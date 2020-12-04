@@ -28,7 +28,7 @@ PlotOutputFn(
 \item{ReaderNames}{Vector with names of each reader, defaults to
 "Reader 1", "Reader 2", etc.}
 
-\item{dots}{Additional arguments passed to the
+\item{...}{Additional arguments passed to the
 \code{\link{ageing_comparison}} function.}
 }
 \value{
