@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-18.04
     # Limit run time to 15 min to avoid wasting action minutes.
     timeout-minutes: 15
-    container: 
+    container:
       image: centos:7.8.2003
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,18 +32,13 @@ jobs:
           sudo unzip admb-12.2-linux.zip -d /usr/local/bin
           sudo chmod 755 /usr/local/bin/admb-12.2/bin/admb
           echo "/usr/local/bin/admb-12.2/bin" >> $GITHUB_PATH
-          
+
       # Runs a set of commands using the runners shell
       - name: Build ADMB executable
         run: |
           cd src
           /bin/bash admb agemat
-          
-      - name: Delete unneeded files
-        run: |
-				  cd src
-          rm *.obj *.htp *.cpp
-					
+
       - name: Archive the exes as tar.
         if: success()
         uses: actions/upload-artifact@main

@@ -1,7 +1,7 @@
 name: build-win
 # copied from /stock-synthesis/build-win.yml created by Kathryn Doering
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on: [workflow_dispatch]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -22,15 +22,10 @@ jobs:
           Invoke-WebRequest -Uri https://github.com/admb-project/admb/releases/download/admb-12.2/admb-12.2-windows.zip -OutFile "D:\a\nwfscAgeingError\nwfscAgeingError\admb-12.2.zip"
           Expand-Archive -LiteralPath "D:\a\nwfscAgeingError\nwfscAgeingError\admb-12.2.zip" -DestinationPath "D:\a\nwfscAgeingError\nwfscAgeingError\"
           echo "D:\a\nwfscAgeingError\nwfscAgeingError\admb-12.2\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          
+
       - name: Build ADMB executable
         run: |
           admb agemat
-
-      - name: Delete unneeded files
-        run: |
-          cd src
-          del *.obj *.htp *.cpp
 
       - name: Archive windows exes
         if: success()

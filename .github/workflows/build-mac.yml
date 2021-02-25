@@ -19,17 +19,12 @@ jobs:
           unzip admb-12.2.zip -d /usr/local/bin
           ls /usr/local/bin
           echo "/usr/local/bin/admb-12.2/bin" >> $GITHUB_PATH
-          
+
       - name: Build ADMB executable
         run: |
           cd src
           /bin/bash admb agemat
 
-      - name: Delete unneeded files
-        run: |
-				  cd src
-          rm *.obj *.htp *.cpp
-					
       - name: Archive the binaries
         if: success()
         uses: actions/upload-artifact@main
