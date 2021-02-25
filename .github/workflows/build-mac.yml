@@ -25,9 +25,13 @@ jobs:
           cd src
           /bin/bash admb agemat
 
+      - name: Delete unneeded files
+        run: |
+          rm *.obj *.htp *.cpp
+					
       - name: Archive the binaries
         if: success()
         uses: actions/upload-artifact@main
         with:
           name: agemat_osx
-          path: exes/
+          path: src/

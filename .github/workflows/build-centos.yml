@@ -39,9 +39,13 @@ jobs:
           cd src
           /bin/bash admb agemat
           
+      - name: Delete unneeded files
+        run: |
+          rm *.obj *.htp *.cpp
+					
       - name: Archive the exes as tar.
         if: success()
         uses: actions/upload-artifact@main
         with:
           name: agemat_linux
-          path: exes/
+          path: src/
