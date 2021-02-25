@@ -21,5 +21,4 @@ URL: http://github.com/nwfsc-assess/nwfscAgeingError
 BugReports: http://github.com/nwfsc-assess/nwfscAgeingError/issues
 License: GPL-2
 Encoding: UTF-8
-BinaryFiles: inst/executables/agemat.exe
 RoxygenNote: 7.1.1

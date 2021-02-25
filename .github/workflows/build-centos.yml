@@ -36,8 +36,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build ADMB executable
         run: |
-				  cd src
-          admb agemat
+				  /bin/bash cd src
+          /bin/bash admb agemat
           
       - name: Archive the exes as tar.
         if: success()
