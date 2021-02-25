@@ -27,9 +27,13 @@ jobs:
         run: |
           admb agemat
 
+      - name: Delete unneeded files
+        run: |
+          rm *.obj *.htp *.cpp
+
       - name: Archive windows exes
         if: success()
         uses: actions/upload-artifact@main
         with:
           name: 'ss_win_exes'
-          path: exes/
+          path: src/
