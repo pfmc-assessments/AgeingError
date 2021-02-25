@@ -3,6 +3,9 @@ Description
 nwfscAgeingError
 * Wrapper for tool to estimate ageing error given double-reads of hard structures (e.g., otoliths)
 
+  <!-- badges: start -->
+  [![R build status](https://github.com/nwfsc-assess/nwfscAgeingError/workflows/R-CMD-check/badge.svg)](https://github.com/nwfsc-assess/nwfscAgeingError/actions)
+  <!-- badges: end -->
 
 Instructions
 =============
