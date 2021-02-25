@@ -29,9 +29,8 @@ jobs:
 
       - name: Delete unneeded files
         run: |
-          del agemat.cpp
-          del agemat.htp 
-          del agemat.obj 
+          cd src
+          del *.obj *.htp *.cpp
 
       - name: Archive windows exes
         if: success()

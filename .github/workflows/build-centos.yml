@@ -41,6 +41,7 @@ jobs:
           
       - name: Delete unneeded files
         run: |
+				  cd src
           rm *.obj *.htp *.cpp
 					
       - name: Archive the exes as tar.
