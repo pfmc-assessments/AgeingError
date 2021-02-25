@@ -29,7 +29,7 @@ jobs:
 
       - name: Delete unneeded files
         run: |
-          rm *.obj *.htp *.cpp
+          del *.obj *.htp *.cpp
 
       - name: Archive windows exes
         if: success()
