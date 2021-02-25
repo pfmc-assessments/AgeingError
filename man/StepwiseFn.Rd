@@ -8,6 +8,7 @@ StepwiseFn(
   SearchMat,
   Data,
   NDataSets,
+  KnotAges,
   MinAge,
   MaxAge,
   RefAge,
@@ -26,6 +27,8 @@ StepwiseFn(
 \item{Data}{Description needed}
 
 \item{NDataSets}{Description needed}
+
+\item{KnotAges}{Ages associated with (necessary for options 5 or 6)}
 
 \item{MinAge}{Description needed}
 

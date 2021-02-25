@@ -15,7 +15,8 @@
 #' @param Intern                  Description needed
 #' @param InformationCriterion    Description needed
 #' @param SelectAges              Description needed
-#'
+#' @param KnotAges Ages associated with (necessary for options 5 or 6)
+#' 
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
 #' Quantifying age-reading error for use in fisheries stock assessments,
 #' with application to species in Australias southern and eastern scalefish
@@ -132,7 +133,7 @@
 #' )
 #' }
 #'
-StepwiseFn <- function(SearchMat, Data, NDataSets, MinAge, MaxAge, RefAge,
+StepwiseFn <- function(SearchMat, Data, NDataSets, KnotAges, MinAge, MaxAge, RefAge,
     MaxSd, MaxExpectedAge, SaveFile, EffSampleSize = 0,
     Intern = TRUE, InformationCriterion = "AIC", SelectAges = TRUE) {
 

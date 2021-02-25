@@ -21,6 +21,7 @@
 #' @param sdFactor The number of standard deviations to include in the
 #' low and high calculations. The default is 1.0.
 #'
+#' @importFrom stats dnorm
 #' @export
 #' @return
 #' Depending on ReturnType, either the negative log likelihood is returned based
