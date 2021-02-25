@@ -2,7 +2,7 @@ name: build-mac
 # copied from /stock-synthesis/build-mac.yml created by Kathryn Doering
 
 # on: Controls when the action will run. workflow_dispatch is a manual trigger.
-on: [workflow_dispatch]
+on: workflow_dispatch
 
 jobs:
   build-mac:
