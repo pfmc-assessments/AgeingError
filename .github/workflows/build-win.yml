@@ -25,11 +25,12 @@ jobs:
 
       - name: Build ADMB executable
         run: |
+          cd src
           admb agemat
 
       - name: Archive windows exes
         if: success()
         uses: actions/upload-artifact@main
         with:
-          name: 'ss_win_exes'
+          name: 'agemat_win_exes'
           path: src/
