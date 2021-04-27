@@ -25,7 +25,8 @@ jobs:
          yum -y install wget
          yum install -y zip unzip
          yum install -y sudo
-
+         yum install -y gcc-c++
+				 
       - name: Get admb and put in path
         run: |
           wget https://github.com/admb-project/admb/releases/download/admb-12.3/admb-12.3-linux.zip
