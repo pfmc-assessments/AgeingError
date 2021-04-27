@@ -23,7 +23,7 @@ jobs:
       - name: Build ADMB executable
         run: |
           cd src
-          /bin/bash admb agemat
+          admb agemat
 
       - name: Archive the binaries
         if: success()
