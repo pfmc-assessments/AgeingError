@@ -87,3 +87,4 @@ https://github.com/nwfsc-assess/nwfscAgeingError/blob/master/inst/doc/Instructio
 For more details regarding development and testing of this software please see:
 * Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008. Quantifying age-reading error for use in fisheries stock assessments, with application to species in Australia’s southern and eastern scalefish and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991–2005.
 
+
