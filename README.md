@@ -10,6 +10,11 @@ nwfscAgeingError
 Instructions
 =============
 
+First, download the executable for your operating system from the releases page:
+https://github.com/nwfsc-assess/nwfscAgeingError/releases
+
+Then install the `nwfscAgeingError` package from this github site as follows:
+
 ```r
 install.packages("devtools")
 devtools::install_github("nwfsc-assess/nwfscAgeingError")
