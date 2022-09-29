@@ -60,7 +60,7 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
       SaveFile <- getwd()
     }
     if (verbose) {
-      message("writing image to", file.path(SaveFile, filename))
+      message("writing image to ", file.path(SaveFile, filename))
     }
     grDevices::png(file.path(SaveFile, filename),
       width = 6.5, height = 6.5, pointsize = 10,
@@ -78,18 +78,22 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
   # add histograms along the sides if requested
   # note: this system won't work
   if (hist) {
-    hist.x <- graphics::hist(xvec, breaks = 0:maxage, plot = FALSE)
-    hist.y <- graphics::hist(yvec, breaks = 0:maxage, plot = FALSE)
+    hist.x <- graphics::hist(xvec, breaks = 0:(maxage + 1) - 0.5, plot = FALSE)
+    hist.y <- graphics::hist(yvec, breaks = 0:(maxage + 1) - 0.5, plot = FALSE)
     scale.hist <- hist.frac * maxage / max(hist.x$counts, hist.y$counts, na.rm = TRUE)
-    for (i in 1:maxage) {
+    for (a in 0:maxage) {
       graphics::rect(
-        xleft = hist.x$breaks[i], ybottom = 0,
-        xright = hist.x$breaks[i + 1], ytop = scale.hist * hist.x$counts[i + 1],
+        xleft = a - 0.5, 
+        xright = a + 0.5, 
+        ybottom = 0,
+        ytop = scale.hist * hist.x$counts[which(hist.x$mids == a)],
         col = col.hist, border = FALSE
       )
       graphics::rect(
-        xleft = 0, ybottom = hist.y$breaks[i],
-        xright = scale.hist * hist.y$counts[i + 1], ytop = hist.y$breaks[i + 1],
+        xleft = 0, 
+        xright = scale.hist * hist.y$counts[which(hist.y$mids == a)],
+        ybottom = a - 0.5,
+        ytop = a + 0.5,
         col = col.hist, border = FALSE
       )
     }
