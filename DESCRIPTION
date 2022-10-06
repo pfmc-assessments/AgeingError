@@ -1,18 +1,44 @@
 Package: nwfscAgeingError
 Type: Package
 Title: Source Code for Punt et al. (2008): Ageing Error and Imprecision
-Version: 1.3.2
+Version: 1.3.3
 Authors@R: c(
-  person(given = c("Kelli", "F."),
+  person(
+    given = c("Kelli", "F."),
     family = "Johnson",
     email = "kelli.johnson@noaa.gov",
     role = c("aut", "cre"),
-    comment = c(ORCID = "0000-0002-5149-451X")),
-  person(c("James", "T."), "Thorson", role = "aut"),
-  person(c("Ian", "J."), "Stewart", role = "aut"),
-  person(c("Andre", "E."), "Punt", role = "aut"),
-  person(c("Ian", "G."), "Taylor", role = "aut"),
-  person(c("Melissa", "A."), "Haltuch", role = "aut")
+    comment = c(ORCID = "0000-0002-5149-451X")
+  ),
+  person(
+    given = c("James", "T."),
+    family = "Thorson",
+    role = "aut",
+    comment = c(ORCID = "0000-0001-7415-1010")
+  ),
+  person(
+    given = c("Ian", "J."),
+    family = "Stewart",
+    role = "aut"
+  ),
+  person(
+    given = c("Andre", "E."),
+    family = "Punt",
+    role = "aut",
+    comment = c(ORCID = "0000-0001-8489-2488")
+  ),
+  person(
+    given = c("Ian", "G."),
+    family = "Taylor",
+    role = "aut",
+    comment = c(ORCID = "0000-0001-8489-2488")
+  ),
+  person(
+    given = c("Melissa", "A."),
+    family = "Haltuch",
+    role = "aut",
+    comment = c(ORCID = "0000-0003-2821-1267")
+  )
   )
 Description: Source code and examples for how to use double-read data to
     estimate ageing imprecision and bias from fishery otoliths. The code
