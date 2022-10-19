@@ -11,21 +11,16 @@ Authors@R: c(
     comment = c(ORCID = "0000-0002-5149-451X")
   ),
   person(
-    given = c("James", "T."),
-    family = "Thorson",
-    role = "aut",
-    comment = c(ORCID = "0000-0001-7415-1010")
-  ),
-  person(
-    given = c("Ian", "J."),
-    family = "Stewart",
-    role = "aut"
-  ),
-  person(
     given = c("Andre", "E."),
     family = "Punt",
     role = "aut",
     comment = c(ORCID = "0000-0001-8489-2488")
+  ),
+  person(
+    given = c("James", "T."),
+    family = "Thorson",
+    role = "aut",
+    comment = c(ORCID = "0000-0001-7415-1010")
   ),
   person(
     given = c("Ian", "G."),
@@ -34,9 +29,14 @@ Authors@R: c(
     comment = c(ORCID = "0000-0001-8489-2488")
   ),
   person(
+    given = c("Ian", "J."),
+    family = "Stewart",
+    role = "ctb"
+  ),
+  person(
     given = c("Melissa", "A."),
     family = "Haltuch",
-    role = "aut",
+    role = "ctb",
     comment = c(ORCID = "0000-0003-2821-1267")
   )
   )
