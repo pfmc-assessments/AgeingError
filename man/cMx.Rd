@@ -10,10 +10,12 @@ cMx(Input)
 \item{Input}{input to be converted to a matrix}
 }
 \description{
-## The function is currently defined as
+\subsection{The function is currently defined as}{
+
 function (Input)
 {
-  as.matrix(Input)
+as.matrix(Input)
+}
 }
 }
 \author{

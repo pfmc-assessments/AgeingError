@@ -1,88 +1,159 @@
 #' Run ageing error model
 #'
-#' Run the Punt et al. (2008) ADMB-based ageing error model from within R
+#' Run the Punt et al. (2008) ADMB-based ageing error model from within R.
 #'
-#' @param Data This is the data set as previously formatted. If the data has
-#' multiple rows with identical reads, this will cause an error and the
-#' "XXX.rep" file will have a properly formatted data matrix which can be
-#' cut-pasted into a "XXX.dat" file for use.
-#' @param SigOpt This a vector with one entry for each reader (i.e. Ncol-1
-#' entries). Each entry specifies the functional form of reading error as
-#' a function of true age. Possible entries include:
-#' \describe{
-#'   \item{-X}{"-1", "-2", "-3", etc; this reader will mirror the
-#'         estimated SD from another reader to it's left. "-1" causes it to
-#'         mirror the estimated SD for the first reader, etc. This number has
-#'         to be lower than the current entry number.}
-#'   \item{0}{No error (but potentially bias)}
-#'   \item{1}{Constant CV, i.e., a 1 parameter linear relationship of SD with
-#'         true age.}
-#'   \item{2}{Curvilinear SD, i.e., a 3 parameter Hollings-form relationship
-#'         of SD with true age}
-#'   \item{3}{Curvilinear CV, i.e., a 3-parameter Hollings-form
-#'         relationship of CV with true age}
-#'   \item{5}{Spline with estimated slope at beginning and end (Number
-#'         of params = 2 + number of knots)}
-#'   \item{6}{Linear interpolation (1st knot must be 1 and last knot must
-#'         be MaxAge)}
+#' @details The premise of Punt *et al.* (2008) is to calculate the likelihood
+#' of model parameters given an observed data set of otolith age reads from
+#' multiple age readers. For each reader/lab, two parameters are defined, one
+#' for standard deviation and one for bias. The model calculates the expected
+#' age of each read and the standard deviation of a normally distributed
+#' reading error given the true age of an otolith. These relationships can be
+#' linear or curvilinear.
+#'
+#' The true age is obviously an unobserved process and can be considered a
+#' random effect. Thus, the software computes the likelihood while summing
+#' across all possible discrete values for the true age of each otolith. This
+#' true age requires a hyperdistribution that represents the prior probability
+#' that an otolith is any given age. The hyperdistribution is controlled by a
+#' set of hyperparameters and the parameters that govern the standard deviation
+#' and bias of each age reader/lab. Specifically, one hyperparameter is
+#' estimated for every age between and including the `MinusAge` and `PlusAge`.
+#' Ages outside of this range have a prior proportion at age defined as a
+#' loglinear deviation from the proportion at age for the extreme ages, i.e.,
+#' `MinusAge` and `PlusAge`. The slope of these loglinear deviations thus
+#' constitutes an additional 1 or 2 fixed effect parameters. The true
+#' proportion at age is then calculated from these fixed effects and loglinear
+#' slope parameters by normalizing the resulting distribution such that it sums
+#' to one.
+#'
+#' @param Data This is the data set with the first column being an integer
+#'   providing the number of otoliths that are included in the row and the
+#'   subsequent columns are the reader or lab estimated ag,e where each
+#'   reader/lab has a unique reading error and bias. The modeling framework
+#'   allows for, at most, 15 readers, i.e., 16 columns. There should not be any
+#'   identical rows in the data frame because otoliths that have the exact same
+#'   read from every reader/lab should be combined into a single row with the
+#'   count as the first column. If you failed to combine identical rows prior
+#'   to running the model, you will be alerted with an error and the `XXX.rep`
+#'   file will have a properly formatted data which can be' cut-pasted into a
+#'   `XXX.dat` file for use. Missing reads from a given reader/lab should be
+#'   entered as `-999`. Order your reader/lab columns such that similar
+#'   readers/labs are located next to one another because columns to the right
+#'   can mirror columns to their immediate left in terms of parameter
+#'   estimates.
+#' @param SigOpt This a vector with one entry for each reader (i.e.,
+#'   `length(SigOpt) == NCOL(Data) -1`). Each entry specifies the functional
+#'   form of reading error as a function of true age. Possible entries include
+#'   the following:
+#'   \describe{
+#'     \item{-[0-9]+}{
+#'       Mirror the standard deviation of another reader, where the negative
+#'       integer corresponds to the column of the reader/lab that is being
+#'       mirrored minus one, e.g., `-1` causes it to mirror reader/lab 1, for
+#'       which data is stored in the second column of `Data`. This number must
+#'       be lower than -1 times the current position in the vector.
+#'     }
+#'     \item{0}{
+#'       No error. But, there could be potential bias.
+#'     }
+#'     \item{1}{
+#'       Constant coefficient of variation, i.e., a 1-parameter linear
+#'       relationship of the standard deviation with the true age.
+#'     }
+#'     \item{2}{
+#'       Curvilinear standard deviation, i.e., a 3-parameter Hollings-form
+#'       relationship of standard deviation with true age.
+#'     }
+#'     \item{3}{
+#'       Curvilinear coefficient of variation, i.e., a 3-parameter
+#'       Hollings-form relationship of coefficient of variation with true age.
+#'     }
+#'     \item{5}{
+#'       Spline with estimated slope at beginning and end where the number of
+#'       parameters is 2 + number of knots.
+#'     }
+#'     \item{6}{
+#'       Linear interpolation with a first knot of 1 and a last knot of the
+#'       maximum age, i.e., `MaxAge`.
+#'     }
 #' }
-#' @param KnotAges Ages associated with (necessary for options 5 or 6)
-#' @param BiasOpt A vector with one entry for each reader specifying the type
-#' of bias specific to each reader. Positive values lead to estimated
-#' parameters and negative values are used for shared parameters
-#' between readers. Parameter sharing is common when there is more
-#' than one reader in a lab working together to refine their methods
-#' such that they have matching techniques. The following types of bias
-#' options are available:
-#' \describe{
-#'   \item{-X}{Mirror the parmeters for reader X}
-#'   \item{0}{Unbiased, where at least one reader has to be unbiased}
-#'   \item{1}{Constant CV: a 1-parameter linear relationship of bias
-#'     with true age}
-#'   \item{2}{Curvilinear: a 2-parameter Hollings-form relationship
-#'     of bias with true age}
-#' }
-#' An example entry for the situation where you have seven readers and you assume
-#' that the first reader is unbiased, readers 2-7 have a curvilinear
-#' bias, reader 3 shares parameters with reader 2, reader 5 shares parameters
-#' with reader 4, and reader 7 shares parameters with reader 6 would look like
-#' \code{c(0, 2, -2, 2, -4, 2, -6)}.
-#' @param NDataSets This is generally "1" and other values are not implemented
-#' in the current R-code.
-#' @param MinAge The minimum possible "true" age
-#' @param MaxAge The maximum possible "true" age
+#' @param KnotAges Ages associated with each knot. This is a necessary input
+#'   for `SigOpt = 5` or `SigOpt = 6`.
+#' @param BiasOpt A vector with one entry for each reader/lab specifying the
+#'   type of bias specific to each reader. Positive values lead to estimated
+#'   parameters and negative values are used for shared parameters between
+#'   readers, just like with `SigOpt`. Parameter sharing is common when there
+#'   is more than one reader in a lab working together to refine their methods
+#'   such that they have matching techniques. Possible entries include the
+#'   following:
+#'   \describe{
+#'     \item{-[0-9]+}{
+#'       Mirror the bias of another reader, where the negative integer
+#'       corresponds to the column of the reader/lab that is being mirrored
+#'       minus one, e.g., `-1` causes it to mirror reader/lab 1, for which data
+#'       is stored in the second column of `Data`. This number must be lower
+#'       than -1 times the current position in the vector.
+#'     }
+#'     \item{0}{
+#'       Unbiased, where at least one reader has to be unbiased.
+#'     }
+#'     \item{1}{
+#'       Constant coefficient of variation, i.e., a 1-parameter linear
+#'       relationship of bias with true age.
+#'     }
+#'     \item{2}{
+#'       Curvilinear, i.e., a 2-parameter Hollings-form relationship of bias
+#'       with true age.
+#'     }
+#'   }
+#'
+#'   An example entry for the situation where you have seven readers and you
+#'   assume that the first reader is unbiased, readers 2-7 have a curvilinear
+#'   bias, reader 3 shares parameters with reader 2, reader 5 shares parameters
+#'   with reader 4, and reader 7 shares parameters with reader 6 would look
+#'   like `c(0, 2, -2, 2, -4, 2, -6)`.
+#' @param NDataSets This is generally `1` and other values are not implemented.
+#' @param MinAge An integer, specifying the minimum possible "true" age.
+#' @param MaxAge An integer, specifying the maximum possible "true" age.
 #' @param RefAge An arbitrarily chosen age from which "true" age-composition
-#' fixed-effects are calculated as an offset. This has no effect on the answer,
-#' but could potentially effect estimation speed.
+#'   fixed-effects are calculated as an offset. This has no effect on the
+#'   answer but could potentially effect estimation speed.
 #' @param MinusAge The minimum age for which an age-specific age-composition is
-#' estimated. Ages below this MinusAge have "true" proportion-at-age (P_a)
-#' estimated as P_a = P_MinusAge*exp(beta*(MinusAge - a)), where beta is an
-#' estimated log-linear trend in the "true" proportion-at-age.
-#' If MinusAge = MinAge, beta is not estimated.
-#' @param PlusAge Identical to MinusAge except defining the age above with
-#' age-specific age-composition is not estimated.
+#'   estimated. Ages below `MinusAge` have "true" proportion-at-age
+#'   (\eqn{P_{a}}) estimated as
+#'   \deqn{P_a = P_{MinusAge}*exp^{(\beta*(MinusAge - a))}},
+#'   where beta is an estimated log-linear trend in the "true"
+#'   proportion-at-age. If `MinusAge` = `MinAge`, beta is not estimated.
+#' @param PlusAge Identical to `MinusAge` except defining the age above with
+#' age-specific age composition is not estimated.
 #' @param MaxSd An upper bound on possible values for the standard deviation
-#' of reading error
-#' @param MaxExpectedAge Set to MaxAge
-#' @param SaveFile Directory where "agemat.exe" is located and where all ADMB
-#' intermediate and output files should be located. If AdmbFile is specified
-#' then "agemat.exe" is copied from that directory to SaveFile
+#' of reading error.
+#' @param MaxExpectedAge Set to MaxAge.
+#' @param SaveFile Directory where `agemat.exe` is located and where all ADMB
+#'   intermediate and output files should be located. If `AdmbFile` is specified
+#'   then `agemat.exe` is copied from that directory to `SaveFile`.
 #' @param EffSampleSize Indicating whether effective sample size should be
-#' calculated. Missing values in the data matrix will cause this to be
-#' ineffective, in which case this should be set to "0"
-#' @param Intern "TRUE" indicates that ADMB output should be displayed in R;
-#' "FALSE" does not.
-#' @param AdmbFile Optional directory from which "agemat.exe" is to be copied
-#' to SaveFile
-#' @param JustWrite Switch to allow data files to be written without running
-#' ADMB executable.
-#' @param CallType Either "system" or "shell" depending on Operating System
-#' or how R is being run.
-#' @param ExtraArgs Extra arguments passed to ADMB. Default is " -est".
-#' @param verbose Provide more feedback about function progress?
+#'   calculated. Missing values in the data matrix will cause this to be
+#'   ineffective, in which case this should be set to `0`.
+#' @param Intern A logical input that controls the amount of output displayed,
+#'   where `TRUE` indicates that ADMB output should be displayed in R and
+#'   `FALSE` leads to the suppression of this information.
+#' @param AdmbFile An optional character entry that specifies the directory
+#'   from which `agemat.exe` is to be copied from to `SaveFile`.
+#' @param JustWrite A logical input that allows just the data files to be
+#'   written without running ADMB executable.
+#' @param CallType Either `"system"` or `"shell"` depending on Operating System
+#'   or how R is being run. The default is `"system"`.
+#' @param ExtraArgs A string of characters providing extra arguments passed to
+#'   ADMB. The default is `" -est"`.
+#' @param verbose A logical input that controls the amount of feedback users
+#'   receive from the program. The default is to provide the most output as
+#'   possible with `verbose = TRUE`.
 #' @author James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor
 #' @export
-#' @seealso \code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
+#' @seealso
+#' * `StepwiseFn()` will run multiple models.
+#' * `PlotOutputFn()` will help summarize the output.
 #' @examples
 #' example(SimulatorFn)
 #' \dontrun{
@@ -152,11 +223,26 @@
 #' )
 #' }
 
-RunFn <- function(Data, SigOpt, KnotAges, BiasOpt, NDataSets,
-  MinAge, MaxAge, RefAge,
-  MinusAge, PlusAge, MaxSd, MaxExpectedAge, SaveFile,
-  EffSampleSize = 0, Intern = TRUE, AdmbFile = NULL, JustWrite = FALSE,
-  CallType = "system", ExtraArgs = " -est", verbose = TRUE) {
+RunFn <- function(Data,
+                  SigOpt,
+                  KnotAges,
+                  BiasOpt,
+                  NDataSets = 1,
+                  MinAge,
+                  MaxAge,
+                  RefAge,
+                  MinusAge,
+                  PlusAge,
+                  MaxSd,
+                  MaxExpectedAge,
+                  SaveFile,
+                  EffSampleSize = 0,
+                  Intern = TRUE,
+                  AdmbFile = NULL,
+                  JustWrite = FALSE,
+                  CallType = "system",
+                  ExtraArgs = " -est",
+                  verbose = TRUE) {
 
     # add slash to end of directories so that nobody has to waste as much time
     # debugging as Ian just did

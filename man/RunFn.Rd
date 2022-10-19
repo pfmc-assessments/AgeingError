@@ -9,7 +9,7 @@ RunFn(
   SigOpt,
   KnotAges,
   BiasOpt,
-  NDataSets,
+  NDataSets = 1,
   MinAge,
   MaxAge,
   RefAge,
@@ -28,106 +28,176 @@ RunFn(
 )
 }
 \arguments{
-\item{Data}{This is the data set as previously formatted. If the data has
-multiple rows with identical reads, this will cause an error and the
-"XXX.rep" file will have a properly formatted data matrix which can be
-cut-pasted into a "XXX.dat" file for use.}
+\item{Data}{This is the data set with the first column being an integer
+providing the number of otoliths that are included in the row and the
+subsequent columns are the reader or lab estimated ag,e where each
+reader/lab has a unique reading error and bias. The modeling framework
+allows for, at most, 15 readers, i.e., 16 columns. There should not be any
+identical rows in the data frame because otoliths that have the exact same
+read from every reader/lab should be combined into a single row with the
+count as the first column. If you failed to combine identical rows prior
+to running the model, you will be alerted with an error and the \code{XXX.rep}
+file will have a properly formatted data which can be' cut-pasted into a
+\code{XXX.dat} file for use. Missing reads from a given reader/lab should be
+entered as \code{-999}. Order your reader/lab columns such that similar
+readers/labs are located next to one another because columns to the right
+can mirror columns to their immediate left in terms of parameter
+estimates.}
 
-\item{SigOpt}{This a vector with one entry for each reader (i.e. Ncol-1
-entries). Each entry specifies the functional form of reading error as
-a function of true age. Possible entries include:
+\item{SigOpt}{This a vector with one entry for each reader (i.e.,
+\code{length(SigOpt) == NCOL(Data) -1}). Each entry specifies the functional
+form of reading error as a function of true age. Possible entries include
+the following:
 \describe{
-  \item{-X}{"-1", "-2", "-3", etc; this reader will mirror the
-        estimated SD from another reader to it's left. "-1" causes it to
-        mirror the estimated SD for the first reader, etc. This number has
-        to be lower than the current entry number.}
-  \item{0}{No error (but potentially bias)}
-  \item{1}{Constant CV, i.e., a 1 parameter linear relationship of SD with
-        true age.}
-  \item{2}{Curvilinear SD, i.e., a 3 parameter Hollings-form relationship
-        of SD with true age}
-  \item{3}{Curvilinear CV, i.e., a 3-parameter Hollings-form
-        relationship of CV with true age}
-  \item{5}{Spline with estimated slope at beginning and end (Number
-        of params = 2 + number of knots)}
-  \item{6}{Linear interpolation (1st knot must be 1 and last knot must
-        be MaxAge)}
+\item{-\link{0-9}+}{
+Mirror the standard deviation of another reader, where the negative
+integer corresponds to the column of the reader/lab that is being
+mirrored minus one, e.g., \code{-1} causes it to mirror reader/lab 1, for
+which data is stored in the second column of \code{Data}. This number must
+be lower than -1 times the current position in the vector.
+}
+\item{0}{
+No error. But, there could be potential bias.
+}
+\item{1}{
+Constant coefficient of variation, i.e., a 1-parameter linear
+relationship of the standard deviation with the true age.
+}
+\item{2}{
+Curvilinear standard deviation, i.e., a 3-parameter Hollings-form
+relationship of standard deviation with true age.
+}
+\item{3}{
+Curvilinear coefficient of variation, i.e., a 3-parameter
+Hollings-form relationship of coefficient of variation with true age.
+}
+\item{5}{
+Spline with estimated slope at beginning and end where the number of
+parameters is 2 + number of knots.
+}
+\item{6}{
+Linear interpolation with a first knot of 1 and a last knot of the
+maximum age, i.e., \code{MaxAge}.
+}
 }}
 
-\item{KnotAges}{Ages associated with (necessary for options 5 or 6)}
+\item{KnotAges}{Ages associated with each knot. This is a necessary input
+for \code{SigOpt = 5} or \code{SigOpt = 6}.}
 
-\item{BiasOpt}{A vector with one entry for each reader specifying the type
-of bias specific to each reader. Positive values lead to estimated
-parameters and negative values are used for shared parameters
-between readers. Parameter sharing is common when there is more
-than one reader in a lab working together to refine their methods
-such that they have matching techniques. The following types of bias
-options are available:
+\item{BiasOpt}{A vector with one entry for each reader/lab specifying the
+type of bias specific to each reader. Positive values lead to estimated
+parameters and negative values are used for shared parameters between
+readers, just like with \code{SigOpt}. Parameter sharing is common when there
+is more than one reader in a lab working together to refine their methods
+such that they have matching techniques. Possible entries include the
+following:
 \describe{
-  \item{-X}{Mirror the parmeters for reader X}
-  \item{0}{Unbiased, where at least one reader has to be unbiased}
-  \item{1}{Constant CV: a 1-parameter linear relationship of bias
-    with true age}
-  \item{2}{Curvilinear: a 2-parameter Hollings-form relationship
-    of bias with true age}
+\item{-\link{0-9}+}{
+Mirror the bias of another reader, where the negative integer
+corresponds to the column of the reader/lab that is being mirrored
+minus one, e.g., \code{-1} causes it to mirror reader/lab 1, for which data
+is stored in the second column of \code{Data}. This number must be lower
+than -1 times the current position in the vector.
 }
-An example entry for the situation where you have seven readers and you assume
-that the first reader is unbiased, readers 2-7 have a curvilinear
+\item{0}{
+Unbiased, where at least one reader has to be unbiased.
+}
+\item{1}{
+Constant coefficient of variation, i.e., a 1-parameter linear
+relationship of bias with true age.
+}
+\item{2}{
+Curvilinear, i.e., a 2-parameter Hollings-form relationship of bias
+with true age.
+}
+}
+
+An example entry for the situation where you have seven readers and you
+assume that the first reader is unbiased, readers 2-7 have a curvilinear
 bias, reader 3 shares parameters with reader 2, reader 5 shares parameters
-with reader 4, and reader 7 shares parameters with reader 6 would look like
-\code{c(0, 2, -2, 2, -4, 2, -6)}.}
+with reader 4, and reader 7 shares parameters with reader 6 would look
+like \code{c(0, 2, -2, 2, -4, 2, -6)}.}
 
-\item{NDataSets}{This is generally "1" and other values are not implemented
-in the current R-code.}
+\item{NDataSets}{This is generally \code{1} and other values are not implemented.}
 
-\item{MinAge}{The minimum possible "true" age}
+\item{MinAge}{An integer, specifying the minimum possible "true" age.}
 
-\item{MaxAge}{The maximum possible "true" age}
+\item{MaxAge}{An integer, specifying the maximum possible "true" age.}
 
 \item{RefAge}{An arbitrarily chosen age from which "true" age-composition
-fixed-effects are calculated as an offset. This has no effect on the answer,
-but could potentially effect estimation speed.}
+fixed-effects are calculated as an offset. This has no effect on the
+answer but could potentially effect estimation speed.}
 
 \item{MinusAge}{The minimum age for which an age-specific age-composition is
-estimated. Ages below this MinusAge have "true" proportion-at-age (P_a)
-estimated as P_a = P_MinusAge*exp(beta*(MinusAge - a)), where beta is an
-estimated log-linear trend in the "true" proportion-at-age.
-If MinusAge = MinAge, beta is not estimated.}
+estimated. Ages below \code{MinusAge} have "true" proportion-at-age
+(\eqn{P_{a}}) estimated as
+\deqn{P_a = P_{MinusAge}*exp^{(\beta*(MinusAge - a))}},
+where beta is an estimated log-linear trend in the "true"
+proportion-at-age. If \code{MinusAge} = \code{MinAge}, beta is not estimated.}
 
-\item{PlusAge}{Identical to MinusAge except defining the age above with
-age-specific age-composition is not estimated.}
+\item{PlusAge}{Identical to \code{MinusAge} except defining the age above with
+age-specific age composition is not estimated.}
 
 \item{MaxSd}{An upper bound on possible values for the standard deviation
-of reading error}
+of reading error.}
 
-\item{MaxExpectedAge}{Set to MaxAge}
+\item{MaxExpectedAge}{Set to MaxAge.}
 
-\item{SaveFile}{Directory where "agemat.exe" is located and where all ADMB
-intermediate and output files should be located. If AdmbFile is specified
-then "agemat.exe" is copied from that directory to SaveFile}
+\item{SaveFile}{Directory where \code{agemat.exe} is located and where all ADMB
+intermediate and output files should be located. If \code{AdmbFile} is specified
+then \code{agemat.exe} is copied from that directory to \code{SaveFile}.}
 
 \item{EffSampleSize}{Indicating whether effective sample size should be
 calculated. Missing values in the data matrix will cause this to be
-ineffective, in which case this should be set to "0"}
+ineffective, in which case this should be set to \code{0}.}
 
-\item{Intern}{"TRUE" indicates that ADMB output should be displayed in R;
-"FALSE" does not.}
+\item{Intern}{A logical input that controls the amount of output displayed,
+where \code{TRUE} indicates that ADMB output should be displayed in R and
+\code{FALSE} leads to the suppression of this information.}
 
-\item{AdmbFile}{Optional directory from which "agemat.exe" is to be copied
-to SaveFile}
+\item{AdmbFile}{An optional character entry that specifies the directory
+from which \code{agemat.exe} is to be copied from to \code{SaveFile}.}
 
-\item{JustWrite}{Switch to allow data files to be written without running
-ADMB executable.}
+\item{JustWrite}{A logical input that allows just the data files to be
+written without running ADMB executable.}
 
-\item{CallType}{Either "system" or "shell" depending on Operating System
-or how R is being run.}
+\item{CallType}{Either \code{"system"} or \code{"shell"} depending on Operating System
+or how R is being run. The default is \code{"system"}.}
 
-\item{ExtraArgs}{Extra arguments passed to ADMB. Default is " -est".}
+\item{ExtraArgs}{A string of characters providing extra arguments passed to
+ADMB. The default is \code{" -est"}.}
 
-\item{verbose}{Provide more feedback about function progress?}
+\item{verbose}{A logical input that controls the amount of feedback users
+receive from the program. The default is to provide the most output as
+possible with \code{verbose = TRUE}.}
 }
 \description{
-Run the Punt et al. (2008) ADMB-based ageing error model from within R
+Run the Punt et al. (2008) ADMB-based ageing error model from within R.
+}
+\details{
+The premise of Punt \emph{et al.} (2008) is to calculate the likelihood
+of model parameters given an observed data set of otolith age reads from
+multiple age readers. For each reader/lab, two parameters are defined, one
+for standard deviation and one for bias. The model calculates the expected
+age of each read and the standard deviation of a normally distributed
+reading error given the true age of an otolith. These relationships can be
+linear or curvilinear.
+
+The true age is obviously an unobserved process and can be considered a
+random effect. Thus, the software computes the likelihood while summing
+across all possible discrete values for the true age of each otolith. This
+true age requires a hyperdistribution that represents the prior probability
+that an otolith is any given age. The hyperdistribution is controlled by a
+set of hyperparameters and the parameters that govern the standard deviation
+and bias of each age reader/lab. Specifically, one hyperparameter is
+estimated for every age between and including the \code{MinusAge} and \code{PlusAge}.
+Ages outside of this range have a prior proportion at age defined as a
+loglinear deviation from the proportion at age for the extreme ages, i.e.,
+\code{MinusAge} and \code{PlusAge}. The slope of these loglinear deviations thus
+constitutes an additional 1 or 2 fixed effect parameters. The true
+proportion at age is then calculated from these fixed effects and loglinear
+slope parameters by normalizing the resulting distribution such that it sums
+to one.
 }
 \examples{
 example(SimulatorFn)
@@ -199,7 +269,10 @@ RunFn(Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
 }
 }
 \seealso{
-\code{\link{StepwiseFn}}, \code{\link{PlotOutputFn}}
+\itemize{
+\item \code{StepwiseFn()} will run multiple models.
+\item \code{PlotOutputFn()} will help summarize the output.
+}
 }
 \author{
 James T. Thorson, Ian J. Stewart, Andre E. Punt, Ian G. Taylor

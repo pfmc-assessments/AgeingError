@@ -1,30 +1,54 @@
-#' Stepwise model selection
+#' Step-wise model selection
 #'
-#' Code for running stepwise model selection.
+#' Run step-wise model selection to facilitate the exploration of several
+#' modelling configurations using Akaike information criterion (AIC).
 #'
-#' @param SearchMat               Description needed
-#' @param Data                    Description needed
-#' @param NDataSets               Description needed
-#' @param MinAge                  Description needed
-#' @param MaxAge                  Description needed
-#' @param RefAge                  Description needed
-#' @param MaxSd                   Description needed
-#' @param MaxExpectedAge          Description needed
-#' @param SaveFile                Description needed
-#' @param EffSampleSize           Description needed
-#' @param Intern                  Description needed
-#' @param InformationCriterion    Description needed
-#' @param SelectAges              Description needed
-#' @param KnotAges Ages associated with (necessary for options 5 or 6)
-#' 
-#' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
+#' @details AIC seems like an appropriate method to select among possible
+#' values for `PlusAge`, i.e., the last row of `SearchMat`, because `PlusAge`
+#' determines the number of estimated fixed-effect hyperparameters that are
+#' used to define the true proportion-at-age hyperdistribution. This
+#' hyperdistribution is in turn used as a prior when integrating across a true
+#' age associated with each otolith. This true age, which is a latent effect,
+#' can be interpreted as a random effect with one for each observation. So, the
+#' use of AIC to select among parameterizations of the fixed effects defining
+#' this hyperdistribution is customary (Pinheiro and Bates, 2009). This was
+#' tested for sablefish, where AIC lead to a true proportion at age that was
+#' biologically plausible.
+#' @inheritParams RunFn
+#' @param SearchMat A matrix explaining stepwise model selection options. One
+#'   row for each readers error and one row for each readers bias + 2 rows, one
+#'   for `MinusAge`, i.e., the age where the proportion at age begins to
+#'   decrease exponentially with decreasing age, and one for `PlusAge`, i.e.,
+#'   the age where the proportion-at-age begins to decrease exponentially with
+#'   increasing age.
+#'
+#'   Each element of a given row is a possible value to search across for that
+#'   reader. So, the number of columns of `SearchMat` will be the maximum
+#'   number of options that you want to include. Think of it as several vectors
+#'   stacked row-wise where shorter rows are filled in with `NA` values. If
+#'   reader two only has two options that the analyst wants to search over the
+#'   remainder of the columns should be filled with `NA` values for that row.
+#' @param InformationCriterion A string specifying the type of information
+#'   criterion that should be used to choose the best model. The default is to
+#'   use AIC, though AIC corrected for small sample sizes and BIC are also
+#'   available.
+#' @param SelectAges A logical input specifying if the boundaries should be
+#'   based on `MinusAge` and `PlusAge`. The default is `TRUE`.
+#'
+#' @references
+#' Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
 #' Quantifying age-reading error for use in fisheries stock assessments,
-#' with application to species in Australias southern and eastern scalefish
+#' with application to species in Australia's southern and eastern scalefish
 #' and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
 #'
+#' Pinheiro, J.C., and Bates, D. 2009. Mixed-Effects Models in S and S-PLUS.
+#' Springer, Germany.
 #' @author James T. Thorson
 #'
 #' @export
+#' @seealso
+#' * `RunFn()` will run a single model, where this function runs multiple models.
+#' * `PlotOutputFn()` will help summarize the output from `RunFn()`.
 #'
 #' @examples
 #'
@@ -133,10 +157,22 @@
 #' )
 #' }
 #'
-StepwiseFn <- function(SearchMat, Data, NDataSets, KnotAges, MinAge, MaxAge, RefAge,
-    MaxSd, MaxExpectedAge, SaveFile, EffSampleSize = 0,
-    Intern = TRUE, InformationCriterion = "AIC", SelectAges = TRUE) {
+StepwiseFn <- function(SearchMat,
+                       Data,
+                       NDataSets,
+                       KnotAges,
+                       MinAge,
+                       MaxAge,
+                       RefAge,
+                       MaxSd,
+                       MaxExpectedAge,
+                       SaveFile,
+                       EffSampleSize = 0,
+                       Intern = TRUE,
+                       InformationCriterion = c("AIC", "AICc", "BIC"),
+                       SelectAges = TRUE) {
 
+  InformationCriterion <- match.arg(InformationCriterion)
     # Define variables
     Nages <- MaxAge + 1
     Nreaders <- ncol(Data) - 1

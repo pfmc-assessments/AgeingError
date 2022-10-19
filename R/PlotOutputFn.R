@@ -1,16 +1,36 @@
 #' Plot output
 #'
-#' Plots age comparisons and results from the fitted Ageing Error model
+#' Plots age comparisons and results from the fitted model. Comparisons must be
+#' conditioned on a true age that is not observed. And, in place of a true age,
+#' the diagnostic plots generally condition on an estimated age, which is fixed
+#' as the mode of the conditional probability at age for each otolith.
 #'
-#' @param Data Input data matrix
-#' @param MaxAge Maximum estimated age
-#' @param SaveFile Directory for fitted model
-#' @param PlotType Type of saved plots, i.e. PDF or PNG
-#' @param subplot Vector of which plots to create.
+#' @details
+#' 1. Error and bias by reader/lab: A panel graph is provided where each panel
+#'    shows the expected and standard deviation in age reads for that
+#'    reader/lab. This is displayed against a scatter plot of the read and
+#'    estimated ages for each otolith that was read by that reader/lab.
+#' 
+#' 1. Proportion-at-age histogram: The estimated proportion at age can be
+#'    plotted as a histogram and is displayed against the observed distribution
+#'    of read ages. This is useful to determine if hte estimated proportion at
+#'    age is generally plausible, e.g., whether it has too many ages where the
+#'    estimated proportion at age approaches zero, which is unlikely in a
+#'    composite sample with moderate effective sample sizes. This plot can also
+#'    be used as a diagnostic to confirm that AIC has selected reasonable
+#'    values for the `MinusAge` and `PlusAge` parameters.
+#'
+#' The function will read in `XXX.rep` and `XXX.par` files that are located in
+#' `SaveFile`.
+#' @inheritParams RunFn
+#' @param PlotType A string specifying the type of saved plots that you desire.
+#'   The default is to save `.png` files via an argument of `"PNG"`. The other
+#'   option is to save `.pdf` files via `"PDF"`.
+#' @param subplot Vector of integers specifying which plots to create. The
+#'   default is to create three plots.
 #' @param ReaderNames Vector with names of each reader, defaults to
 #' "Reader 1", "Reader 2", etc.
-#' @param ... Additional arguments passed to the
-#' \code{\link{ageing_comparison}} function.
+#' @param ... Additional arguments passed to `ageing_comparison()`.
 #' @return Returns AIC, AICc, and BIC for fitted model.
 #'
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
@@ -21,11 +41,17 @@
 #' @author James T. Thorson, Ian G. Taylor
 #'
 #' @export
-#'
-PlotOutputFn <-
-  function(Data, MaxAge, SaveFile, PlotType = "PNG", subplot = 1:3,
-           ReaderNames = NULL, ...) {
-
+#' @seealso
+#' * `RunFn()`
+#' * `StepwiseFn()`
+PlotOutputFn <- function(Data,
+                         MaxAge,
+                         SaveFile,
+                         PlotType = c("PNG", "PDF"),
+                         subplot = 1:3,
+                         ReaderNames = NULL,
+                         ...) {
+  PlotType <- match.arg(PlotType)
     # Interpret inputs
     Nreaders <- ncol(Data) - 1
     Ages <- Nages <- MaxAge + 1

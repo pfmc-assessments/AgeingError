@@ -10,16 +10,18 @@ rMx(Input)
 \item{Input}{input to be converted into a row matrix}
 }
 \description{
-## The function is currently defined as
+\subsection{The function is currently defined as}{
+
 function (Input)
 {
-  if (is.vector(Input)) {
-      Output <- t(as.matrix(Input))
-  }
-  if (!is.vector(Input)) {
-      Output <- as.matrix(Input)
-  }
-  Output
+if (is.vector(Input)) {
+Output <- t(as.matrix(Input))
+}
+if (!is.vector(Input)) {
+Output <- as.matrix(Input)
+}
+Output
+}
 }
 }
 \author{

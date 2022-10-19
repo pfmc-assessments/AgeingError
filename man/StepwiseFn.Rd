@@ -2,7 +2,7 @@
 % Please edit documentation in R/StepwiseFn.R
 \name{StepwiseFn}
 \alias{StepwiseFn}
-\title{Stepwise model selection}
+\title{Step-wise model selection}
 \usage{
 StepwiseFn(
   SearchMat,
@@ -17,41 +17,95 @@ StepwiseFn(
   SaveFile,
   EffSampleSize = 0,
   Intern = TRUE,
-  InformationCriterion = "AIC",
+  InformationCriterion = c("AIC", "AICc", "BIC"),
   SelectAges = TRUE
 )
 }
 \arguments{
-\item{SearchMat}{Description needed}
+\item{SearchMat}{A matrix explaining stepwise model selection options. One
+row for each readers error and one row for each readers bias + 2 rows, one
+for \code{MinusAge}, i.e., the age where the proportion at age begins to
+decrease exponentially with decreasing age, and one for \code{PlusAge}, i.e.,
+the age where the proportion-at-age begins to decrease exponentially with
+increasing age.
 
-\item{Data}{Description needed}
+Each element of a given row is a possible value to search across for that
+reader. So, the number of columns of \code{SearchMat} will be the maximum
+number of options that you want to include. Think of it as several vectors
+stacked row-wise where shorter rows are filled in with \code{NA} values. If
+reader two only has two options that the analyst wants to search over the
+remainder of the columns should be filled with \code{NA} values for that row.}
 
-\item{NDataSets}{Description needed}
+\item{Data}{This is the data set with the first column being an integer
+providing the number of otoliths that are included in the row and the
+subsequent columns are the reader or lab estimated ag,e where each
+reader/lab has a unique reading error and bias. The modeling framework
+allows for, at most, 15 readers, i.e., 16 columns. There should not be any
+identical rows in the data frame because otoliths that have the exact same
+read from every reader/lab should be combined into a single row with the
+count as the first column. If you failed to combine identical rows prior
+to running the model, you will be alerted with an error and the \code{XXX.rep}
+file will have a properly formatted data which can be' cut-pasted into a
+\code{XXX.dat} file for use. Missing reads from a given reader/lab should be
+entered as \code{-999}. Order your reader/lab columns such that similar
+readers/labs are located next to one another because columns to the right
+can mirror columns to their immediate left in terms of parameter
+estimates.}
 
-\item{KnotAges}{Ages associated with (necessary for options 5 or 6)}
+\item{NDataSets}{This is generally \code{1} and other values are not implemented.}
 
-\item{MinAge}{Description needed}
+\item{KnotAges}{Ages associated with each knot. This is a necessary input
+for \code{SigOpt = 5} or \code{SigOpt = 6}.}
 
-\item{MaxAge}{Description needed}
+\item{MinAge}{An integer, specifying the minimum possible "true" age.}
 
-\item{RefAge}{Description needed}
+\item{MaxAge}{An integer, specifying the maximum possible "true" age.}
 
-\item{MaxSd}{Description needed}
+\item{RefAge}{An arbitrarily chosen age from which "true" age-composition
+fixed-effects are calculated as an offset. This has no effect on the
+answer but could potentially effect estimation speed.}
 
-\item{MaxExpectedAge}{Description needed}
+\item{MaxSd}{An upper bound on possible values for the standard deviation
+of reading error.}
 
-\item{SaveFile}{Description needed}
+\item{MaxExpectedAge}{Set to MaxAge.}
 
-\item{EffSampleSize}{Description needed}
+\item{SaveFile}{Directory where \code{agemat.exe} is located and where all ADMB
+intermediate and output files should be located. If \code{AdmbFile} is specified
+then \code{agemat.exe} is copied from that directory to \code{SaveFile}.}
 
-\item{Intern}{Description needed}
+\item{EffSampleSize}{Indicating whether effective sample size should be
+calculated. Missing values in the data matrix will cause this to be
+ineffective, in which case this should be set to \code{0}.}
 
-\item{InformationCriterion}{Description needed}
+\item{Intern}{A logical input that controls the amount of output displayed,
+where \code{TRUE} indicates that ADMB output should be displayed in R and
+\code{FALSE} leads to the suppression of this information.}
 
-\item{SelectAges}{Description needed}
+\item{InformationCriterion}{A string specifying the type of information
+criterion that should be used to choose the best model. The default is to
+use AIC, though AIC corrected for small sample sizes and BIC are also
+available.}
+
+\item{SelectAges}{A logical input specifying if the boundaries should be
+based on \code{MinusAge} and \code{PlusAge}. The default is \code{TRUE}.}
 }
 \description{
-Code for running stepwise model selection.
+Run step-wise model selection to facilitate the exploration of several
+modelling configurations using Akaike information criterion (AIC).
+}
+\details{
+AIC seems like an appropriate method to select among possible
+values for \code{PlusAge}, i.e., the last row of \code{SearchMat}, because \code{PlusAge}
+determines the number of estimated fixed-effect hyperparameters that are
+used to define the true proportion-at-age hyperdistribution. This
+hyperdistribution is in turn used as a prior when integrating across a true
+age associated with each otolith. This true age, which is a latent effect,
+can be interpreted as a random effect with one for each observation. So, the
+use of AIC to select among parameterizations of the fixed effects defining
+this hyperdistribution is customary (Pinheiro and Bates, 2009). This was
+tested for sablefish, where AIC lead to a true proportion at age that was
+biologically plausible.
 }
 \examples{
 
@@ -164,8 +218,17 @@ StepwiseFn(SearchMat = SearchMat, Data = AgeReads2,
 \references{
 Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
 Quantifying age-reading error for use in fisheries stock assessments,
-with application to species in Australias southern and eastern scalefish
+with application to species in Australia's southern and eastern scalefish
 and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
+
+Pinheiro, J.C., and Bates, D. 2009. Mixed-Effects Models in S and S-PLUS.
+Springer, Germany.
+}
+\seealso{
+\itemize{
+\item \code{RunFn()} will run a single model, where this function runs multiple models.
+\item \code{PlotOutputFn()} will help summarize the output from \code{RunFn()}.
+}
 }
 \author{
 James T. Thorson
