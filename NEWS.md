@@ -1,0 +1,44 @@
+# nwfscAgeingError 1.3.3
+
+* Added a `NEWS.md` file to track changes to the package.
+* Included TMB agemat2.cpp souce code from A. E. Punt
+
+# nwfscAgeingError 1.3.2
+
+This version contains updates by A. E. Punt during his work with CSIRO.
+
+# nwfscAgeingError 1.3.1
+
+Archive from 16th of November 2021.
+
+# nwfscAgeingError 1.0.1
+
+The version used for the 2017 assessment cycle.
+
+# nwfscAgeingError 1.0.0
+
+The version used for the 2013 assessment cycle. Though the repository was not
+tagged until 2015. Melissa Haltuch noted that in 2014 the code was updated and
+a summary of those updates are provided below.
+
+ - tpl file
+   - 2 new options for bias estimation.
+      - (5) Splines, which requires a new argument defining the knots.
+      - (6) Linear interpolation between knots, which requires a new argument
+        that defines the knots.
+   - Changes the calculation of the best true age because the previous way
+     led to strange plots.
+   - Improvement to effective sample size calculation.
+ - dat file
+   - Read in one data set with missing entries, where there are no double
+     reads. In the 2011-based code it allowed for reading in of multiple data
+     sets.
+   - Increased estimation speed because of how missing values are treated.
+ - R files
+   - Includes code to simulate data.
+   - Includes a function to format input data from a csv with readers in
+     columns and double reads in the rows.
+   - Plot standardized outputs from the output file. These figures could still
+     use some development.
+   - Ability to step through multiple runs and catalog the output using the
+     new `StepwiseFn()` function.
