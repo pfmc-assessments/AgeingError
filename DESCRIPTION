@@ -42,9 +42,9 @@ Authors@R: c(
   )
 Description: Source code and examples for how to use double-read data to
     estimate ageing imprecision and bias from fishery otoliths. The code
-    was developed for Punt et al. (2008) and updated in 2020.
-URL: http://github.com/nwfsc-assess/nwfscAgeingError
-BugReports: http://github.com/nwfsc-assess/nwfscAgeingError/issues
+    was developed for Punt et al. (2008) and updated in 2022.
+URL: http://github.com/pfmc-assessments/nwfscAgeingError
+BugReports: http://github.com/pfmc-assessments/nwfscAgeingError/issues
 License: GPL-2
 Encoding: UTF-8
 RoxygenNote: 7.2.1
