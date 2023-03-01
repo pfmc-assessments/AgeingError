@@ -86,8 +86,11 @@ and also please cite the Punt et al. (2008) paper below.
 
 Further reading
 =============
-The user manual (which may not include all current features) can found here:
-https://github.com/pfmc-assessments/nwfscAgeingError/blob/master/inst/doc/Instructions_for_use.pdf
+The user manual (which may not include all current features) can accessed by running the following R code:
+```r
+library(nwfscAgeingError)
+?nwfscAgeingError
+```
 
 For more details regarding development and testing of this software please see:
 * Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008. Quantifying age-reading error for use in fisheries stock assessments, with application to species in Australia’s southern and eastern scalefish and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991–2005.
