@@ -73,9 +73,6 @@ StepwiseFn(SearchMat = SearchMat, Data = AgeReads2,
 
 ```
 
-Please see examples folder for an example of how to run the model, found here:
-https://github.com/pfmc-assessments/nwfscAgeingError/blob/master/examples/Example_with_simulated_data.R
-
 Citing this package
 =============
 When using this software, please cite it as:
