@@ -80,21 +80,24 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
   if (hist) {
     hist.x <- graphics::hist(xvec, breaks = 0:(maxage + 1) - 0.5, plot = FALSE)
     hist.y <- graphics::hist(yvec, breaks = 0:(maxage + 1) - 0.5, plot = FALSE)
-    scale.hist <- hist.frac * maxage / max(hist.x$counts, hist.y$counts, na.rm = TRUE)
+    scale.hist <- hist.frac * maxage /
+      max(hist.x$counts, hist.y$counts, na.rm = TRUE)
     for (a in 0:maxage) {
       graphics::rect(
-        xleft = a - 0.5, 
-        xright = a + 0.5, 
+        xleft = a - 0.5,
+        xright = a + 0.5,
         ybottom = 0,
         ytop = scale.hist * hist.x$counts[which(hist.x$mids == a)],
-        col = col.hist, border = FALSE
+        col = col.hist,
+        border = FALSE
       )
       graphics::rect(
-        xleft = 0, 
+        xleft = 0,
         xright = scale.hist * hist.y$counts[which(hist.y$mids == a)],
         ybottom = a - 0.5,
         ytop = a + 0.5,
-        col = col.hist, border = FALSE
+        col = col.hist,
+        border = FALSE
       )
     }
   }
