@@ -206,7 +206,7 @@ DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final", ver
   SaveAll$parameters <- parameters
   SaveAll$report <- model$report()
   save(SaveAll,file=SaveFile)
-  rep   <- sdreport(model)
+  rep   <- TMB::sdreport(model)
   if (verbose) print(summary(rep))
   SaveAll$gradient <- rep$gradient.fixed
   SaveAll$sdreport <- rep
