@@ -17,7 +17,7 @@ PlotOutputFn(
   ReaderNames = NULL,
   Species = NULL,
   SaveDir = "",
-  Verbose = F,
+  verbose = FALSE,
   ...
 )
 
@@ -34,7 +34,7 @@ PlotOutputFn(
   ReaderNames = NULL,
   Species = NULL,
   SaveDir = "",
-  Verbose = F,
+  verbose = FALSE,
   ...
 )
 }
@@ -51,6 +51,10 @@ PlotOutputFn(
 
 \item{ReaderNames}{Vector with names of each reader, defaults to
 "Reader 1", "Reader 2", etc.}
+
+\item{verbose}{A logical input that controls the amount of feedback users
+receive from the program. The default is to provide the most output as
+possible with \code{verbose = TRUE}.}
 
 \item{...}{Additional arguments passed to \code{ageing_comparison()}.}
 

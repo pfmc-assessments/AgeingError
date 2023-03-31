@@ -1,4 +1,4 @@
-Minimzer <- function(model,method="optim",lower,upper,verbose=F)
+Minimzer <- function(model,method="optim",lower,upper, verbose = FALSE)
 {
   # Check parameters "work" 
   if (length(lower) > 0 & length(model$par) != length(lower)) { print("wrong number of lower bounds"); AA }
@@ -19,13 +19,13 @@ Minimzer <- function(model,method="optim",lower,upper,verbose=F)
     model$fitv <- fit$value
     print(model$fitv,digits=10)
   }
- if (Verbose==T) print(fit)
+ if (verbose) print(fit)
   
  return(model)  
 }
 
 
-DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final",Verbose=F)
+DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final", verbose = FALSE)
  {
 
   if (!dir.exists(SaveDir)) dir.create(SaveDir)
@@ -158,24 +158,24 @@ DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final",Verb
                MaxCells=DataSpecs$MaxCells,TotalN=DataSpecs$TotalN,EffN=DataSpecs$EffN,
                xvals=ModelSpecsInp$xvals,nknots=ModelSpecsInp$nknots,xvalsL=ModelSpecsInp$xvalsL,nknotsL=ModelSpecsInp$nknotsL,
                AprobWght=AprobWght,SlopeWght=SlopeWght)
-  if (Verbose==T) print(str(data))
+  if (verbose) print(str(data))
 
   Bias_INIT_Use <- Bias_INIT
   if (is.null(Bias_INIT)) Bias_INIT_Use <- 1
   parameters=list(Dummy=0,BiasPar=Bias_INIT_Use,SDPar=Sigma_INIT,Slope=Slope_INIT,Probs=Prob_INIT)
-  if (Verbose==T) print(str(parameters))
+  if (verbose) print(str(parameters))
   map <- list(BiasPar=rep(factor(NA),NumBias),SDPar=rep(factor(NA),NumSig),Slope=rep(factor(NA),Nslops),Probs=rep(factor(NA),Nprobs))
   map <- list(Dummy=factor(NA),BiasPar=BiasParMap,SDPar=SDParMap)
   
   if (is.null(Bias_INIT)) map <- list(Dummy=factor(NA),BiasPar=BiasParMap,SDPar=SDParMap)
-  if (Verbose==T) print(map)
+  if (verbose) print(map)
 
   ##################
   #Sigma_LO <- c(0,0.01,0,0,0)
   #Sigma_HI <- c(1,1,2,1,2)
   upper <- c(Bias_HI,Sigma_HI,Slope_HI,Prob_HI)
   lower <- c(Bias_LO,Sigma_LO,Slope_LO,Prob_LO)
-  model <- MakeADFun(data,parameters,map=map,silent=T,DLL='AgeingError')
+  model <- TMB::MakeADFun(data,parameters,map=map,silent=T,DLL='AgeingError')
   model$fn_orig <- model$fn
 
   # Debugging track
@@ -195,7 +195,7 @@ DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final",Verb
     print(model$fitv,digits=10)
     cat("Difference",best-model$fitv,"\n")
    }
-  model <- Minimzer(model,method="both",lower,upper,verbose=verbose)
+  model <- Minimzer(model,method="both",lower,upper, verbose = verbose)
   print( model$gr(model$env$last.par.best))
   print(model$env$last.par.best)
 
@@ -207,7 +207,7 @@ DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final",Verb
   SaveAll$report <- model$report()
   save(SaveAll,file=SaveFile)
   rep   <- sdreport(model)
-  if (Verbose==T) print(summary(rep))
+  if (verbose) print(summary(rep))
   SaveAll$gradient <- rep$gradient.fixed
   SaveAll$sdreport <- rep
   save(SaveAll,file=SaveFile)
@@ -216,7 +216,7 @@ DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final",Verb
 
 # ==============================================================================================================
 
-CreateData <- function(DataFile="data.dat",NDataSet=1,Verbose=F)
+CreateData <- function(DataFile="data.dat",NDataSet=1, verbose = FALSE)
 {
   MatchTable<-function(Table,Char1=NULL,Char2=NULL,Char3=NULL,Char4=NULL,Char5=NULL)
   {
@@ -252,7 +252,7 @@ CreateData <- function(DataFile="data.dat",NDataSet=1,Verbose=F)
     RefAge[Idataset] <- as.numeric(Data[IndexVals[Idataset]+3,3])  
     Readers <- as.numeric(Data[IndexVals[Idataset]+4,1:NReaders[Idataset]])  
     MaxReader <- max(MaxReader,Readers)
-    if (Verbose==T) cat("readers",Readers,"\n")
+    if (verbose) cat("readers",Readers,"\n")
    }  
   ReadPnt <- matrix(0,nrow=NDataSet,ncol=MaxReader)
   for (Idataset in 1:NDataSet)
@@ -265,7 +265,7 @@ CreateData <- function(DataFile="data.dat",NDataSet=1,Verbose=F)
    { 
     for (Iline in 1:Npnt[Idataset])
      TheData[Idataset,Iline,1:(NReaders[Idataset]+1)] <- as.numeric(Data[(IndexVals[Idataset]+4+Iline),1:(NReaders[Idataset]+1)])
-    if (Verbose==T) cat("Last line of data set",Idataset,"is",TheData[Idataset,Npnt[Idataset],1:(NReaders[Idataset]+1)],"\n")
+    if (verbose) cat("Last line of data set",Idataset,"is",TheData[Idataset,Npnt[Idataset],1:(NReaders[Idataset]+1)],"\n")
    }
 
   # Do checks on the data set
@@ -423,13 +423,13 @@ CreateData <- function(DataFile="data.dat",NDataSet=1,Verbose=F)
   Outs$MaxCells <- MaxCells
   Outs$TotalN <- TotalN
   Outs$EffN <- EffN
-  if (Verbose==T) print(str(Outs))
+  if (verbose) print(str(Outs))
   return(Outs)
 }
   
 # ==============================================================================================================
 
-CreateSpecs <- function(SpecsFile="data.spc",DataSpecs,Verbose=F)
+CreateSpecs <- function(SpecsFile="data.spc",DataSpecs, verbose = FALSE)
 {
   MatchTable<-function(Table,Char1=NULL,Char2=NULL,Char3=NULL,Char4=NULL,Char5=NULL)
   {
@@ -544,7 +544,7 @@ CreateSpecs <- function(SpecsFile="data.spc",DataSpecs,Verbose=F)
   Outs$nknotsL <- nknotsL
   Outs$xvals <- xvals
   Outs$nknots <- nknots
-  if (Verbose==T) print(str(Outs))
+  if (verbose) print(str(Outs))
   return(Outs)
 
 }
@@ -576,7 +576,7 @@ CreateSpecs <- function(SpecsFile="data.spc",DataSpecs,Verbose=F)
 #'
 PlotOutputFn <-
   function(Data, IDataSet, MaxAge, Report, PlotType = "PNG", SaveFile=getwd(), subplot=1:3, Nparameters=0,LogLike=0,
-           ReaderNames = NULL, Species=NULL, SaveDir="",Verbose=F, ...)
+           ReaderNames = NULL, Species=NULL, SaveDir="", verbose = FALSE, ...)
   {
     SaveFile <- paste(SaveFile,"/",SaveDir,sep="")
 
@@ -620,7 +620,7 @@ PlotOutputFn <-
                                                  "CV", "SD", "Expected_age"),
                                                paste("Age", 0:MaxAge),
                                                paste("Reader", 1:Nreaders)))
-    if (Verbose==T) print(str(ErrorAndBiasArray))
+    if (verbose) print(str(ErrorAndBiasArray))
     # Estimate unobserved age for each otolith
     # This is done by assigning each otolith to the age which has
     # maximum posterior probability (i.e. the conditional mode,
@@ -678,7 +678,7 @@ PlotOutputFn <-
                             SaveFile = SaveFile,
                             filename = paste0(Species,"-Data set-",IDataSet," ",ReaderNames[ireader],
                                               " vs ", ReaderNames[jreader], ".png",sep=""),
-                            verbose = FALSE,
+                            verbose = verbose,
                             ...)
         }
       }
@@ -783,7 +783,7 @@ PlotOutputFn <-
 
 # ==============================================================================================================
 
-ProcessResults <- function(Species,SaveDir,CalcEff=F,Verbose=F)
+ProcessResults <- function(Species,SaveDir,CalcEff=F, verbose = FALSE)
 {
  
   
@@ -793,7 +793,7 @@ ProcessResults <- function(Species,SaveDir,CalcEff=F,Verbose=F)
  print(ReportFile)
  
  load(SaveFile)
- if (Verbose==T) print(str(SaveAll))
+ if (verbose) print(str(SaveAll))
  NDataSet <- SaveAll$data$NDataSet
  MaxReader <- SaveAll$data$MaxReader
  
