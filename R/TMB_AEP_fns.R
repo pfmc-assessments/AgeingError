@@ -25,8 +25,13 @@ Minimzer <- function(model,method="optim",lower,upper, verbose = FALSE)
 }
 
 
-DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final", verbose = FALSE)
- {
+DoApplyAgeError <- function(Species,
+                            DataSpecs,
+                            ModelSpecsInp,
+                            AprobWght = 0.000001,
+                            SlopeWght = 0.01,
+                            SaveDir = "Final",
+                            verbose = FALSE) {
 
   if (!dir.exists(SaveDir)) dir.create(SaveDir)
   
@@ -216,8 +221,17 @@ DoApplyAgeError <- function(Species,DataSpecs,ModelSpecsInp,SaveDir="Final", ver
 
 # ==============================================================================================================
 
-CreateData <- function(DataFile="data.dat",NDataSet=1, verbose = FALSE)
-{
+#' @param EchoFile A file path to a file that will be created or appended to if
+#'   it already exists to store information about your data inputs. The default
+#'   is `""`, which leads to output being printed to the screen rather than
+#'   saved in a file. An example of a user-defined input would be
+#'   `"EchoTMB.out"`.
+CreateData <- function(DataFile = "data.dat",
+                       NDataSet = 1,
+                       verbose = FALSE,
+                       EchoFile = "") {
+  # Put a first line in the EchoFile if the file does not already exist
+  if (!file.exists(EchoFile)) write("", file = EchoFile)
   MatchTable<-function(Table,Char1=NULL,Char2=NULL,Char3=NULL,Char4=NULL,Char5=NULL)
   {
     ii <- rep(T,length(Table[,1]))
