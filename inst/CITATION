@@ -1,0 +1,17 @@
+bibentry(
+  bibtype = "Article",
+  title = paste0("Quantifying age-reading error for use in fisheries stock
+                  assessments, with application to species in {Australia}'s
+                  southern and eastern scalefish and shark fishery"),
+  author = c(
+    person(c("Andre", "E."), "Punt"),
+    person(c("D.", "C."), "Smith"),
+    person(c("K."), "KrusicGolub"),
+    person(c("S."), "Robertson")
+  ),
+  year = "2008",
+  journal = "Canadian Journal of Fisheries and Aquatic Sciences",
+  volume = "65",
+  pages = "1991--2005",
+  doi = "10.1139/F08-11"
+)
