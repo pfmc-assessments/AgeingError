@@ -1,5 +1,4 @@
 ^\.github$
-test
-exes
-inst/doc
+^\.history$
 src/agemat.tpl
+sandbox/
