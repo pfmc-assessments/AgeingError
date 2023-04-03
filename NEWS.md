@@ -2,8 +2,9 @@
 
 # nwfscAgeingError 2.0.0
 
-* changed name to AgeingError
+* Changed package name to AgeingError
 * Added TMB code that is pre-compiled in the package
+* Added `run()` as a wrapper for the code provided by @puntae
 * Increased the number of examples present in the package
 
 # nwfscAgeingError 1.3.3

@@ -1,6 +1,6 @@
 Description
 ================
-nwfscAgeingError
+AgeingError
 * Wrapper for tool to estimate ageing error given double-reads of hard structures (e.g., otoliths)
 
   <!-- badges: start -->
@@ -13,15 +13,20 @@ Instructions
 First, download the executable for your operating system from the releases page:
 https://github.com/pfmc-assessments/nwfscAgeingError/releases
 
-Then install the `nwfscAgeingError` package from this github site as follows:
+Then install the `AgeingError` package from this github site as follows:
 
 ```r
-install.packages("devtools")
-devtools::install_github("pfmc-assessments/nwfscAgeingError")
+install.packages("remotes")
+remotes::install_github("pfmc-assessments/nwfscAgeingError@TMB")
 # Load package
-library(nwfscAgeingError)
+library(AgeingError)
 
 ##### Run examples
+###############################################################################
+# The below is example for the model (.exe) compiled with ADMB not the new TMB
+# model, examples for the TMB model are yet to come.
+###############################################################################
+
 # File where the Punt et al. (2008) model (pre-compiled in ADMB) resides
 SourceFile <- file.path(system.file("executables",
   package = "nwfscAgeingError"), .Platform$file.sep)
@@ -85,7 +90,7 @@ Further reading
 =============
 The user manual (which may not include all current features) can accessed by running the following R code:
 ```r
-library(nwfscAgeingError)
+library(AgeingError)
 ?nwfscAgeingError
 ```
 

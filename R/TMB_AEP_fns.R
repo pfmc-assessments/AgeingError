@@ -1,16 +1,30 @@
-Minimzer <- function(model,
-                     method = "optim",
-                     lower,
-                     upper,
-                     verbose = FALSE) {
+#' Minimize the negative log likelihood
+#'
+#' Minimize the negative log likelihood using `"nlmimb"` and/or `"optim"`.
+#'
+#' @param model A model to be optimized.
+#' @param method A string specifying the desired method to be used for the
+#'   optimization routine. The options are listed in the function call, where
+#'   the default is to use `"optim"`. Using both routines is an option, via
+#'   `"both"`, and will lead to first optimizing the model using `"nlminb"`
+#'   and then re-optimization of the model with `"optim"`. Note that when using
+#'   [stats::optim()], the `"L-BFGS-B"` method is used rather than the default
+#'   method of `"Nelder-Mead"`.
+#' @param lower,upper Vectors of parameter bounds of the same length as the
+#'   number of parameters in the model.
+#' @inheritParams DoApplyAgeError
+minimizer <- function(model,
+                      method = c("optim", "nlmimb", "both"),
+                      lower,
+                      upper,
+                      verbose = FALSE) {
+  method <- match.arg(method)
   # Check parameters 'work'
   if (length(lower) > 0 & length(model$par) != length(lower)) {
-    print("wrong number of lower bounds")
-    AA
+    cli::cli_abort("wrong number of lower bounds")
   }
   if (length(upper) > 0 & length(model$par) != length(upper)) {
-    print("wrong number of upper bounds")
-    AA
+    cli::cli_abort("wrong number of upper bounds")
   }
 
   # Find the model and iterate until convergence
@@ -30,7 +44,9 @@ Minimzer <- function(model,
     )
     model$par <- model$env$last.par.best
     model$fitv <- fit$objective
-    print(model$fitv, digits = 10)
+    if (verbose) {
+      cli::cli_inform(model$fitv)
+    }
   }
   if (method == "both" || method == "optim") {
     fit <- optim(
@@ -44,7 +60,9 @@ Minimzer <- function(model,
     )
     model$par <- model$env$last.par.best
     model$fitv <- fit$value
-    print(model$fitv, digits = 10)
+    if (verbose) {
+      cli::cli_inform(model$fitv)
+    }
   }
   if (verbose) {
     print(fit)
@@ -53,23 +71,44 @@ Minimzer <- function(model,
   return(model)
 }
 
-
-DoApplyAgeError <- function(Species,
+#' Run the ageing error optimization routine
+#' @param Species A string that will be used to create file names. Typically,
+#'   users will use the common name for the species of interest, especially if
+#'   you are saving files from multiple species in a single directory. Though,
+#'   the default is `"AgeingError"`.
+#' @param DataSpecs A data object returned from [CreateData()].
+#' @param ModelSpecsInp A specification object returned from [CreateSpecs()].
+#' @param AprobWght,SlopeWght Numeric values passed to the model. The defaults
+#'   are 1e-06 and 0.01. Andre originally had these hard coded from his
+#'   workspace. TODO: decide if they should be passed in the specifications or
+#'   data files.
+#' @param SaveDir A path, relative or absolute, to a directory where the
+#'   results will be saved. The directory need not exist currently as it will
+#'   be created dynamically.
+#' @param verbose A logical specifying if messages should be printed. The
+#'   default is to **NOT** print, i.e., `verbose = FALSE`.
+#'
+#' @export
+#' @author Andre E. Punt
+DoApplyAgeError <- function(Species = "AgeingError",
                             DataSpecs,
                             ModelSpecsInp,
                             AprobWght = 1e-06,
                             SlopeWght = 0.01,
-                            SaveDir = "Final",
+                            SaveDir = getwd(),
                             verbose = FALSE) {
-  if (!dir.exists(SaveDir)) {
-    dir.create(SaveDir)
+  fs::dir_create(SaveDir)
+  SaveFile <- file.path(
+    SaveDir,
+    paste0(Species, ".lda")
+  )
+  if (verbose) {
+    cli::cli_inform(
+      "Results will be saved to {SaveFile}"
+    )
   }
 
-  # Save
-  SaveFile <- paste(SaveDir, "/", Species, ".lda", sep = "")
-  print(SaveFile)
-
-  # Extract material from the data specis
+  # Extract material from the data specs
   MinAge <- DataSpecs$MinAge
   MaxAge <- DataSpecs$MaxAge
   MaxReader <- DataSpecs$MaxReader
@@ -298,19 +337,19 @@ DoApplyAgeError <- function(Species,
   }
 
   # Find the model and iterate until convergence
-  model <- Minimzer(model, method = "both", lower, upper)
+  model <- minimizer(model, method = "both", lower, upper)
   best <- 1e+20
   print(model$fitv, digits = 10)
   while (abs(best - model$fitv) > 1e-10) {
     print("looping")
     print(best)
     best <- model$fitv
-    model <- Minimzer(model, method = "both", lower, upper)
+    model <- minimizer(model, method = "both", lower, upper)
     print("Objective fn:")
     print(model$fitv, digits = 10)
     cat("Difference", best - model$fitv, "\n")
   }
-  model <- Minimzer(model, method = "both", lower, upper, verbose = verbose)
+  model <- minimizer(model, method = "both", lower, upper, verbose = verbose)
   print(model$gr(model$env$last.par.best))
   print(model$env$last.par.best)
 
@@ -926,12 +965,12 @@ CreateSpecs <- function(SpecsFile = "data.spc",
 #' @param Data Input data matrix
 #' @param MaxAge Maximum estimated age
 #' @param SaveFile Directory for fitted model
-#' @param PlotType Type of saved plots, i.e. PDF or PNG
 #' @param ReaderNames Vector with names of each reader, defaults to
-#' 'Reader 1', 'Reader 2', etc.
+#'   'Reader1', 'Reader2', etc. if left at the default argument of `NULL`.
+#'   If you pass a vector of strings, the vector must be the same length as
+#'   `NCOL(Data) - 1`.
 #' @param subplot Vector of which plots to create.
-#' @param dots Additional arguments passed to the
-#' \code{\link{ageing_comparison}} function.
+#' @param ... Additional arguments passed to [ageing_comparison()].
 #' @return Returns AIC, AICc, and BIC for fitted model.
 #'
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
@@ -943,20 +982,19 @@ CreateSpecs <- function(SpecsFile = "data.spc",
 #'
 #' @export
 #'
-PlotOutputFn <- function(Data,
-                         IDataSet,
-                         MaxAge,
-                         Report,
-                         PlotType = "PNG",
-                         SaveFile = getwd(),
-                         subplot = 1:3, Nparameters = 0,
-                         LogLike = 0,
-                         ReaderNames = NULL,
-                         Species = NULL,
-                         SaveDir = "",
-                         verbose = FALSE,
-                         ...) {
-  SaveFile <- paste(SaveFile, "/", SaveDir, sep = "")
+plot_output <- function(Data,
+                        IDataSet,
+                        MaxAge,
+                        Report,
+                        subplot = 1:3,
+                        Nparameters = 0,
+                        LogLike = 0,
+                        ReaderNames = NULL,
+                        Species = "AgeingError",
+                        SaveDir = getwd(),
+                        verbose = FALSE,
+                        ...) {
+  fs::dir_create(SaveDir)
 
   # Interpret inputs
   Nreaders <- ncol(Data) - 1
@@ -964,7 +1002,7 @@ PlotOutputFn <- function(Data,
 
   # Reader names
   if (is.null(ReaderNames)) {
-    ReaderNames <- paste("Reader", 1:Nreaders)
+    ReaderNames <- paste0("Reader", 1:Nreaders)
   }
 
   # Age-reading error matrices: dimensions are Reader, TrueAge, EstAge
@@ -1052,19 +1090,6 @@ PlotOutputFn <- function(Data,
 
   # Plot comparison of data for each pair of readers
   if (1 %in% subplot) {
-    if (PlotType == "PDF") {
-      pdf(
-        paste0(
-          SaveDir, "/",
-          Species, "-Data set", IDataSet, ReaderNames[ireader],
-          " vs ", ReaderNames[jreader], ".pdf",
-          sep = ""
-        ),
-        width = 6,
-        height = 6
-      )
-    }
-
     # make plots of input data for each reader pair
     for (ireader in 1:(Nreaders - 1)) {
       for (jreader in (ireader + 1):Nreaders) {
@@ -1075,18 +1100,17 @@ PlotOutputFn <- function(Data,
           ylab = ReaderNames[jreader],
           maxage = max(DataExpanded, na.rm = TRUE),
           hist = FALSE,
-          png = (PlotType == "PNG"),
-          SaveFile = SaveFile,
+          png = TRUE,
+          SaveFile = SaveDir,
           filename = paste0(
             Species,
-            "-Data set-",
+            "-DataSet-",
             IDataSet,
-            " ",
+            "-",
             ReaderNames[ireader],
-            " vs ",
+            "Vs",
             ReaderNames[jreader],
-            ".png",
-            sep = ""
+            ".png"
           ),
           verbose = verbose,
           ...
@@ -1097,40 +1121,21 @@ PlotOutputFn <- function(Data,
 
   #  Plot estimated age structure
   if (2 %in% subplot) {
-    if (PlotType == "PDF") {
-      pdf(
-        file.path(
-          SaveFile,
-          paste(
-            Species,
-            "-Data set-",
-            IDataSet,
-            "Estimated vs Observed Age Structure.pdf",
-            sep = ""
-          )
-        ),
-        width = 6,
-        height = 6
-      )
-    }
-    if (PlotType == "PNG") {
-      png(
-        file.path(
-          SaveFile,
-          paste(
-            Species,
-            "-Data set-",
-            IDataSet,
-            "Estimated vs Observed Age Structure.png",
-            sep = ""
-          )
-        ),
-        width = 6,
-        height = 6,
-        units = "in",
-        res = 200
-      )
-    }
+    png(
+      file.path(
+        SaveDir,
+        paste0(
+          Species,
+          "-DataSet-",
+          IDataSet,
+          "EstimatedVsObservedAgeStructure.png"
+        )
+      ),
+      width = 6,
+      height = 6,
+      units = "in",
+      res = 200
+    )
     par(mar = c(3, 3, 2, 0), mgp = c(1.5, 0.25, 0), tck = -0.02, oma = c(
       0,
       0, 0, 0
@@ -1158,40 +1163,21 @@ PlotOutputFn <- function(Data,
   if (3 %in% subplot) {
     Ncol <- ceiling(sqrt(Nreaders))
     Nrow <- ceiling(Nreaders / Ncol)
-    if (PlotType == "PDF") {
-      pdf(
-        file.path(
-          SaveFile,
-          paste(
-            Species,
-            "-Data set-",
-            IDataSet,
-            "True vs Reads (by reader).pdf",
-            sep = ""
-          )
-        ),
-        width = Ncol * 3,
-        height = Nrow * 3
-      )
-    }
-    if (PlotType == "PNG") {
-      png(
-        file.path(
-          SaveFile,
-          paste(
-            Species,
-            "-Data set-",
-            IDataSet,
-            "True vs Reads (by reader).png",
-            sep = ""
-          )
-        ),
-        width = Ncol * 3,
-        height = Nrow * 3,
-        units = "in",
-        res = 200
-      )
-    }
+    png(
+      file.path(
+        SaveDir,
+        paste0(
+          Species,
+          "-DataSet-",
+          IDataSet,
+          "TrueVsReadsByReader.png"
+        )
+      ),
+      width = Ncol * 3,
+      height = Nrow * 3,
+      units = "in",
+      res = 200
+    )
     par(
       mfrow = c(Nrow, Ncol),
       mar = c(3, 3, 2, 0),
@@ -1280,10 +1266,10 @@ PlotOutputFn <- function(Data,
     write.csv(
       ErrorAndBiasArray[, , ReadI],
       file = file.path(
-        SaveFile,
+        SaveDir,
         paste0(
           Species,
-          " SS_format_",
+          " SS3_format_",
           Main,
           ".csv",
           sep = ""
@@ -1302,14 +1288,24 @@ PlotOutputFn <- function(Data,
   return(Output)
 }
 
-ProcessResults <- function(Species,
-                           SaveDir,
+ProcessResults <- function(Species = "AgeingError",
+                           SaveDir = getwd(),
                            CalcEff = FALSE,
                            verbose = FALSE) {
-  SaveFile <- paste(SaveDir, "/", Species, ".lda", sep = "")
-  print(SaveFile)
-  ReportFile <- paste(SaveDir, "/", Species, ".rpt", sep = "")
-  print(ReportFile)
+  SaveFile <- file.path(
+    SaveDir,
+    paste0("/", Species, ".lda")
+  )
+  if (verbose) {
+    print(SaveFile)
+  }
+  ReportFile <- file.path(
+    SaveDir,
+    paste0("/", Species, ".rpt")
+  )
+  if (verbose) {
+    print(ReportFile)
+  }
 
   load(SaveFile)
   if (verbose) {
@@ -1733,14 +1729,13 @@ ProcessResults <- function(Species,
   # find the effective sample sizes
   for (IDataSet in 1:NDataSet) {
     Data <- SaveAll$data$TheData[IDataSet, 1:SaveAll$data$Npnt[IDataSet], ]
-    Output <- PlotOutputFn(
-      Data,
-      IDataSet,
-      SaveAll$data$MaxAge,
-      SaveAll$report,
+    Output <- plot_output(
+      Data = Data,
+      IDataSet = IDataSet,
+      MaxAge = SaveAll$data$MaxAge,
+      Report = SaveAll$report,
       Nparameters = Npars,
       LogLike = SaveAll$report$Obj_fun,
-      PlotType = "PNG",
       subplot = 1:3,
       ReaderNames = NULL,
       Species = Species,

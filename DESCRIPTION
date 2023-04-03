@@ -30,6 +30,7 @@ Imports:
     assertthat,
     cli,
     clisymbols,
+    fs,
     generics,
     glmmTMB,
     graphics,
