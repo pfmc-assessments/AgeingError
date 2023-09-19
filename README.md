@@ -90,6 +90,6 @@ library(nwfscAgeingError)
 ```
 
 For more details regarding development and testing of this software please see:
-* Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008. Quantifying age-reading error for use in fisheries stock assessments, with application to species in Australia’s southern and eastern scalefish and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991–2005.
+* Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008. Quantifying age-reading error for use in fisheries stock assessments, with application to species in Australia’s southern and eastern scalefish and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991–2005. https://doi.org/10.1139/F08-111.
 
 
