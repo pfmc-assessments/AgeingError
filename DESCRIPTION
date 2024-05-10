@@ -1,13 +1,19 @@
 Package: nwfscAgeingError
 Type: Package
 Title: Source Code for Punt et al. (2008): Ageing Error and Imprecision
-Version: 1.3.3
+Version: 1.3.4
 Authors@R: c(
+  person(
+    given = c("Ian", "G."),
+    family = "Taylor",
+    email = "ian.taylor@noaa.gov",
+    role = c("aut", "cre")
+    comment = c(ORCID = "0000-0001-8489-2488")
+  ),
   person(
     given = c("Kelli", "F."),
     family = "Johnson",
-    email = "kelli.johnson@noaa.gov",
-    role = c("aut", "cre"),
+    role = "aut",
     comment = c(ORCID = "0000-0002-5149-451X")
   ),
   person(
@@ -21,12 +27,6 @@ Authors@R: c(
     family = "Thorson",
     role = "aut",
     comment = c(ORCID = "0000-0001-7415-1010")
-  ),
-  person(
-    given = c("Ian", "G."),
-    family = "Taylor",
-    role = "aut",
-    comment = c(ORCID = "0000-0001-8489-2488")
   ),
   person(
     given = c("Ian", "J."),
