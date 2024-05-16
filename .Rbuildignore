@@ -1,4 +1,8 @@
 ^\.github$
 ^\.history$
 src/agemat.tpl
-sandbox/
+^sandbox$
+^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
