@@ -3,17 +3,18 @@ Package: AgeingError
 Title: Estimating ageing error with 'TMB' from double reads
 Version: 2.0.1
 Authors@R: c(
-    person(c("Kelli", "F."), "Johnson", , "kelli.johnson@noaa.gov", role = c("aut"),
-           comment = c(ORCID = "0000-0001-9563-1937")),
     person(c("Andre", "E."), "Punt", role = "aut",
            comment = c(ORCID = "0000-0001-8489-2488")),
+    person(c("Kelli", "F."), "Johnson", role = "aut",
+           comment = c(ORCID = "0000-0001-9563-1937")),
     person(c("James", "T."), "Thorson", role = c("ctb", "cph"),
            comment = c(ORCID = "0000-0001-7415-1010")),
-    person(c("Ian", "G."), "Taylor", role = c("aut", "cre"),
+    person(c("Ian", "G."), "Taylor", email = "ian.taylor@noaa.gov", 
+           role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8489-2488")),
     person(c("Ian", "J."), "Stewart", role = "ctb"),
     person(c("Melissa", "A."), "Haltuch", role = "ctb",
-           comment = c(ORCID = "0000-0003-2821-1267"))
+           comment = c(ORCID = "0000-0003-2821-1267")),
     person("Paul", "Burch", role = "aut",
            comment = c(ORCID = "0000-0002-9853-462X"))
   )
@@ -75,5 +76,5 @@ Copyright: inst/COPYRIGHTS
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 SystemRequirements: GNU make, C++17

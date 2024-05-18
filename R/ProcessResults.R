@@ -1,3 +1,8 @@
+#' Process results of the ageing error estimation
+#' 
+#' @inheritParams DoApplyAgeError
+#' @param CalcEff Calculate effective sample sizes (TRUE/FALSE)
+#' @author Andre E. Punt
 ProcessResults <- function(Species = "AgeingError",
                            SaveDir = getwd(),
                            CalcEff = FALSE,

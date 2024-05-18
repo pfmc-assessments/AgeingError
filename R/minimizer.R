@@ -13,6 +13,7 @@
 #' @param lower,upper Vectors of parameter bounds of the same length as the
 #'   number of parameters in the model.
 #' @inheritParams DoApplyAgeError
+#' @author Andre E. Punt
 minimizer <- function(model,
                       method = c("optim", "nlmimb", "both"),
                       lower,

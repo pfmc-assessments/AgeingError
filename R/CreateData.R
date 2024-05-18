@@ -1,8 +1,15 @@
+#' Read the ageing error data
+#' 
+#' @param DataFile Filename for input data
+#' @param NDataSet Number of data sets within `DataFile`
+#' @param verbose Return messages to the console (in addition to any output to 
+#' `EchoFile`)
 #' @param EchoFile A file path to a file that will be created or appended to if
 #'   it already exists to store information about your data inputs. The default
 #'   is `''`, which leads to output being printed to the screen rather than
 #'   saved in a file. An example of a user-defined input would be
 #'   `'EchoTMB.out'`.
+#' @author Andre E. Punt
 CreateData <- function(DataFile = "data.dat",
                        NDataSet = 1,
                        verbose = FALSE,

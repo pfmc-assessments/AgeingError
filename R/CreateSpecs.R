@@ -1,3 +1,10 @@
+#' Read the ageing error specifications
+#' 
+#' @param SpecsFile Filename for input specifications.
+#' @param DataSpecs The output from CreateData()
+#' @param verbose Return messages to the console (TRUE/FALSE)
+
+#' @author Andre E. Punt
 CreateSpecs <- function(SpecsFile = "data.spc",
                         DataSpecs,
                         verbose = FALSE) {

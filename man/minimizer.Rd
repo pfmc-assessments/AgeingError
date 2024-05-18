@@ -32,3 +32,6 @@ default is to \strong{NOT} print, i.e., \code{verbose = FALSE}.}
 \description{
 Minimize the negative log likelihood using \code{"nlmimb"} and/or \code{"optim"}.
 }
+\author{
+Andre E. Punt
+}
