@@ -34,23 +34,16 @@ repository.
 ## Ageing Error R package
 
 The NOAA Northwest Fisheries Science Center (NWFSC) GitHub site hosts the 
-`AgeingError` package that contains both the earlier AD Model Builder and
-more recent TMB versions of the software. The TMB version is now recommended
-and the ADMB version is available throught the git history.
+`AgeingError` package. The newer TMB version of the software replaced the ADMB 
+version in the main branch of the repository in May 2024. The ADMB version is 
+still available via the git history.
 
-There are two options for installing the TMB version, you can clone the source
-
-https://github.com/pfmc-assessments/AgeingError.git
-
-and build the package directly from the source,
-or, you can install the TMB branch directly from Github using the code below. Note
+You can install the TMB branch directly from Github using the code below. Note
 both TMB and Rtools need to be installed to do this.
 
 ```{r, echo=TRUE, eval=FALSE}
-remotes::install_github("pfmc-assessments/AgeingError@TMB")
+remotes::install_github("pfmc-assessments/AgeingError")
 ```
-
-**Note it is important to install software from the TMB branch of the repository or you will get the older AD Model Builder version.**
 
 The package can then be loaded. 
 
