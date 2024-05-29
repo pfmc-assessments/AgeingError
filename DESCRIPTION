@@ -1,7 +1,7 @@
 Type: Package
 Package: AgeingError
 Title: Estimating ageing error with 'TMB' from double reads
-Version: 2.0.1
+Version: 2.0.2
 Authors@R: c(
     person(c("Andre", "E."), "Punt", role = "aut",
            comment = c(ORCID = "0000-0001-8489-2488")),
@@ -12,11 +12,11 @@ Authors@R: c(
     person(c("Ian", "G."), "Taylor", email = "ian.taylor@noaa.gov", 
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8489-2488")),
+    person("Paul", "Burch", role = "aut",
+           comment = c(ORCID = "0000-0002-9853-462X"))
     person(c("Ian", "J."), "Stewart", role = "ctb"),
     person(c("Melissa", "A."), "Haltuch", role = "ctb",
            comment = c(ORCID = "0000-0003-2821-1267")),
-    person("Paul", "Burch", role = "aut",
-           comment = c(ORCID = "0000-0002-9853-462X"))
   )
 Description: Implements Generalized Linear Mixed Effect Models (GLMMs) using
     'TMB' to estimate ageing error from double reads of otoliths. The original
