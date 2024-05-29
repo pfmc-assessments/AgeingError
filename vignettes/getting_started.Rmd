@@ -20,6 +20,8 @@ matrices that account for both ageing bias and imprecision. We provide some
 documentation and examples of the Template Model Builder (TMB) implementation 
 these methods, incorporating documentation written by André Punt.
 
+This vignette is illustrated using data and settings associated with three stocks in the Australian Southern and Eastern Scalefish and Shark Fishery (SESSF) fishery (Blue Grenadier, Bight Redfish, and School Whiting), as well as sablefish from the U.S. west coast.
+
 # Software
 
 The current implementation of the software was written by André Punt in 2020 and
@@ -31,21 +33,21 @@ repository.
 
 ## Ageing Error R package
 
-The NOAA north west fisheries science center (NWFSC) GitHub site hosts the 
-`nwfscAgeingError` package that contains both the earlier AD Model Builder and
-more recent TMB versions of the software. At the time of writing this document
-the TMB version was located in a branch of the git repository. 
+The NOAA Northwest Fisheries Science Center (NWFSC) GitHub site hosts the 
+`AgeingError` package that contains both the earlier AD Model Builder and
+more recent TMB versions of the software. The TMB version is now recommended
+and the ADMB version is available throught the git history.
 
 There are two options for installing the TMB version, you can clone the source
 
-https://github.com/pfmc-assessments/nwfscAgeingError.git
+https://github.com/pfmc-assessments/AgeingError.git
 
-then navigate to the TMB branch and build the package directly from the source,
+and build the package directly from the source,
 or, you can install the TMB branch directly from Github using the code below. Note
-both TMB and rtools need to be installed to do this.
+both TMB and Rtools need to be installed to do this.
 
 ```{r, echo=TRUE, eval=FALSE}
-remotes::install_github("pfmc-assessments/nwfscAgeingError@TMB")
+remotes::install_github("pfmc-assessments/AgeingError@TMB")
 ```
 
 **Note it is important to install software from the TMB branch of the repository or you will get the older AD Model Builder version.**
@@ -53,7 +55,6 @@ remotes::install_github("pfmc-assessments/nwfscAgeingError@TMB")
 The package can then be loaded. 
 
 ```{r}
-## note the name is just AgeingError, not nwfscAgeingError
 library(AgeingError)
 ```
 
@@ -77,12 +78,16 @@ The age range is simply specified by providing the minimum and maximum ages.
 The data can't fall outside the specified age range or the code will generate 
 an error.
 
+The input files are parsed by the software using keywords that need to match 
+exactly what is expected, so the text "Range_of_ages" is part of the input and
+not just a comment to help the user keep track of the format.
+
 ````{verbatim}
 Range_of_ages
 0 25
 ````
 
-The data can be entered with a separate data set for each pair of readers, or,
+The data can be entered with a separate data set for each pair of readers, or
 a single data set for all pairs of readers. Both these options are described 
 below.
 
@@ -94,7 +99,7 @@ immediately below the header are
 
 * The number of rows of paired age determinations (described below)
 * The number of readers in this data set (always 2 for the SESSF)
-* The minus group, plus group and reference age
+* The minus group, plus group, and reference age
 * The reader numbers
 
 The remainder of the data set comprises one row of data for each pair of age
@@ -123,7 +128,10 @@ Data_set_1
 
 A second (and potentially a third) data set follow the same format as the first 
 data set, with the data being associated with the next pair of readers (see 
-below).
+below). The headers for each data set need to have headers numbered from 1 to 
+`NDataSet` which is an input to `CreateData()`. That is, if `NDataSet=3`, the 
+data file needs to have sections with header `Data_set_1`, `Data_set_2`, and
+`Data_set_3`. 
 
 ````{verbatim}
 Data_set_2
@@ -178,14 +186,15 @@ Data_set_1
 Note that the ages need to be whole numbers in the data file. The C++ code adds 
 0.5 to each age so the model it fitting to the midpoint of an age bin.
 
-R code to create the read comparison data for a data set is in the R package 
-`SESSFdataproc` and examples are in the assessment repository `SESSFassessments`.
-A version of this code is available from CSIRO. We usually create the
-data file in Excel (using the summarised output from the R code) and then paste
-into a text file.
+Different agencies have created R code specific to the format of their ageing
+comparison data to format it for this package. For instance CSIRO 
+uses the R package `SESSFdataproc` and hosts examples are in the assessment
+repository `SESSFassessments`. A version of this code is available from CSIRO. 
+They usually create the data file in Excel (using the summarised output from the 
+R code) and then paste into a text file.
 
 The data file is read into R
-using the function `CreateData` which is described in the examples below.
+using the function `CreateData()` which is described in the examples below.
 
 ## Specifications file
 
@@ -200,18 +209,18 @@ description of the model options.
 
 The available options for bias are:
 
-* `-x` Assume that the relationship between expected age and true age is the same as that for reader x [note that the ''x'' must be lower than the number of the reader for which bias is being defined].
+* `-x` Assume that the relationship between expected age and true age is the same as that for reader x. [Note that the ''x'' must be lower than the number of the reader for which bias is being defined. Reader 2 can have `BiasOpt=-1` to match reader 1].
 
 * `0`  Age-estimates are unbiased.
 
-* `1` The expected age of an animal of age a, $E_a$, is a linear function of its true age, i.e. $E_a =\alpha a$ (constant coefficient of variation).
+* `1` The expected age of an animal of age $a$, $E_a$, is a linear function of its true age, i.e. $E_a =\alpha a$ (constant coefficient of variation).
 
-* `2` The expected age of an animal of age a, $E_a$, is a given by: 
+* `2` The expected age of an animal of age $a$, $E_a$, is a given by: 
 
 $$E_a = E_L + (E_H - E_L)\frac{1-\text{exp}(-\beta(a-1))}{1-\text{exp}(-\beta(a_{max}-1))}$$.
 
-The C++ code (`agemat2.cpp`) also has conditional (if) statements for Bias 
-options 4 and 5 but these appear to be identical to option 0 (unbiased).
+The C++ code (`AgeingError.cpp`) also has conditional (if) statements for Bias 
+options 4 and 5 but these are identical to option 0 (unbiased) and therefore presumably placeholders for some future options.
 
 In the SESSF we typically assume that all readers are unbiased (`BiasOpt=0`),
 however, it is important to check this assumption using the residual plots 
@@ -229,11 +238,11 @@ $$
   \sigma_a = 
   \begin{cases}
     \gamma & \text{if  } a=0 \\
-    \gamma_a & \text{otherwise} \\
+    \gamma a & \text{otherwise} \\
   \end{cases}
  $$ 
 
-*	`2` The parameters relate to the standard deviation (Michaelis-Menton equation ). This option has three parameters that need to be specified for each pair of independent readers in the specification (.spc) file. The standard deviation of random age-reading error, $\sigma_a$, is given by:
+*	`2` The parameters relate to the standard deviation (Michaelis-Menton equation). This option has three parameters that need to be specified for each pair of independent readers in the specification (.spc) file. The standard deviation of random age-reading error, $\sigma_a$, is given by:
 
 $$ 
   \sigma_a = 
@@ -256,7 +265,7 @@ $$
 
 *	`4` The estimates of age are exact (use this option for ''known age'' individuals). This option returns a vector of zeroes (or perhaps just a single zero).
 
-*	`5` The standard deviation of random age-reading error, $\sigma_a$, is a Forsythe, Malcolm and Moler spline function of age. The number and location (ages) of the knots must be specified, with the number of parameters equal to the number of knots. Bounds and initial parameters need to be specified in log space.
+*	`5` The standard deviation of random age-reading error, $\sigma_a$, is a spline function of age (a Forsythe, Malcolm, and Moler type spline as implemented by `tmbutils::splinefun()`). The number and location (ages) of the knots must be specified, with the number of parameters equal to the number of knots. Bounds and initial parameters need to be specified in log space.
 
 *	`6` The standard deviation of random age-reading error, $\sigma_a$, is a piecewise linear function of age.  The number and location (ages) of the knots must be specified, with the number of parameters equal to the number of knots. Boounds and initial parameters need to be specified in log space.
 
@@ -266,8 +275,11 @@ $$
 
 ### Example Specifications file
 
-The .spc file contains three sections, reader specification, knots for 
-splines/piecewise linear functions, bias parameters and the sigma parameters.
+The .spc file contains three or four sections: 
+1. reader specification, 
+2. knots for splines or breakpoints for piecewise linear functions (if used), 
+3. bias parameters, and 
+4. the sigma parameters.
 
 The first section specifies the Bias and Sigma options for each reader. For each
 reader, one line specifies their Bias and Sigma options. `SigmaOpt=-x` is used
@@ -292,7 +304,7 @@ readers (in the case of Blue Grenadier the first and second reads from two reade
 The second (optional) section species the knots for the spline and linear 
 interpolation models. The example below is taken from School Whiting (`WHS2.spc`).
 It specifies five knots with the first and last knots being the minimum and
-maximum ages.
+maximum ages. Note that the text "# Spline specifications" or "# Linear specifications" are required by the code if SigmaOpt options 5 or 6 are used.
 
 ````{verbatim}
 # Spline specifications
@@ -357,10 +369,10 @@ ageing error R package so we need to use `:::` to access it. Note we are using
 the data file with a single data set so we set `NDataSet=1`.
 
 ```{r}
-BG2022_dat <- AgeingError:::CreateData("data/BG2022.dat", NDataSet=1, 
+BG2022_dat <- AgeingError:::CreateData("data-raw/BG2022.dat", NDataSet=1, 
                                        verbose=TRUE, EchoFile="BG2022echo.out")
 ```
-When we set `verbose=TRUE` a summary of the loaded data is printedto the console.
+When we set `verbose=TRUE` a summary of the loaded data is printed to the console.
 Check that the this matches with the input file, some things that are worth 
 checking include,
 
@@ -382,7 +394,7 @@ function is not exported either so again we need to call the package name and
 `:::` to access it. 
 
 ```{r}
-BG2022_spc <- AgeingError:::CreateSpecs("data/BG2022.spc", DataSpecs=BG2022_dat, 
+BG2022_spc <- AgeingError:::CreateSpecs("data-raw/BG2022.spc", DataSpecs=BG2022_dat, 
                                        verbose=TRUE)
 ```
 
@@ -479,7 +491,7 @@ We refit the final model (`BG2022_trim_8_1`).
 Load the data file.
 
 ```{r}
-BG2022final_dat <- AgeingError:::CreateData("data/BG2022_trim_8_1.dat",
+BG2022final_dat <- AgeingError:::CreateData("data-raw/BG2022_trim_8_1.dat",
                                             NDataSet=1, verbose=TRUE,
                                             EchoFile="BG2022finalecho.out")
 ```
@@ -492,7 +504,7 @@ age-reading error (`SigmaOpt=7`) and fixed the first parameter at 0.2.
 
 
 ```{r}
-BG2022final_spc <- AgeingError:::CreateSpecs("data/BG2022_trim_8_1.spc",
+BG2022final_spc <- AgeingError:::CreateSpecs("data-raw/BG2022_trim_8_1.spc",
                                              DataSpecs=BG2022final_dat, 
                                              verbose=TRUE)
 ```
@@ -528,7 +540,7 @@ readings from three separate readers who have each re-read their own reads (i.e.
 there are no inter-reader comparisons in the data). 
 
 ```{r}
-REB2022_dat <- AgeingError:::CreateData("data/REB2022.dat", NDataSet=1, 
+REB2022_dat <- AgeingError:::CreateData("data-raw/REB2022.dat", NDataSet=1, 
                                        verbose=TRUE, EchoFile="REB2022echo.out")
 ```
 
@@ -539,7 +551,7 @@ missing data.
 Next we load the model specifications using the `CreateSpecs` function. 
 
 ```{r}
-REB2022_spc <- AgeingError:::CreateSpecs("data/REB2022.spc",
+REB2022_spc <- AgeingError:::CreateSpecs("data-raw/REB2022.spc",
                                          DataSpecs=REB2022_dat, verbose=TRUE)
 ```
 
@@ -579,9 +591,9 @@ model (note we suppress the creation of output in this document).
 
 <!-- set results="hide" -->
 ```{r, results="hide"}
-REB2022_dat2 <- AgeingError:::CreateData("data/REB2022_trim.dat", NDataSet=1, 
+REB2022_dat2 <- AgeingError:::CreateData("data-raw/REB2022_trim.dat", NDataSet=1, 
                   verbose=FALSE, EchoFile="REB2022_trimecho.out")
-REB2022_spc2 <- AgeingError:::CreateSpecs("data/REB2022_trim.spc",
+REB2022_spc2 <- AgeingError:::CreateSpecs("data-raw/REB2022_trim.spc",
                   DataSpecs=REB2022_dat2, verbose=FALSE)
 REB2022_mod2 <- AgeingError::DoApplyAgeError(Species = "REB2022_final",
                   DataSpecs = REB2022_dat2, ModelSpecsInp = REB2022_spc2,
@@ -606,7 +618,7 @@ Load the School Whiting data file, make sure to set the number of data sets to
 three (`NDataSet=3`).
 
 ```{r}
-WHS2_dat <- AgeingError:::CreateData("data/WHS2.dat", NDataSet=3, 
+WHS2_dat <- AgeingError:::CreateData("data-raw/WHS2.dat", NDataSet=3, 
                   verbose=TRUE, EchoFile="WHS2echo.out")
 ```
 
@@ -615,7 +627,7 @@ Make sure to check the summary above against the values in the data file.
 Load the specifications for School Whiting.
 
 ```{r}
-WHS2_spc <- AgeingError:::CreateSpecs("data/WHS2.spc",
+WHS2_spc <- AgeingError:::CreateSpecs("data-raw/WHS2.spc",
                   DataSpecs=WHS2_dat, verbose=TRUE)
 ```
 
@@ -647,7 +659,7 @@ appropriateness of this model should be discussed with the ageing technicians.
 Sablefish (_Anoplopoma fimbria_) provides an example of using the bias option.
 
 ```{r}
-Sable_dat <- AgeingError:::CreateData("data/Sable.dat", NDataSet=1, 
+Sable_dat <- AgeingError:::CreateData("data-raw/Sable.dat", NDataSet=1, 
                                       verbose=TRUE, EchoFile="SableEcho.out")
 ```
 
@@ -657,7 +669,7 @@ set has several inter-reader comparisons.
 We load the model specifications using the `CreateSpecs` function. 
 
 ```{r}
-Sable_spc <- AgeingError:::CreateSpecs("data/Sable.spc",
+Sable_spc <- AgeingError:::CreateSpecs("data-raw/Sable.spc",
                                          DataSpecs=Sable_dat, verbose=TRUE)
 ```
 
@@ -713,6 +725,8 @@ Some suggestions for getting to a converged model are provided below.
 
 # Acknowledgements 
 Fish Ageing Services https://www.fishageingservices.com/ provided the data for Blue Grenadier, Bight Redfish, and School Whiting and the Australian Fisheries Management Authority (AFMA) provided funding for the data collection and otolith reading.
+
+The sablefish age data are provided by the NWFSC.
 
 This document is prepared from documentation and examples written by André Punt.
 Pia Bessell-Browne provided helpful comments that improved this document.
