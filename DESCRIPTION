@@ -1,51 +1,80 @@
-Package: nwfscAgeingError
 Type: Package
-Title: Source Code for Punt et al. (2008): Ageing Error and Imprecision
-Version: 1.3.4
+Package: AgeingError
+Title: Estimating ageing error with 'TMB' from double reads
+Version: 2.0.2
 Authors@R: c(
-  person(
-    given = c("Ian", "G."),
-    family = "Taylor",
-    email = "ian.taylor@noaa.gov",
-    role = c("aut", "cre")
-    comment = c(ORCID = "0000-0001-8489-2488")
-  ),
-  person(
-    given = c("Kelli", "F."),
-    family = "Johnson",
-    role = "aut",
-    comment = c(ORCID = "0000-0002-5149-451X")
-  ),
-  person(
-    given = c("Andre", "E."),
-    family = "Punt",
-    role = "aut",
-    comment = c(ORCID = "0000-0001-8489-2488")
-  ),
-  person(
-    given = c("James", "T."),
-    family = "Thorson",
-    role = "aut",
-    comment = c(ORCID = "0000-0001-7415-1010")
-  ),
-  person(
-    given = c("Ian", "J."),
-    family = "Stewart",
-    role = "ctb"
-  ),
-  person(
-    given = c("Melissa", "A."),
-    family = "Haltuch",
-    role = "ctb",
-    comment = c(ORCID = "0000-0003-2821-1267")
+    person(c("Andre", "E."), "Punt", role = "aut",
+           comment = c(ORCID = "0000-0001-8489-2488")),
+    person(c("Kelli", "F."), "Johnson", role = "aut",
+           comment = c(ORCID = "0000-0001-9563-1937")),
+    person(c("James", "T."), "Thorson", role = c("ctb", "cph"),
+           comment = c(ORCID = "0000-0001-7415-1010")),
+    person(c("Ian", "G."), "Taylor", email = "ian.taylor@noaa.gov", 
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8489-2488")),
+    person("Paul", "Burch", role = "aut",
+           comment = c(ORCID = "0000-0002-9853-462X")),
+    person(c("Ian", "J."), "Stewart", role = "ctb"),
+    person(c("Melissa", "A."), "Haltuch", role = "ctb",
+           comment = c(ORCID = "0000-0003-2821-1267"))
   )
-  )
-Description: Source code and examples for how to use double-read data to
-    estimate ageing imprecision and bias from fishery otoliths. The code
-    was developed for Punt et al. (2008) and updated in 2022.
-URL: http://github.com/pfmc-assessments/nwfscAgeingError
-BugReports: http://github.com/pfmc-assessments/nwfscAgeingError/issues
-License: GPL-2
+Description: Implements Generalized Linear Mixed Effect Models (GLMMs) using
+    'TMB' to estimate ageing error from double reads of otoliths. The original
+    analysis (Punt et al. 2008; <doi:10.1139/F08-111>) was written in `ADMB`
+    and focused on estimating imprecision and bias. The newer version of the
+    software allows for random effects using `TMB`.
+License: GPL-3
+URL: https://pfmc-assessments.github.io/AgeingError/index.html, https://pfmc-assessments.github.io/AgeingError/, http://pfmc-assessments.github.io/AgeingError/
+BugReports: https://github.com/pfmc-assessments/AgeingError/issues
+Depends:
+    R (>= 3.5.0)
+Imports:
+    assertthat,
+    cli,
+    clisymbols,
+    fs,
+    generics,
+    glmmTMB,
+    graphics,
+    lifecycle,
+    Matrix,
+    methods,
+    mgcv,
+    mvtnorm,
+    nlme,
+    rlang,
+    stats,
+    TMB (>= 1.8.0)
+Suggests:
+    dplyr,
+    effects (>= 4.0-1),
+    emmeans (>= 1.4),
+    estimability,
+    future,
+    future.apply,
+    ggeffects,
+    ggforce,
+    ggplot2,
+    knitr,
+    lme4,
+    rgdal,
+    rmarkdown,
+    sf,
+    splancs,
+    testthat,
+    tibble,
+    visreg
+LinkingTo:
+    RcppEigen,
+    TMB
+VignetteBuilder:
+    knitr
+ByteCompile: true
+Config/testthat/edition: 3
+Config/testthat/parallel: true
+Copyright: inst/COPYRIGHTS
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+LazyData: true
 Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+SystemRequirements: GNU make, C++17

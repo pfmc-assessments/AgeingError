@@ -1,2 +1,11 @@
 .history
 sandbox/
+ignored/
+# results created by the vignette
+*.out
+Results/
+# files created by compiling the TMB model
+*.dll
+*.o
+# files for the pkgdown website
+docs
