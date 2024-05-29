@@ -362,7 +362,8 @@ ageing error R package so we need to use `:::` to access it. Note we are using
 the data file with a single data set so we set `NDataSet=1`.
 
 ```{r}
-BG2022_dat <- AgeingError:::CreateData("data-raw/BG2022.dat", NDataSet=1, 
+data_dir <- system.file("extdata", package = "AgeingError")
+BG2022_dat <- AgeingError:::CreateData(file.path(data_dir, "BG2022.dat"), NDataSet=1, 
                                        verbose=TRUE, EchoFile="BG2022echo.out")
 ```
 When we set `verbose=TRUE` a summary of the loaded data is printed to the console.
@@ -387,7 +388,7 @@ function is not exported either so again we need to call the package name and
 `:::` to access it. 
 
 ```{r}
-BG2022_spc <- AgeingError:::CreateSpecs("data-raw/BG2022.spc", DataSpecs=BG2022_dat, 
+BG2022_spc <- AgeingError:::CreateSpecs(file.path(data_dir, "BG2022.spc"), DataSpecs=BG2022_dat, 
                                        verbose=TRUE)
 ```
 
@@ -484,7 +485,7 @@ We refit the final model (`BG2022_trim_8_1`).
 Load the data file.
 
 ```{r}
-BG2022final_dat <- AgeingError:::CreateData("data-raw/BG2022_trim_8_1.dat",
+BG2022final_dat <- AgeingError:::CreateData(file.path(data_dir, "BG2022_trim_8_1.dat"),
                                             NDataSet=1, verbose=TRUE,
                                             EchoFile="BG2022finalecho.out")
 ```
@@ -497,7 +498,7 @@ age-reading error (`SigmaOpt=7`) and fixed the first parameter at 0.2.
 
 
 ```{r}
-BG2022final_spc <- AgeingError:::CreateSpecs("data-raw/BG2022_trim_8_1.spc",
+BG2022final_spc <- AgeingError:::CreateSpecs(file.path(data_dir, "BG2022_trim_8_1.spc"),
                                              DataSpecs=BG2022final_dat, 
                                              verbose=TRUE)
 ```
@@ -533,7 +534,7 @@ readings from three separate readers who have each re-read their own reads (i.e.
 there are no inter-reader comparisons in the data). 
 
 ```{r}
-REB2022_dat <- AgeingError:::CreateData("data-raw/REB2022.dat", NDataSet=1, 
+REB2022_dat <- AgeingError:::CreateData(file.path(data_dir, "REB2022.dat"), NDataSet=1, 
                                        verbose=TRUE, EchoFile="REB2022echo.out")
 ```
 
@@ -544,7 +545,7 @@ missing data.
 Next we load the model specifications using the `CreateSpecs` function. 
 
 ```{r}
-REB2022_spc <- AgeingError:::CreateSpecs("data-raw/REB2022.spc",
+REB2022_spc <- AgeingError:::CreateSpecs(file.path(data_dir, "REB2022.spc"),
                                          DataSpecs=REB2022_dat, verbose=TRUE)
 ```
 
@@ -584,9 +585,9 @@ model (note we suppress the creation of output in this document).
 
 <!-- set results="hide" -->
 ```{r, results="hide"}
-REB2022_dat2 <- AgeingError:::CreateData("data-raw/REB2022_trim.dat", NDataSet=1, 
+REB2022_dat2 <- AgeingError:::CreateData(file.path(data_dir, "REB2022_trim.dat"), NDataSet=1, 
                   verbose=FALSE, EchoFile="REB2022_trimecho.out")
-REB2022_spc2 <- AgeingError:::CreateSpecs("data-raw/REB2022_trim.spc",
+REB2022_spc2 <- AgeingError:::CreateSpecs(file.path(data_dir, "REB2022_trim.spc"),
                   DataSpecs=REB2022_dat2, verbose=FALSE)
 REB2022_mod2 <- AgeingError::DoApplyAgeError(Species = "REB2022_final",
                   DataSpecs = REB2022_dat2, ModelSpecsInp = REB2022_spc2,
@@ -611,7 +612,7 @@ Load the School Whiting data file, make sure to set the number of data sets to
 three (`NDataSet=3`).
 
 ```{r}
-WHS2_dat <- AgeingError:::CreateData("data-raw/WHS2.dat", NDataSet=3, 
+WHS2_dat <- AgeingError:::CreateData(file.path(data_dir, "WHS2.dat"), NDataSet=3, 
                   verbose=TRUE, EchoFile="WHS2echo.out")
 ```
 
@@ -620,7 +621,7 @@ Make sure to check the summary above against the values in the data file.
 Load the specifications for School Whiting.
 
 ```{r}
-WHS2_spc <- AgeingError:::CreateSpecs("data-raw/WHS2.spc",
+WHS2_spc <- AgeingError:::CreateSpecs(file.path(data_dir, "WHS2.spc"),
                   DataSpecs=WHS2_dat, verbose=TRUE)
 ```
 
@@ -652,7 +653,7 @@ appropriateness of this model should be discussed with the ageing technicians.
 Sablefish (_Anoplopoma fimbria_) provides an example of using the bias option.
 
 ```{r}
-Sable_dat <- AgeingError:::CreateData("data-raw/Sable.dat", NDataSet=1, 
+Sable_dat <- AgeingError:::CreateData(file.path(data_dir, "Sable.dat"), NDataSet=1, 
                                       verbose=TRUE, EchoFile="SableEcho.out")
 ```
 
@@ -662,7 +663,7 @@ set has several inter-reader comparisons.
 We load the model specifications using the `CreateSpecs` function. 
 
 ```{r}
-Sable_spc <- AgeingError:::CreateSpecs("data-raw/Sable.spc",
+Sable_spc <- AgeingError:::CreateSpecs(file.path(data_dir, "Sable.spc"),
                                          DataSpecs=Sable_dat, verbose=TRUE)
 ```
 

@@ -1,6 +1,9 @@
 # AgeingError development
 
-# nwfscAgeingError 2.0.0
+# AgeingError 2.0.2
+* Renamed github repository, 
+
+# AgeingError 2.0.0
 
 * Changed package name to AgeingError
 * Added TMB code that is pre-compiled in the package
