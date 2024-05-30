@@ -14,7 +14,7 @@ prepare_inputs <- function(file_data, file_specs) {
 }
 
 prepare_run <- function(inputs, directory) {
-  model <- AgeingError:::DoApplyAgeError(
+  model <- AgeingError::DoApplyAgeError(
     Species = "AgeingError",
     DataSpecs = inputs[["data"]],
     ModelSpecs = inputs[["specs"]],
@@ -23,7 +23,7 @@ prepare_run <- function(inputs, directory) {
     SaveDir = directory,
     verbose = FALSE
   )
-  Output <- AgeingError:::ProcessResults(
+  Output <- AgeingError::ProcessResults(
     Species = "AgeingError",
     SaveDir = directory,
     CalcEff = FALSE,

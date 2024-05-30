@@ -6,3 +6,5 @@ src/agemat.tpl
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^Results$
+^Makefile$

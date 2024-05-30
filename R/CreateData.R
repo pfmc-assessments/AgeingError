@@ -9,6 +9,7 @@
 #'   is `''`, which leads to output being printed to the screen rather than
 #'   saved in a file. An example of a user-defined input would be
 #'   `'EchoTMB.out'`.
+#' @export
 #' @author Andre E. Punt
 CreateData <- function(DataFile = "data.dat",
                        NDataSet = 1,

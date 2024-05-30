@@ -22,18 +22,30 @@ plot_output(
 \arguments{
 \item{Data}{Input data matrix}
 
+\item{IDataSet}{Index of the data set used in creating the filename}
+
 \item{MaxAge}{Maximum estimated age}
 
+\item{Report}{Results from fitting the model}
+
 \item{subplot}{Vector of which plots to create.}
+
+\item{Nparameters}{Number of parameters}
+
+\item{LogLike}{Negative log likelihood from fitting the model}
 
 \item{ReaderNames}{Vector with names of each reader, defaults to
 'Reader1', 'Reader2', etc. if left at the default argument of \code{NULL}.
 If you pass a vector of strings, the vector must be the same length as
 \code{NCOL(Data) - 1}.}
 
-\item{...}{Additional arguments passed to \code{\link[=ageing_comparison]{ageing_comparison()}}.}
+\item{Species}{String used at beginning of the output files}
 
-\item{SaveFile}{Directory for fitted model}
+\item{SaveDir}{Directory for fitted model}
+
+\item{verbose}{Report messages as function runs.}
+
+\item{...}{Additional arguments passed to \code{\link[=ageing_comparison]{ageing_comparison()}}.}
 }
 \value{
 Returns AIC, AICc, and BIC for fitted model.

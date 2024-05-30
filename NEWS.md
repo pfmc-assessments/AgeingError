@@ -1,7 +1,10 @@
 # AgeingError development
 
 # AgeingError 2.0.2
-* Renamed github repository, 
+* Switched to the new TMB version of the package in the main branch
+* Renamed github repository from nwfscAgeingError to AgeingError
+* Adding vignette documenting the TMB version from Paul Burch
+* Cleared out some, but not all, of the files associated with the ADMB version
 
 # AgeingError 2.0.0
 

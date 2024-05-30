@@ -3,13 +3,19 @@
 #' Plots age comparisons and results from the fitted Ageing Error model
 #'
 #' @param Data Input data matrix
+#' @param IDataSet Index of the data set used in creating the filename
 #' @param MaxAge Maximum estimated age
-#' @param SaveFile Directory for fitted model
+#' @param Report Results from fitting the model
+#' @param subplot Vector of which plots to create.
+#' @param Nparameters Number of parameters
+#' @param LogLike Negative log likelihood from fitting the model
 #' @param ReaderNames Vector with names of each reader, defaults to
 #'   'Reader1', 'Reader2', etc. if left at the default argument of `NULL`.
 #'   If you pass a vector of strings, the vector must be the same length as
 #'   `NCOL(Data) - 1`.
-#' @param subplot Vector of which plots to create.
+#' @param Species String used at beginning of the output files
+#' @param SaveDir Directory for fitted model
+#' @param verbose Report messages as function runs.
 #' @param ... Additional arguments passed to [ageing_comparison()].
 #' @return Returns AIC, AICc, and BIC for fitted model.
 #'

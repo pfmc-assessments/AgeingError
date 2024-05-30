@@ -2,6 +2,7 @@
 #' 
 #' @inheritParams DoApplyAgeError
 #' @param CalcEff Calculate effective sample sizes (TRUE/FALSE)
+#' @export
 #' @author Andre E. Punt
 ProcessResults <- function(Species = "AgeingError",
                            SaveDir = getwd(),

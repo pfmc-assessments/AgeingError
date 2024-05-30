@@ -29,41 +29,12 @@ BugReports: https://github.com/pfmc-assessments/AgeingError/issues
 Depends:
     R (>= 3.5.0)
 Imports:
-    assertthat,
     cli,
-    clisymbols,
     fs,
-    generics,
-    glmmTMB,
-    graphics,
-    lifecycle,
-    Matrix,
-    methods,
-    mgcv,
-    mvtnorm,
-    nlme,
-    rlang,
     stats,
     TMB (>= 1.8.0)
 Suggests:
-    dplyr,
-    effects (>= 4.0-1),
-    emmeans (>= 1.4),
-    estimability,
-    future,
-    future.apply,
-    ggeffects,
-    ggforce,
-    ggplot2,
-    knitr,
-    lme4,
-    rgdal,
-    rmarkdown,
-    sf,
-    splancs,
-    testthat,
-    tibble,
-    visreg
+    knitr    
 LinkingTo:
     RcppEigen,
     TMB
