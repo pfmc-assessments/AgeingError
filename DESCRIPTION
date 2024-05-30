@@ -32,10 +32,10 @@ Imports:
     cli,
     fs,
     stats,
-    TMB (>= 1.8.0)
+    TMB (>= 1.8.0),
+    knitr
 Suggests:
-    spelling,
-    knitr    
+    spelling
 LinkingTo:
     RcppEigen,
     TMB
