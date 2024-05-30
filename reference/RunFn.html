@@ -305,39 +305,47 @@ to one.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Parameters for generating data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # This represents 2 unique readers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 1 -- Otoliths read only once by reader </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 2 -- Otoliths read twice by reader 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 2 -- Otoliths read only once by reader 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 4 -- Otoliths read twice by reader 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 5 -- Otoliths read once by reader 1 and once by reader 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; ReadsMat &lt;- structure(matrix(nrow = 5, ncol = 5,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(rep(25, 5),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 1 -- Otoliths read only once by reader</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 2 -- Otoliths read twice by reader 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 2 -- Otoliths read only once by reader 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 4 -- Otoliths read twice by reader 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 5 -- Otoliths read once by reader 1 and once by reader 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; ReadsMat &lt;- structure(matrix(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   nrow = 5, ncol = 5,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     rep(25, 5),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     1, 1, 0, 0, 1,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 1, 0, 0, 0,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 0, 1, 1, 1,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 0, 0, 1, 0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   ), dimnames = list(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     c("Reader1_Only", "Reader1_DoubleReads",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+       "Reader2_Only", "Reader2_DoubleReads",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+       "Reader1_&amp;_Reader2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     ),</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+    c("NumberOfReads",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 0, 0, 1, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+ ), dimnames = list(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader1_Only", "Reader1_DoubleReads",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader2_Only", "Reader2_DoubleReads",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader1_&amp;_Reader2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   ),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "NumberOfReads",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader1", "Reader1_DoubleReads",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader2", "Reader2_DoubleReads"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     ))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+ ))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Generate data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; set.seed(2)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; AgeReads &lt;- SimulatorFn(Nreaders = 4, M = 0.2,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; AgeReads &lt;- SimulatorFn(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   Nreaders = 4, M = 0.2,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   SelexForm = "Logistic",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   SelexParams = c(5, 0.2), BiasParams = c(1, 1, 1.1, 1.1),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   ErrorParams = c(0.2, 0.2, 0.2, 0.2), ReadsMat = ReadsMat,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   RecCv = 0.6, RecAr1 = 0.8, Amax = 100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   RecCv = 0.6, RecAr1 = 0.8, Amax = 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+ )</span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">AgeReads</span>,</span></span>
-<span class="r-in"><span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Simulated_data_example.csv"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Simulated_data_example.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##### Format data</span></span></span>
@@ -366,23 +374,23 @@ to one.</p>
 <span class="r-in"><span>  <span class="va">DupRow</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
 <span class="r-in"><span>  <span class="kw">for</span> <span class="op">(</span><span class="va">PreviousRowJ</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">AgeReads2</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="va">AgeReads</span><span class="op">[</span><span class="va">RowI</span>,<span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">]</span> <span class="op">==</span> <span class="va">AgeReads2</span><span class="op">[</span><span class="va">PreviousRowJ</span>,<span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span>      <span class="va">AgeReads</span><span class="op">[</span><span class="va">RowI</span>, <span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">]</span> <span class="op">==</span> <span class="va">AgeReads2</span><span class="op">[</span><span class="va">PreviousRowJ</span>, <span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>      <span class="va">DupRow</span> <span class="op">&lt;-</span> <span class="va">PreviousRowJ</span></span></span>
 <span class="r-in"><span>    <span class="op">}</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
-<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DupRow</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span><span class="co"># Add new row to AgeReads2</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DupRow</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> <span class="co"># Add new row to AgeReads2</span></span></span>
 <span class="r-in"><span>    <span class="va">AgeReads2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">AgeReads2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">AgeReads</span><span class="op">[</span><span class="va">RowI</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
-<span class="r-in"><span>  <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DupRow</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="co"># Increment number of samples for previous duplicate</span></span></span>
-<span class="r-in"><span>    <span class="va">AgeReads2</span><span class="op">[</span><span class="va">DupRow</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">AgeReads2</span><span class="op">[</span><span class="va">DupRow</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DupRow</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> <span class="co"># Increment number of samples for previous duplicate</span></span></span>
+<span class="r-in"><span>    <span class="va">AgeReads2</span><span class="op">[</span><span class="va">DupRow</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">AgeReads2</span><span class="op">[</span><span class="va">DupRow</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">######## Determine settings for ADMB</span></span></span>
 <span class="r-in"><span><span class="co"># Define minimum and maximum ages for integral across unobserved ages</span></span></span>
 <span class="r-in"><span><span class="va">MinAge</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="va">MaxAge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">AgeReads2</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span><span class="op">*</span><span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="va">MaxAge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">AgeReads2</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">BiasOpt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="op">-</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">SigOpt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">6</span>, <span class="op">-</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Necessary for SigOpt option 5 or 6</span></span></span>
@@ -392,12 +400,14 @@ to one.</p>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">fileloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"age"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">fileloc</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">RunFn</span><span class="op">(</span>Data <span class="op">=</span> <span class="va">AgeReads2</span>, SigOpt <span class="op">=</span> <span class="va">SigOpt</span>, KnotAges <span class="op">=</span> <span class="va">KnotAges</span>,</span></span>
+<span class="r-in"><span><span class="fu">RunFn</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  Data <span class="op">=</span> <span class="va">AgeReads2</span>, SigOpt <span class="op">=</span> <span class="va">SigOpt</span>, KnotAges <span class="op">=</span> <span class="va">KnotAges</span>,</span></span>
 <span class="r-in"><span>  BiasOpt <span class="op">=</span> <span class="va">BiasOpt</span>,</span></span>
 <span class="r-in"><span>  NDataSets <span class="op">=</span> <span class="fl">1</span>, MinAge <span class="op">=</span> <span class="va">MinAge</span>, MaxAge <span class="op">=</span> <span class="va">MaxAge</span>, RefAge <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  MinusAge <span class="op">=</span> <span class="fl">1</span>, PlusAge <span class="op">=</span> <span class="fl">30</span>, SaveFile <span class="op">=</span> <span class="va">fileloc</span>,</span></span>
 <span class="r-in"><span>  AdmbFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"executables"</span>,</span></span>
-<span class="r-in"><span>    package <span class="op">=</span> <span class="st">"nwfscAgeingError"</span><span class="op">)</span>, <span class="va">.Platform</span><span class="op">$</span><span class="va">file.sep</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    package <span class="op">=</span> <span class="st">"nwfscAgeingError"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>, <span class="va">.Platform</span><span class="op">$</span><span class="va">file.sep</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  EffSampleSize <span class="op">=</span> <span class="fl">0</span>, Intern <span class="op">=</span> <span class="cn">FALSE</span>, JustWrite <span class="op">=</span> <span class="cn">FALSE</span>, CallType <span class="op">=</span> <span class="st">"shell"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>

@@ -219,40 +219,48 @@ Springer, Germany.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Parameters for generating data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # This represents 2 unique readers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 1 -- Otoliths read only once by reader </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 2 -- Otoliths read twice by reader 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 2 -- Otoliths read only once by reader 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 4 -- Otoliths read twice by reader 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt;   # Row 5 -- Otoliths read once by reader 1 and once by reader 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; ReadsMat &lt;- structure(matrix(nrow = 5, ncol = 5,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(rep(25, 5),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 1 -- Otoliths read only once by reader</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 2 -- Otoliths read twice by reader 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 2 -- Otoliths read only once by reader 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 4 -- Otoliths read twice by reader 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Row 5 -- Otoliths read once by reader 1 and once by reader 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; ReadsMat &lt;- structure(matrix(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   nrow = 5, ncol = 5,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     rep(25, 5),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     1, 1, 0, 0, 1,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 1, 0, 0, 0,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 0, 1, 1, 1,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 0, 0, 1, 0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   ), dimnames = list(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     c("Reader1_Only", "Reader1_DoubleReads",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+       "Reader2_Only", "Reader2_DoubleReads",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+       "Reader1_&amp;_Reader2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     ),</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+    c("NumberOfReads",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     0, 0, 0, 1, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+ ), dimnames = list(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader1_Only", "Reader1_DoubleReads",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader2_Only", "Reader2_DoubleReads",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader1_&amp;_Reader2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   ),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   c(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "NumberOfReads",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader1", "Reader1_DoubleReads",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     "Reader2", "Reader2_DoubleReads"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+     ))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+ ))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; # Generate data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; set.seed(2)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; AgeReads &lt;- SimulatorFn(Nreaders = 4, M = 0.2,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF&gt; AgeReads &lt;- SimulatorFn(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   Nreaders = 4, M = 0.2,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   SelexForm = "Logistic",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   SelexParams = c(5, 0.2), BiasParams = c(1, 1, 1.1, 1.1),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   ErrorParams = c(0.2, 0.2, 0.2, 0.2), ReadsMat = ReadsMat,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   RecCv = 0.6, RecAr1 = 0.8, Amax = 100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+   RecCv = 0.6, RecAr1 = 0.8, Amax = 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SmltrF+ )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ## Not run: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D utils::write.csv(AgeReads,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   file = file.path(getwd(), "Simulated_data_example.csv"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   file = file.path(getwd(), "Simulated_data_example.csv")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ## End(Not run)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##### Format data</span>
@@ -282,16 +290,16 @@ Springer, Germany.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   DupRow &lt;- NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   for (PreviousRowJ in 1:nrow(AgeReads2)) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+     if (all(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+       AgeReads[RowI,1:Nreaders] == AgeReads2[PreviousRowJ,1:Nreaders+1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+       AgeReads[RowI, 1:Nreaders] == AgeReads2[PreviousRowJ, 1:Nreaders + 1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+     )) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+       DupRow &lt;- PreviousRowJ</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   if (is.na(DupRow)) {# Add new row to AgeReads2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   if (is.na(DupRow)) { # Add new row to AgeReads2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+     AgeReads2 &lt;- rbind(AgeReads2, c(1, AgeReads[RowI, ]))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   if(!is.na(DupRow)){# Increment number of samples for previous duplicate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+     AgeReads2[DupRow,1] &lt;- AgeReads2[DupRow,1] + 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   if (!is.na(DupRow)) { # Increment number of samples for previous duplicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+     AgeReads2[DupRow, 1] &lt;- AgeReads2[DupRow, 1] + 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+   }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn+ }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -299,7 +307,7 @@ Springer, Germany.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; # Define minimum and maximum ages for integral across unobserved ages</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; MinAge &lt;- 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; MaxAge &lt;- ceiling(max(AgeReads2[,-1])/10)*10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; MaxAge &lt;- ceiling(max(AgeReads2[, -1]) / 10) * 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; BiasOpt &lt;- c(0, -1, 0, -3)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -312,12 +320,14 @@ Springer, Germany.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ## Not run: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D fileloc &lt;- file.path(tempdir(), "age")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D dir.create(fileloc, showWarnings = FALSE)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D RunFn(Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D RunFn(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   BiasOpt = BiasOpt,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   MinusAge = 1, PlusAge = 30, SaveFile = fileloc,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   AdmbFile = file.path(system.file("executables",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D     package = "nwfscAgeingError"), .Platform$file.sep),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D     package = "nwfscAgeingError"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   ), .Platform$file.sep),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D   EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ##D )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RunFn&gt; ## End(Not run)</span>
@@ -328,16 +338,19 @@ Springer, Germany.</p>
 <span class="r-in"><span><span class="co">##### Run the model (MAY TAKE 5-10 MINUTES)</span></span></span>
 <span class="r-in"><span><span class="va">fileloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"age"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">fileloc</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="RunFn.html">RunFn</a></span><span class="op">(</span>Data <span class="op">=</span> <span class="va">AgeReads2</span>, SigOpt <span class="op">=</span> <span class="va">SigOpt</span>, KnotAges <span class="op">=</span> <span class="va">KnotAges</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="RunFn.html">RunFn</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  Data <span class="op">=</span> <span class="va">AgeReads2</span>, SigOpt <span class="op">=</span> <span class="va">SigOpt</span>, KnotAges <span class="op">=</span> <span class="va">KnotAges</span>,</span></span>
 <span class="r-in"><span>  BiasOpt <span class="op">=</span> <span class="va">BiasOpt</span>,</span></span>
 <span class="r-in"><span>  NDataSets <span class="op">=</span> <span class="fl">1</span>, MinAge <span class="op">=</span> <span class="va">MinAge</span>, MaxAge <span class="op">=</span> <span class="va">MaxAge</span>, RefAge <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  MinusAge <span class="op">=</span> <span class="fl">1</span>, PlusAge <span class="op">=</span> <span class="fl">30</span>, SaveFile <span class="op">=</span> <span class="va">fileloc</span>,</span></span>
 <span class="r-in"><span>  AdmbFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"executables"</span>,</span></span>
-<span class="r-in"><span>    package <span class="op">=</span> <span class="st">"nwfscAgeingError"</span><span class="op">)</span>, <span class="va">.Platform</span><span class="op">$</span><span class="va">file.sep</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    package <span class="op">=</span> <span class="st">"nwfscAgeingError"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>, <span class="va">.Platform</span><span class="op">$</span><span class="va">file.sep</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  EffSampleSize <span class="op">=</span> <span class="fl">0</span>, Intern <span class="op">=</span> <span class="cn">FALSE</span>, JustWrite <span class="op">=</span> <span class="cn">FALSE</span>, CallType <span class="op">=</span> <span class="st">"shell"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Plot output</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="PlotOutputFn.html">PlotOutputFn</a></span><span class="op">(</span>Data <span class="op">=</span> <span class="va">AgeReads2</span>, MaxAge <span class="op">=</span> <span class="va">MaxAge</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="PlotOutputFn.html">PlotOutputFn</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  Data <span class="op">=</span> <span class="va">AgeReads2</span>, MaxAge <span class="op">=</span> <span class="va">MaxAge</span>,</span></span>
 <span class="r-in"><span>  SaveFile <span class="op">=</span> <span class="va">fileloc</span>, PlotType <span class="op">=</span> <span class="st">"PDF"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
@@ -362,9 +375,13 @@ Springer, Germany.</p>
 <span class="r-in"><span><span class="co"># across for that reader</span></span></span>
 <span class="r-in"><span><span class="va">SearchMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="cn">NA</span>,</span></span>
 <span class="r-in"><span>  dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Nreaders</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span>, <span class="fl">7</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Error_Reader"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Bias_Reader"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">)</span>, <span class="st">"MinusAge"</span>, <span class="st">"PlusAge"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Option"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Error_Reader"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Bias_Reader"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">Nreaders</span><span class="op">)</span>, <span class="st">"MinusAge"</span>, <span class="st">"PlusAge"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Option"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Readers 1 and 3 search across options 1-3 for ERROR</span></span></span>
 <span class="r-in"><span><span class="va">SearchMat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/outer.html" class="external-link">%o%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span></span></span>
@@ -390,7 +407,7 @@ Springer, Germany.</p>
 <span class="r-in"><span>  <span class="va">StartMinusAge</span> <span class="op">+</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span>  <span class="va">StartMinusAge</span> <span class="op">+</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">9</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;</span> <span class="va">MinAge</span>,</span></span>
+<span class="r-in"><span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;</span> <span class="va">MinAge</span>,</span></span>
 <span class="r-in"><span>  <span class="cn">NA</span>, <span class="va">SearchMat</span><span class="op">[</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10</span></span></span>
@@ -403,8 +420,9 @@ Springer, Germany.</p>
 <span class="r-in"><span>  <span class="va">StartPlusAge</span> <span class="op">+</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span>  <span class="va">StartPlusAge</span> <span class="op">+</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&gt;</span> <span class="va">MaxAge</span>,</span></span>
-<span class="r-in"><span>  <span class="cn">NA</span>, <span class="va">SearchMat</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">SearchMat</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&gt;</span> <span class="va">MaxAge</span>,</span></span>
+<span class="r-in"><span>  <span class="cn">NA</span>, <span class="va">SearchMat</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run model selection</span></span></span>
 <span class="r-in"><span><span class="co"># This outputs a series of files</span></span></span>
@@ -421,7 +439,8 @@ Springer, Germany.</p>
 <span class="r-in"><span><span class="co"># WARNING: One run of this stepwise model building example can take</span></span></span>
 <span class="r-in"><span><span class="co"># 8+ hours, and should be run overnight</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">StepwiseFn</span><span class="op">(</span>SearchMat <span class="op">=</span> <span class="va">SearchMat</span>, Data <span class="op">=</span> <span class="va">AgeReads2</span>,</span></span>
+<span class="r-in"><span><span class="fu">StepwiseFn</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  SearchMat <span class="op">=</span> <span class="va">SearchMat</span>, Data <span class="op">=</span> <span class="va">AgeReads2</span>,</span></span>
 <span class="r-in"><span>  NDataSets <span class="op">=</span> <span class="fl">1</span>, MinAge <span class="op">=</span> <span class="va">MinAge</span>, MaxAge <span class="op">=</span> <span class="va">MaxAge</span>,</span></span>
 <span class="r-in"><span>  RefAge <span class="op">=</span> <span class="fl">10</span>, MaxSd <span class="op">=</span> <span class="fl">40</span>, MaxExpectedAge <span class="op">=</span> <span class="va">MaxAge</span> <span class="op">+</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  SaveFile <span class="op">=</span> <span class="va">fileloc</span>, InformationCriterion <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AIC"</span>, <span class="st">"AICc"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span></span>
