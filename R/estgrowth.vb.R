@@ -9,7 +9,7 @@
 #' @param Ages A vector of ages in years. Values of \code{NA} are accepted.
 #' @param Lengths A vector of Lengths in cm. Lengths can be \code{NULL} if
 #' \code{ReturnType == "Pred"} because you are only predicting using ages, where
-#' the lengths are just needed for estimation purpopses. If not \code{NULL},
+#' the lengths are just needed for estimation purposes. If not \code{NULL},
 #' ensure that there is one length measurement for every age measurement.
 #' Values of \code{NA} are accepted.
 #' @param ReturnType A single character value with \code{"NLL"} being the default,

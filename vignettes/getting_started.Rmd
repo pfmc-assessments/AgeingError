@@ -38,7 +38,7 @@ The NOAA Northwest Fisheries Science Center (NWFSC) GitHub site hosts the
 version in the main branch of the repository in May 2024. The ADMB version is 
 still available via the git history.
 
-You can install the TMB branch directly from Github using the code below. Note
+You can install the TMB branch directly from GitHub using the code below. Note
 both TMB and Rtools need to be installed to do this.
 
 ```{r, echo=TRUE, eval=FALSE}
@@ -235,7 +235,7 @@ $$
   \end{cases}
  $$ 
 
-*	`2` The parameters relate to the standard deviation (Michaelis-Menton equation). This option has three parameters that need to be specified for each pair of independent readers in the specification (.spc) file. The standard deviation of random age-reading error, $\sigma_a$, is given by:
+*	`2` The parameters relate to the standard deviation (Michaelis-Menten equation). This option has three parameters that need to be specified for each pair of independent readers in the specification (.spc) file. The standard deviation of random age-reading error, $\sigma_a$, is given by:
 
 $$ 
   \sigma_a = 
@@ -246,7 +246,7 @@ $$
 $$ 
 
 
-* `3` The parameters relate to the coefficient of variation (Michaelis-Menton equation). This option has three parameters that need to be specified for each pair of independent readers in the specification (.spc) file. The coefficient of variation of random age-reading error, $CV_a$, is given by: 
+* `3` The parameters relate to the coefficient of variation (Michaelis-Menten equation). This option has three parameters that need to be specified for each pair of independent readers in the specification (.spc) file. The coefficient of variation of random age-reading error, $CV_a$, is given by: 
 
 $$ 
   CV_a = 
@@ -260,7 +260,7 @@ $$
 
 *	`5` The standard deviation of random age-reading error, $\sigma_a$, is a spline function of age (a Forsythe, Malcolm, and Moler type spline as implemented by `tmbutils::splinefun()`). The number and location (ages) of the knots must be specified, with the number of parameters equal to the number of knots. Bounds and initial parameters need to be specified in log space.
 
-*	`6` The standard deviation of random age-reading error, $\sigma_a$, is a piecewise linear function of age.  The number and location (ages) of the knots must be specified, with the number of parameters equal to the number of knots. Boounds and initial parameters need to be specified in log space.
+*	`6` The standard deviation of random age-reading error, $\sigma_a$, is a piecewise linear function of age.  The number and location (ages) of the knots must be specified, with the number of parameters equal to the number of knots. Bounds and initial parameters need to be specified in log space.
 
 * `7` A linear change in the standard deviation of random age-reading error, $\sigma_a$, with age. This option has two parameters that need to be specified for each pair of independent readers in the specifications (.spc) file. 
 

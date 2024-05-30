@@ -16,7 +16,7 @@
 # nwfscAgeingError 1.3.3
 
 * Added a `NEWS.md` file to track changes to the package.
-* Included TMB agemat2.cpp souce code from A. E. Punt
+* Included TMB agemat2.cpp source code from A. E. Punt
 
 # nwfscAgeingError 1.3.2
 
