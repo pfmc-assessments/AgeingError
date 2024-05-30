@@ -464,8 +464,10 @@ access it. Note we are using the data file with a single data set so we
 set <code>NDataSet=1</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"AgeingError"</span><span class="op">)</span></span>
-<span><span class="va">BG2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.dat"</span><span class="op">)</span>, NDataSet<span class="op">=</span><span class="fl">1</span>, </span>
-<span>                                       verbose<span class="op">=</span><span class="cn">TRUE</span>, EchoFile<span class="op">=</span><span class="st">"BG2022echo.out"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">BG2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.dat"</span><span class="op">)</span>,</span>
+<span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"BG2022echo.out"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## readers 1 2 3 4 </span></span>
 <span><span class="co">## Last line of data set 1 is 1 -999 -999 23 22 </span></span>
 <span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
@@ -519,8 +521,10 @@ they are &lt;0.</p>
 so again we need to call the package name and <code>:::</code> to access
 it.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.spc"</span><span class="op">)</span>, DataSpecs<span class="op">=</span><span class="va">BG2022_dat</span>, </span>
-<span>                                       verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">BG2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.spc"</span><span class="op">)</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">BG2022_dat</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
 <span><span class="co">##  $ ModelSpecs:List of 4</span></span>
 <span><span class="co">##   ..$ :List of 10</span></span>
@@ -593,13 +597,15 @@ exist). We set <code>verbose=FALSE</code> in this example as a large
 amount of output is printed to the screen.</p>
 <!-- The output of this function isn't useful, set results="hide" -->
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022"</span>,</span>
-<span>                                           DataSpecs <span class="op">=</span> <span class="va">BG2022_dat</span>,</span>
-<span>                                           ModelSpecsInp <span class="op">=</span> <span class="va">BG2022_spc</span>,</span>
-<span>                                           AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>                                           SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>                                           SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
-<span>                                           verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">BG2022_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"BG2022"</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">BG2022_dat</span>,</span>
+<span>  ModelSpecsInp <span class="op">=</span> <span class="va">BG2022_spc</span>,</span>
+<span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The model is stored as a list in the object <code>BG2022_mod</code>
 and this information along with the data and model specifications is
 saved in the output directory as an lda file with name
@@ -616,7 +622,7 @@ saved in the output directory as an lda file with name
 <span><span class="co">##  $ hessian : logi FALSE</span></span>
 <span><span class="co">##  $ method  : chr "BFGS"</span></span>
 <span><span class="co">##  $ retape  :function (set.defaults = TRUE)  </span></span>
-<span><span class="co">##  $ env     :&lt;environment: 0x55dc75ccb538&gt; </span></span>
+<span><span class="co">##  $ env     :&lt;environment: 0x559d57e3e9c8&gt; </span></span>
 <span><span class="co">##  $ report  :function (par = last.par)  </span></span>
 <span><span class="co">##  $ simulate:function (par = last.par, complete = FALSE)  </span></span>
 <span><span class="co">##  $ fn_orig :function (x = last.par[lfixed()], ...)  </span></span>
@@ -677,8 +683,9 @@ model we considered acceptable.</p>
 <p>Load the data file.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022final_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.dat"</span><span class="op">)</span>,</span>
-<span>                                            NDataSet<span class="op">=</span><span class="fl">1</span>, verbose<span class="op">=</span><span class="cn">TRUE</span>,</span>
-<span>                                            EchoFile<span class="op">=</span><span class="st">"BG2022finalecho.out"</span><span class="op">)</span></span></code></pre></div>
+<span>  NDataSet <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  EchoFile <span class="op">=</span> <span class="st">"BG2022finalecho.out"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## readers 1 2 3 4 </span></span>
 <span><span class="co">## Last line of data set 1 is 1 -999 -999 23 22 </span></span>
 <span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
@@ -721,8 +728,9 @@ of random age-reading error (<code>SigmaOpt=7</code>) and fixed the
 first parameter at 0.2.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022final_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.spc"</span><span class="op">)</span>,</span>
-<span>                                             DataSpecs<span class="op">=</span><span class="va">BG2022final_dat</span>, </span>
-<span>                                             verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  DataSpecs <span class="op">=</span> <span class="va">BG2022final_dat</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
 <span><span class="co">##  $ ModelSpecs:List of 4</span></span>
 <span><span class="co">##   ..$ :List of 10</span></span>
@@ -779,13 +787,15 @@ first parameter at 0.2.</p>
 <p>We run the final model.</p>
 <!-- The output of this function isn't useful, set results="hide" -->
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022final_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>,</span>
-<span>                                           DataSpecs <span class="op">=</span> <span class="va">BG2022final_dat</span>,</span>
-<span>                                           ModelSpecsInp <span class="op">=</span> <span class="va">BG2022final_spc</span>,</span>
-<span>                                           AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>                                           SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>                                           SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
-<span>                                           verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">BG2022final_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">BG2022final_dat</span>,</span>
+<span>  ModelSpecsInp <span class="op">=</span> <span class="va">BG2022final_spc</span>,</span>
+<span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>As with the earlier model we save the results.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022final_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -802,8 +812,10 @@ caught by trawl in the Great Australian Bight (Curin-Osorio and Burch
 re-read their own reads (i.e. there are no inter-reader comparisons in
 the data).</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.dat"</span><span class="op">)</span>, NDataSet<span class="op">=</span><span class="fl">1</span>, </span>
-<span>                                       verbose<span class="op">=</span><span class="cn">TRUE</span>, EchoFile<span class="op">=</span><span class="st">"REB2022echo.out"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">REB2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.dat"</span><span class="op">)</span>,</span>
+<span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"REB2022echo.out"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## readers 1 2 3 4 5 6 </span></span>
 <span><span class="co">## Last line of data set 1 is 1 -999 -999 -999 -999 62 62 </span></span>
 <span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
@@ -846,7 +858,8 @@ warning about missing data.</p>
 <code>CreateSpecs</code> function.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">REB2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.spc"</span><span class="op">)</span>,</span>
-<span>                                         DataSpecs<span class="op">=</span><span class="va">REB2022_dat</span>, verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
 <span><span class="co">##  $ ModelSpecs:List of 6</span></span>
 <span><span class="co">##   ..$ :List of 10</span></span>
@@ -931,13 +944,15 @@ only need to provide one line of sigma parameters.</p>
 <p>We estimate ageing error for Bight Redfish.</p>
 <!-- The output of this function isn't useful, set results="hide" -->
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022"</span>,</span>
-<span>                                            DataSpecs <span class="op">=</span> <span class="va">REB2022_dat</span>,</span>
-<span>                                            ModelSpecsInp <span class="op">=</span> <span class="va">REB2022_spc</span>,</span>
-<span>                                            AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>                                            SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>                                            SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
-<span>                                            verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">REB2022_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"REB2022"</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat</span>,</span>
+<span>  ModelSpecsInp <span class="op">=</span> <span class="va">REB2022_spc</span>,</span>
+<span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>We then save the Bight Redfish model output.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">REB2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -951,16 +966,23 @@ data and model specifications as (<code>REB2022_trim.dat</code> and
 creation of output in this document).</p>
 <!-- set results="hide" -->
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_dat2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.dat"</span><span class="op">)</span>, NDataSet<span class="op">=</span><span class="fl">1</span>, </span>
-<span>                  verbose<span class="op">=</span><span class="cn">FALSE</span>, EchoFile<span class="op">=</span><span class="st">"REB2022_trimecho.out"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">REB2022_dat2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.dat"</span><span class="op">)</span>,</span>
+<span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>, EchoFile <span class="op">=</span> <span class="st">"REB2022_trimecho.out"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">REB2022_spc2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.spc"</span><span class="op">)</span>,</span>
-<span>                  DataSpecs<span class="op">=</span><span class="va">REB2022_dat2</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">REB2022_mod2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022_final"</span>,</span>
-<span>                  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat2</span>, ModelSpecsInp <span class="op">=</span> <span class="va">REB2022_spc2</span>,</span>
-<span>                  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>, SlopeWght <span class="op">=</span> <span class="fl">0.01</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
-<span>                  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">REB2022_out2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022_final"</span>, </span>
-<span>                  SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat2</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">REB2022_mod2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"REB2022_final"</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat2</span>, ModelSpecsInp <span class="op">=</span> <span class="va">REB2022_spc2</span>,</span>
+<span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>, SlopeWght <span class="op">=</span> <span class="fl">0.01</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">REB2022_out2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"REB2022_final"</span>,</span>
+<span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The final gradient is -0.001973, close to convergence.</p>
 </div>
 <div class="section level3">
@@ -973,8 +995,10 @@ separate data sets and a spline model.</p>
 <p>Load the School Whiting data file, make sure to set the number of
 data sets to three (<code>NDataSet=3</code>).</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">WHS2_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.dat"</span><span class="op">)</span>, NDataSet<span class="op">=</span><span class="fl">3</span>, </span>
-<span>                  verbose<span class="op">=</span><span class="cn">TRUE</span>, EchoFile<span class="op">=</span><span class="st">"WHS2echo.out"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">WHS2_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.dat"</span><span class="op">)</span>,</span>
+<span>  NDataSet <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"WHS2echo.out"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## readers 1 2 </span></span>
 <span><span class="co">## readers 3 4 </span></span>
 <span><span class="co">## readers 5 6 </span></span>
@@ -1021,7 +1045,8 @@ file.</p>
 <p>Load the specifications for School Whiting.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WHS2_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.spc"</span><span class="op">)</span>,</span>
-<span>                  DataSpecs<span class="op">=</span><span class="va">WHS2_dat</span>, verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  DataSpecs <span class="op">=</span> <span class="va">WHS2_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Spline used to define SD for reader  1 </span></span>
 <span><span class="co">## Selected knots are located at 0  3  5  7  9  </span></span>
 <span><span class="co">## List of 7</span></span>
@@ -1105,12 +1130,16 @@ the initial parameter values are in log space.</p>
 <p>Fit the ageing error model and save the results</p>
 <!-- Set results="hide" -->
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">WHS2_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"WHS2"</span>,</span>
-<span>                  DataSpecs <span class="op">=</span> <span class="va">WHS2_dat</span>, ModelSpecsInp <span class="op">=</span> <span class="va">WHS2_spc</span>,</span>
-<span>                  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>, SlopeWght <span class="op">=</span> <span class="fl">0.01</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
-<span>                  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">WHS2_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"WHS2"</span>, </span>
-<span>                  SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">WHS2_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"WHS2"</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">WHS2_dat</span>, ModelSpecsInp <span class="op">=</span> <span class="va">WHS2_spc</span>,</span>
+<span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>, SlopeWght <span class="op">=</span> <span class="fl">0.01</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">WHS2_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"WHS2"</span>,</span>
+<span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The maximum gradient is ~2.3-05 indicating the model has converged.
 The estimated standard deviation by age shows the ageing uncertainty
 increasing from age 0 to age 4, then declining for ages 5 and 6 before
@@ -1125,8 +1154,10 @@ discussed with the ageing technicians.</p>
 <p>Sablefish (<em>Anoplopoma fimbria</em>) provides an example of using
 the bias option.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Sable_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.dat"</span><span class="op">)</span>, NDataSet<span class="op">=</span><span class="fl">1</span>, </span>
-<span>                                      verbose<span class="op">=</span><span class="cn">TRUE</span>, EchoFile<span class="op">=</span><span class="st">"SableEcho.out"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Sable_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.dat"</span><span class="op">)</span>,</span>
+<span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"SableEcho.out"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## readers 1 2 3 4 5 6 </span></span>
 <span><span class="co">## Last line of data set 1 is 6 -999 -999 -999 -999 2 2 </span></span>
 <span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
@@ -1171,7 +1202,8 @@ This data set has several inter-reader comparisons.</p>
 function.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Sable_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.spc"</span><span class="op">)</span>,</span>
-<span>                                         DataSpecs<span class="op">=</span><span class="va">Sable_dat</span>, verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  DataSpecs <span class="op">=</span> <span class="va">Sable_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
 <span><span class="co">##  $ ModelSpecs:List of 6</span></span>
 <span><span class="co">##   ..$ :List of 10</span></span>
@@ -1267,13 +1299,15 @@ We don’t run it because this particular model is very slow.</p>
 <!-- We don't run this code -->
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## run the Sablefish model</span></span>
-<span><span class="va">Sable_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"Sable"</span>,</span>
-<span>                                          DataSpecs <span class="op">=</span> <span class="va">Sable_dat</span>,</span>
-<span>                                          ModelSpecsInp <span class="op">=</span> <span class="va">Sable_spc</span>,</span>
-<span>                                          AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>                                          SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>                                          SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
-<span>                                          verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">Sable_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
+<span>  Species <span class="op">=</span> <span class="st">"Sable"</span>,</span>
+<span>  DataSpecs <span class="op">=</span> <span class="va">Sable_dat</span>,</span>
+<span>  ModelSpecsInp <span class="op">=</span> <span class="va">Sable_spc</span>,</span>
+<span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  SlopeWght <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">## save the model results</span></span>
 <span><span class="va">Sable_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"Sable"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
