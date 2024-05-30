@@ -5,7 +5,7 @@ AgeingError
 * Software to estimate ageing error given double-reads of hard structures (e.g., otoliths)
 
   <!-- badges: start -->
-  [![R build status](https://github.com/pfmc-assessments/AgeingError/workflows/R-CMD-check/badge.svg)](https://github.com/pfmc-assessments/AgeingError/actions)
+  [![call-r-cmd-check](https://github.com/r4ss/r4ss/actions/workflows/call-r-cmd-check.yml/badge.svg)](https://github.com/r4ss/r4ss/actions/workflows/call-r-cmd-check.yml)
   <!-- badges: end -->
 
 Instructions
