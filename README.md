@@ -24,4 +24,4 @@ library(AgeingError)
 
 ```
 
-See the vignette for example use.
+See [the vignette](https://pfmc-assessments.github.io/AgeingError/articles/getting_started.html) for description and example use.
