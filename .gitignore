@@ -7,5 +7,6 @@ Results/
 # files created by compiling the TMB model
 *.dll
 *.o
+*.so
 # files for the pkgdown website
 docs
