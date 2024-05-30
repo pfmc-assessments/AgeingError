@@ -203,7 +203,8 @@ to one.
 example(SimulatorFn)
 \dontrun{
 utils::write.csv(AgeReads,
-  file = file.path(getwd(), "Simulated_data_example.csv"))
+  file = file.path(getwd(), "Simulated_data_example.csv")
+)
 }
 
 ##### Format data
@@ -232,23 +233,23 @@ for (RowI in 2:nrow(AgeReads)) {
   DupRow <- NA
   for (PreviousRowJ in 1:nrow(AgeReads2)) {
     if (all(
-      AgeReads[RowI,1:Nreaders] == AgeReads2[PreviousRowJ,1:Nreaders+1]
+      AgeReads[RowI, 1:Nreaders] == AgeReads2[PreviousRowJ, 1:Nreaders + 1]
     )) {
       DupRow <- PreviousRowJ
     }
   }
-  if (is.na(DupRow)) {# Add new row to AgeReads2
+  if (is.na(DupRow)) { # Add new row to AgeReads2
     AgeReads2 <- rbind(AgeReads2, c(1, AgeReads[RowI, ]))
   }
-  if(!is.na(DupRow)){# Increment number of samples for previous duplicate
-    AgeReads2[DupRow,1] <- AgeReads2[DupRow,1] + 1
+  if (!is.na(DupRow)) { # Increment number of samples for previous duplicate
+    AgeReads2[DupRow, 1] <- AgeReads2[DupRow, 1] + 1
   }
 }
 
 ######## Determine settings for ADMB
 # Define minimum and maximum ages for integral across unobserved ages
 MinAge <- 1
-MaxAge <- ceiling(max(AgeReads2[,-1])/10)*10
+MaxAge <- ceiling(max(AgeReads2[, -1]) / 10) * 10
 BiasOpt <- c(0, -1, 0, -3)
 SigOpt <- c(1, -1, 6, -3)
 # Necessary for SigOpt option 5 or 6
@@ -258,12 +259,14 @@ KnotAges <- list(NA, NA, c(1, 10, 20, MaxAge), NA)
 \dontrun{
 fileloc <- file.path(tempdir(), "age")
 dir.create(fileloc, showWarnings = FALSE)
-RunFn(Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
+RunFn(
+  Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
   BiasOpt = BiasOpt,
   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,
   MinusAge = 1, PlusAge = 30, SaveFile = fileloc,
   AdmbFile = file.path(system.file("executables",
-    package = "nwfscAgeingError"), .Platform$file.sep),
+    package = "nwfscAgeingError"
+  ), .Platform$file.sep),
   EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"
 )
 }

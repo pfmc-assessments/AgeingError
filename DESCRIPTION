@@ -32,9 +32,9 @@ Depends:
 Imports:
     cli,
     fs,
+    knitr,
     stats,
-    TMB (>= 1.8.0),
-    knitr
+    TMB (>= 1.8.0)
 Suggests:
     spelling
 LinkingTo:

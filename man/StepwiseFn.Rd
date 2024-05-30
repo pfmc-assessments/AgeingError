@@ -114,16 +114,19 @@ example(RunFn)
 ##### Run the model (MAY TAKE 5-10 MINUTES)
 fileloc <- file.path(tempdir(), "age")
 dir.create(fileloc, showWarnings = FALSE)
-RunFn(Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
+RunFn(
+  Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
   BiasOpt = BiasOpt,
   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,
   MinusAge = 1, PlusAge = 30, SaveFile = fileloc,
   AdmbFile = file.path(system.file("executables",
-    package = "nwfscAgeingError"), .Platform$file.sep),
+    package = "nwfscAgeingError"
+  ), .Platform$file.sep),
   EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"
 )
 # Plot output
-PlotOutputFn(Data = AgeReads2, MaxAge = MaxAge,
+PlotOutputFn(
+  Data = AgeReads2, MaxAge = MaxAge,
   SaveFile = fileloc, PlotType = "PDF"
 )
 }
@@ -148,9 +151,13 @@ StartPlusAge <- 30
 # across for that reader
 SearchMat <- array(NA,
   dim = c(Nreaders * 2 + 2, 7),
-  dimnames = list(c(paste("Error_Reader", 1:Nreaders),
-    paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"),
-    paste("Option", 1:7))
+  dimnames = list(
+    c(
+      paste("Error_Reader", 1:Nreaders),
+      paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"
+    ),
+    paste("Option", 1:7)
+  )
 )
 # Readers 1 and 3 search across options 1-3 for ERROR
 SearchMat[c(1, 3), 1:3] <- rep(1, 2) \%o\% c(1, 2, 3)
@@ -176,7 +183,7 @@ SearchMat[9, 1:7] <- c(
   StartMinusAge + 4,
   StartMinusAge + 10
 )
-SearchMat[9, 1:7] <- ifelse(SearchMat[9,1:7] < MinAge,
+SearchMat[9, 1:7] <- ifelse(SearchMat[9, 1:7] < MinAge,
   NA, SearchMat[9, 1:7]
 )
 # PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
@@ -189,8 +196,9 @@ SearchMat[10, 1:7] <- c(
   StartPlusAge + 4,
   StartPlusAge + 10
 )
-SearchMat[10,1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
-  NA, SearchMat[10, 1:7])
+SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
+  NA, SearchMat[10, 1:7]
+)
 
 # Run model selection
 # This outputs a series of files
@@ -207,7 +215,8 @@ SearchMat[10,1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
 # WARNING: One run of this stepwise model building example can take
 # 8+ hours, and should be run overnight
 \dontrun{
-StepwiseFn(SearchMat = SearchMat, Data = AgeReads2,
+StepwiseFn(
+  SearchMat = SearchMat, Data = AgeReads2,
   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge,
   RefAge = 10, MaxSd = 40, MaxExpectedAge = MaxAge + 10,
   SaveFile = fileloc, InformationCriterion = c("AIC", "AICc", "BIC")[3]

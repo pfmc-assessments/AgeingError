@@ -55,35 +55,42 @@ A function to generate simulated double reading data with given properties
 \examples{
 # Parameters for generating data
 # This represents 2 unique readers
-  # Row 1 -- Otoliths read only once by reader 
-  # Row 2 -- Otoliths read twice by reader 1
-  # Row 2 -- Otoliths read only once by reader 2
-  # Row 4 -- Otoliths read twice by reader 2
-  # Row 5 -- Otoliths read once by reader 1 and once by reader 2
-ReadsMat <- structure(matrix(nrow = 5, ncol = 5,
-  c(rep(25, 5),
+# Row 1 -- Otoliths read only once by reader
+# Row 2 -- Otoliths read twice by reader 1
+# Row 2 -- Otoliths read only once by reader 2
+# Row 4 -- Otoliths read twice by reader 2
+# Row 5 -- Otoliths read once by reader 1 and once by reader 2
+ReadsMat <- structure(matrix(
+  nrow = 5, ncol = 5,
+  c(
+    rep(25, 5),
     1, 1, 0, 0, 1,
     0, 1, 0, 0, 0,
     0, 0, 1, 1, 1,
-    0, 0, 0, 1, 0)
-  ), dimnames = list(
-    c("Reader1_Only", "Reader1_DoubleReads",
-      "Reader2_Only", "Reader2_DoubleReads",
-      "Reader1_&_Reader2"
-    ),
-   c("NumberOfReads",
+    0, 0, 0, 1, 0
+  )
+), dimnames = list(
+  c(
+    "Reader1_Only", "Reader1_DoubleReads",
+    "Reader2_Only", "Reader2_DoubleReads",
+    "Reader1_&_Reader2"
+  ),
+  c(
+    "NumberOfReads",
     "Reader1", "Reader1_DoubleReads",
     "Reader2", "Reader2_DoubleReads"
-    ))
   )
+))
 
 # Generate data
 set.seed(2)
-AgeReads <- SimulatorFn(Nreaders = 4, M = 0.2,
+AgeReads <- SimulatorFn(
+  Nreaders = 4, M = 0.2,
   SelexForm = "Logistic",
   SelexParams = c(5, 0.2), BiasParams = c(1, 1, 1.1, 1.1),
   ErrorParams = c(0.2, 0.2, 0.2, 0.2), ReadsMat = ReadsMat,
-  RecCv = 0.6, RecAr1 = 0.8, Amax = 100)
+  RecCv = 0.6, RecAr1 = 0.8, Amax = 100
+)
 }
 \references{
 Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
