@@ -32,28 +32,34 @@
 #'
 #' @examples
 #' \dontrun{
-#' bio_dat <- data.frame(Age = rep(0:30, each = 20),
-#'   Length_cm = rnorm(n = 31 * 20, mean = 50, sd = 5))
+#' bio_dat <- data.frame(
+#'   Age = rep(0:30, each = 20),
+#'   Length_cm = rnorm(n = 31 * 20, mean = 50, sd = 5)
+#' )
 #' pars_in <- lapply(FUN = log, X = list(
 #'   "K" = 0.13,
 #'   "Linf" = 55,
 #'   "L0" = 5,
 #'   "CV0" = 0.1,
-#'   "CV1" = 0.1))
-#' solve <- optim(fn = estgrowth.vb, par = unlist(pars_in), hessian = FALSE,
+#'   "CV1" = 0.1
+#' ))
+#' solve <- optim(
+#'   fn = estgrowth.vb, par = unlist(pars_in), hessian = FALSE,
 #'   Ages = bio_dat[, "Age"],
-#'   Lengths = bio_dat[, "Length_cm"])
-#' predictions <- estgrowth.vb(Par = solve$par, ReturnType = "Pred",
+#'   Lengths = bio_dat[, "Length_cm"]
+#' )
+#' predictions <- estgrowth.vb(
+#'   Par = solve$par, ReturnType = "Pred",
 #'   sdFactor = 1,
 #'   Ages = bio_dat[, "Age"],
-#'   Lengths = bio_dat[, "Length_cm"])
+#'   Lengths = bio_dat[, "Length_cm"]
+#' )
 #' plot(bio_dat$Age, predictions[, "Lhat_pred"],
-#'   xlab = "Age (years)", ylab = "Predicted length (cm)")
+#'   xlab = "Age (years)", ylab = "Predicted length (cm)"
+#' )
 #' exp(solve$par)
 #' }
-
 estgrowth.vb <- function(Par, Ages, Lengths, ReturnType = c("NLL", "Pred"), sdFactor = 1) {
-
   #### Initialization
   if (is.null(names(Par))) {
     names(Par) <- c("K", "Linf", "L0", "CV0", "CV1")
@@ -96,11 +102,11 @@ estgrowth.vb <- function(Par, Ages, Lengths, ReturnType = c("NLL", "Pred"), sdFa
 
   #### Return
   if (ReturnType == "NLL") {
-    Return <- -1 * sum(dnorm(Lengths, mean=Lhat, sd=SD, log=TRUE), na.rm=TRUE)
+    Return <- -1 * sum(dnorm(Lengths, mean = Lhat, sd = SD, log = TRUE), na.rm = TRUE)
   }
   if (ReturnType == "Pred") {
-    Lhat_low   <- lhat.here(Par, Ages, variability = (-sdFactor * SD))
-    Lhat_high  <- lhat.here(Par, Ages, variability = (sdFactor * SD))
+    Lhat_low <- lhat.here(Par, Ages, variability = (-sdFactor * SD))
+    Lhat_high <- lhat.here(Par, Ages, variability = (sdFactor * SD))
     Return <- cbind(Lhat_low = Lhat_low, Lhat_pred = Lhat, Lhat_high = Lhat_high)
   }
   return(Return)

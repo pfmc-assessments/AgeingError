@@ -1,5 +1,5 @@
 #' Process results of the ageing error estimation
-#' 
+#'
 #' @inheritParams DoApplyAgeError
 #' @param CalcEff Calculate effective sample sizes (TRUE/FALSE)
 #' @export

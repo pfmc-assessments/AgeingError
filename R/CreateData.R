@@ -1,8 +1,8 @@
 #' Read the ageing error data
-#' 
+#'
 #' @param DataFile Filename for input data
 #' @param NDataSet Number of data sets within `DataFile`
-#' @param verbose Return messages to the console (in addition to any output to 
+#' @param verbose Return messages to the console (in addition to any output to
 #' `EchoFile`)
 #' @param EchoFile A file path to a file that will be created or appended to if
 #'   it already exists to store information about your data inputs. The default

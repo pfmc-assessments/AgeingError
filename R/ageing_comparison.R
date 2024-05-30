@@ -107,19 +107,22 @@ ageing_comparison <- function(xvec, yvec, scale.pts = 2,
   graphics::grid()
   # add lines at 0 if axes have padding around 0
   if (axs == "r") {
-    graphics::rect(xleft = 0, ybottom = 0,
+    graphics::rect(
+      xleft = 0, ybottom = 0,
       xright = graphics::par()$usr[2], ytop = graphics::par()$usr[4]
     )
   } else {
     graphics::box()
   }
   # add points
-  graphics::points(df1[, 1:2], col = col.pts,
+  graphics::points(df1[, 1:2],
+    col = col.pts,
     pch = 16, cex = scale.pts * sqrt(df1[, 3])
   )
   # add counts as text
   if (counts) {
-    graphics::text(df1[, 1:2], col = "white",
+    graphics::text(df1[, 1:2],
+      col = "white",
       lab = paste(df1[, 3]), cex = scale.pts / 3
     )
   }
