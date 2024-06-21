@@ -1,3 +1,6 @@
+bibentry("Manual",
+         other = unlist(citation(auto = meta), recursive = FALSE))
+         
 bibentry(
   bibtype = "Article",
   title = paste0("Quantifying age-reading error for use in fisheries stock
