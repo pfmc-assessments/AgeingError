@@ -22,24 +22,21 @@ these methods, incorporating documentation written by André Punt.
 
 This vignette is illustrated using data and settings associated with three stocks in the Australian Southern and Eastern Scalefish and Shark Fishery (SESSF) fishery (Blue Grenadier, Bight Redfish, and School Whiting), as well as sablefish from the U.S. west coast.
 
-# Software
+# R package
 
 The current implementation of the software was written by André Punt in 2020 and
 subsequently updated in 2022. There are several slightly different versions of 
-the source code in circulation, we use the version maintained by Kelli Johnson
-(NOAA NWFSC). We have consulted with André Punt and agreed that future 
+the source code in circulation. This vignette describes the version hosted on the 
+`pfmc-assessments` GitHub organization maintained by the assessment team at 
+the NOAA Northwest Fisheries Science Center (NWFSC). 
+The newer TMB version of the software replaced the ADMB 
+version in the main branch of the repository in May 2024. The ADMB version is 
+still available via the git history. We have consulted with André Punt and agreed that future 
 development of the ageing error code should be done through the NWFSC GitHub
 repository.
 
-## Ageing Error R package
-
-The NOAA Northwest Fisheries Science Center (NWFSC) GitHub site hosts the 
-`AgeingError` package. The newer TMB version of the software replaced the ADMB 
-version in the main branch of the repository in May 2024. The ADMB version is 
-still available via the git history.
-
-You can install the TMB branch directly from GitHub using the code below. Note
-both TMB and Rtools need to be installed to do this.
+You can install the it GitHub using the code below. Note
+both TMB and Rtools (for Windows users) need to be installed to do this.
 
 ```{r, echo=TRUE, eval=FALSE}
 remotes::install_github("pfmc-assessments/AgeingError")
