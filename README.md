@@ -11,17 +11,17 @@ AgeingError
 Instructions
 =============
 
-Install the `AgeingError` package from this github site as follows:
-
+The easiest installation method is to use a pre-compiled version on R-universe via
 ```r
-# using {remotes}
-remotes::install_github("pfmc-assessments/AgeingError")
-# using {pak}
-pak::pak("pfmc-assessments/AgeingError")
-
-# Load package
-library(AgeingError)
-
+install.packages("AgeingError", repos = c("https://noaa-fisheries-integrated-toolbox.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-See [the vignette](https://pfmc-assessments.github.io/AgeingError/articles/getting_started.html) for description and example use.
+You can also install from GitHub using the code below which will compile the package locally
+(which takes longer and requires (Rtools)[https://cran.r-project.org/bin/windows/Rtools/] 
+for Windows users).
+
+```r
+remotes::install_github("pfmc-assessments/AgeingError")
+```
+
+See [the vignette](https://pfmc-assessments.github.io/AgeingError/articles/getting_started.html) for detailed description and example use.

@@ -35,8 +35,14 @@ still available via the git history. We have consulted with André Punt and agre
 development of the ageing error code should be done through the NWFSC GitHub
 repository.
 
-You can install the it GitHub using the code below. Note
-both TMB and Rtools (for Windows users) need to be installed to do this.
+The easiest installation method is to use a pre-compiled version on R-universe via
+```{r, echo=TRUE, eval=FALSE}
+install.packages("AgeingError", repos = c("https://noaa-fisheries-integrated-toolbox.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+You can also install from GitHub using the code below which will compile the package locally
+(which takes longer and requires (Rtools)[https://cran.r-project.org/bin/windows/Rtools/] 
+for Windows users).
 
 ```{r, echo=TRUE, eval=FALSE}
 remotes::install_github("pfmc-assessments/AgeingError")
