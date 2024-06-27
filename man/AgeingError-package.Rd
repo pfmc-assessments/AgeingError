@@ -17,9 +17,7 @@ Canadian Journal of Fisheries and Aquatic Sciences 65: 1991-2005.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pfmc-assessments.github.io/AgeingError/index.html}
   \item \url{https://pfmc-assessments.github.io/AgeingError/}
-  \item \url{http://pfmc-assessments.github.io/AgeingError/}
   \item Report bugs at \url{https://github.com/pfmc-assessments/AgeingError/issues}
 }
 
