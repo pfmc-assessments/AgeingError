@@ -41,7 +41,7 @@ install.packages("AgeingError", repos = c("https://noaa-fisheries-integrated-too
 ```
 
 You can also install from GitHub using the code below which will compile the package locally
-(which takes longer and requires (Rtools)[https://cran.r-project.org/bin/windows/Rtools/] 
+(which takes longer and requires [Rtools](https://cran.r-project.org/bin/windows/Rtools/) 
 for Windows users).
 
 ```{r, echo=TRUE, eval=FALSE}
