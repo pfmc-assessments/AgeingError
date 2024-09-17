@@ -1,10 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   getting_started: getting_started.html
-last_built: 2024-06-27T18:33Z
+last_built: 2024-09-17T15:52Z
 urls:
   reference: http://pfmc-assessments.github.io/AgeingError/reference
   article: http://pfmc-assessments.github.io/AgeingError/articles
-

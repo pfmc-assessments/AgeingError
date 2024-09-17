@@ -5,64 +5,48 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="AgeingError">
 <title>Estimating ageing error using the TMB model written by André Punt • AgeingError</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimating ageing error using the TMB model written by André Punt">
-<meta property="og:description" content="AgeingError">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimating ageing error using the TMB model written by André Punt">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">AgeingError</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.2</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/getting_started.html">Estimating ageing error using the TMB model written by André Punt</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/getting_started.html">Estimating ageing error using the TMB model written by André Punt</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/pfmc-assessments/AgeingError/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/pfmc-assessments/AgeingError/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -71,13 +55,14 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Estimating ageing error using the TMB model written by André Punt</h1>
+
+      <h1>Estimating ageing error using the TMB model written by André Punt</h1>
                         <h4 data-toc-skip class="author">Paul Burch
 based on documentation written by André Punt</h4>
             
             <h4 data-toc-skip class="date">8 September 2023</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/pfmc-assessments/AgeingError/blob/HEAD/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pfmc-assessments/AgeingError/blob/main/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="d-none name"><code>getting_started.Rmd</code></div>
     </div>
 
@@ -274,13 +259,18 @@ and true age is the same as that for reader x. [Note that the ‘’x’’ must
 be lower than the number of the reader for which bias is being defined.
 Reader 2 can have <code>BiasOpt=-1</code> to match reader 1].</p></li>
 <li><p><code>0</code> Age-estimates are unbiased.</p></li>
-<li><p><code>1</code> The expected age of an animal of age <span class="math inline">\(a\)</span>, <span class="math inline">\(E_a\)</span>, is a linear function of its true
-age, i.e. <span class="math inline">\(E_a =\alpha a\)</span> (constant
-coefficient of variation).</p></li>
-<li><p><code>2</code> The expected age of an animal of age <span class="math inline">\(a\)</span>, <span class="math inline">\(E_a\)</span>, is a given by:</p></li>
+<li><p><code>1</code> The expected age of an animal of age
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mi>a</mi></msub><annotation encoding="application/x-tex">E_a</annotation></semantics></math>,
+is a linear function of its true age,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>a</mi></msub><mo>=</mo><mi>α</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">E_a =\alpha a</annotation></semantics></math>
+(constant coefficient of variation).</p></li>
+<li><p><code>2</code> The expected age of an animal of age
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mi>a</mi></msub><annotation encoding="application/x-tex">E_a</annotation></semantics></math>,
+is a given by:</p></li>
 </ul>
-<p><span class="math display">\[E_a = E_L + (E_H -
-E_L)\frac{1-\text{exp}(-\beta(a-1))}{1-\text{exp}(-\beta(a_{max}-1))}\]</span>.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>a</mi></msub><mo>=</mo><msub><mi>E</mi><mi>L</mi></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>E</mi><mi>H</mi></msub><mo>−</mo><msub><mi>E</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>β</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>β</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_a = E_L + (E_H - E_L)\frac{1-\text{exp}(-\beta(a-1))}{1-\text{exp}(-\beta(a_{max}-1))}</annotation></semantics></math>.</p>
 <p>The C++ code (<code>AgeingError.cpp</code>) also has conditional (if)
 statements for Bias options 4 and 5 but these are identical to option 0
 (unbiased) and therefore presumably placeholders for some future
@@ -301,79 +291,80 @@ for which bias is being defined].</p></li>
 <li><p><code>1</code> This option assumes a constant coefficient of
 variation, it has one parameter that needs to be specified for each pair
 of independent readers in the specification (.spc) file. The standard
-deviation of random age-reading error, <span class="math inline">\(\sigma_a\)</span>, is a linear function of true
-age, i.e.:</p></li>
+deviation of random age-reading error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>a</mi></msub><annotation encoding="application/x-tex">\sigma_a</annotation></semantics></math>,
+is a linear function of true age, i.e.:</p></li>
 </ul>
-<p><span class="math display">\[
-  \sigma_a =
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>a</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>γ</mi></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>a</mi><mo>=</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>γ</mi><mi>a</mi></mtd><mtd columnalign="left" style="text-align: left"><mtext mathvariant="normal">otherwise</mtext></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex"> 
+  \sigma_a = 
   \begin{cases}
     \gamma &amp; \text{if  } a=0 \\
     \gamma a &amp; \text{otherwise} \\
   \end{cases}
-\]</span></p>
+ </annotation></semantics></math></p>
 <ul>
 <li>
 <code>2</code> The parameters relate to the standard deviation
 (Michaelis-Menten equation). This option has three parameters that need
 to be specified for each pair of independent readers in the
 specification (.spc) file. The standard deviation of random age-reading
-error, <span class="math inline">\(\sigma_a\)</span>, is given by:</li>
+error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>a</mi></msub><annotation encoding="application/x-tex">\sigma_a</annotation></semantics></math>,
+is given by:</li>
 </ul>
-<p><span class="math display">\[
-  \sigma_a =
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>a</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>σ</mi><mi>L</mi></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>σ</mi><mi>H</mi></msub><mo>−</mo><msub><mi>σ</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>a</mi><mo>=</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>σ</mi><mi>L</mi></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>σ</mi><mi>H</mi></msub><mo>−</mo><msub><mi>σ</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mtext mathvariant="normal">otherwise</mtext></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex"> 
+  \sigma_a = 
   \begin{cases}
-    \sigma_L + (\sigma_H -
-\sigma_L)\frac{1}{1-exp(-\delta(a_{max}-1))}   &amp; \text{if  } a=0 \\
-    \sigma_L + (\sigma_H -
-\sigma_L)\frac{1-exp(-\delta(a-1))}{1-exp(-\delta(a_{max}-1))} &amp;
-\text{otherwise} \\
+    \sigma_L + (\sigma_H - \sigma_L)\frac{1}{1-exp(-\delta(a_{max}-1))}   &amp; \text{if  } a=0 \\
+    \sigma_L + (\sigma_H - \sigma_L)\frac{1-exp(-\delta(a-1))}{1-exp(-\delta(a_{max}-1))} &amp; \text{otherwise} \\
   \end{cases}
-\]</span></p>
+</annotation></semantics></math></p>
 <ul>
 <li>
 <code>3</code> The parameters relate to the coefficient of variation
 (Michaelis-Menten equation). This option has three parameters that need
 to be specified for each pair of independent readers in the
 specification (.spc) file. The coefficient of variation of random
-age-reading error, <span class="math inline">\(CV_a\)</span>, is given
-by:</li>
+age-reading error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><msub><mi>V</mi><mi>a</mi></msub></mrow><annotation encoding="application/x-tex">CV_a</annotation></semantics></math>,
+is given by:</li>
 </ul>
-<p><span class="math display">\[
-  CV_a =
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><msub><mi>V</mi><mi>a</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>C</mi><msub><mi>V</mi><mi>L</mi></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><msub><mi>V</mi><mi>H</mi></msub><mo>−</mo><mi>C</mi><msub><mi>V</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>a</mi><mo>=</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>C</mi><msub><mi>V</mi><mi>L</mi></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><msub><mi>V</mi><mi>H</mi></msub><mo>−</mo><mi>C</mi><msub><mi>V</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mtext mathvariant="normal">otherwise</mtext></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex"> 
+  CV_a = 
   \begin{cases}
-    CV_L + (CV_H -
-CV_L)\frac{1}{1-\text{exp}(-\delta(a_{max}-1))}   &amp; \text{if  } a=0
-\\
-    CV_L + (CV_H -
-CV_L)\frac{1-\text{exp}(-\delta(a-1))}{1-\text{exp}(-\delta(a_{max}-1))}
-&amp; \text{otherwise} \\
+    CV_L + (CV_H - CV_L)\frac{1}{1-\text{exp}(-\delta(a_{max}-1))}   &amp; \text{if  } a=0 \\
+    CV_L + (CV_H - CV_L)\frac{1-\text{exp}(-\delta(a-1))}{1-\text{exp}(-\delta(a_{max}-1))} &amp; \text{otherwise} \\
   \end{cases}
-\]</span></p>
+ </annotation></semantics></math></p>
 <ul>
 <li><p><code>4</code> The estimates of age are exact (use this option
 for ‘’known age’’ individuals). This option returns a vector of zeroes
 (or perhaps just a single zero).</p></li>
 <li><p><code>5</code> The standard deviation of random age-reading
-error, <span class="math inline">\(\sigma_a\)</span>, is a spline
-function of age (a Forsythe, Malcolm, and Moler type spline as
-implemented by <code>tmbutils::splinefun()</code>). The number and
+error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>a</mi></msub><annotation encoding="application/x-tex">\sigma_a</annotation></semantics></math>,
+is a spline function of age (a Forsythe, Malcolm, and Moler type spline
+as implemented by <code>tmbutils::splinefun()</code>). The number and
 location (ages) of the knots must be specified, with the number of
 parameters equal to the number of knots. Bounds and initial parameters
 need to be specified in log space.</p></li>
 <li><p><code>6</code> The standard deviation of random age-reading
-error, <span class="math inline">\(\sigma_a\)</span>, is a piecewise
-linear function of age. The number and location (ages) of the knots must
-be specified, with the number of parameters equal to the number of
-knots. Bounds and initial parameters need to be specified in log
-space.</p></li>
+error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>a</mi></msub><annotation encoding="application/x-tex">\sigma_a</annotation></semantics></math>,
+is a piecewise linear function of age. The number and location (ages) of
+the knots must be specified, with the number of parameters equal to the
+number of knots. Bounds and initial parameters need to be specified in
+log space.</p></li>
 <li><p><code>7</code> A linear change in the standard deviation of
-random age-reading error, <span class="math inline">\(\sigma_a\)</span>,
+random age-reading error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>a</mi></msub><annotation encoding="application/x-tex">\sigma_a</annotation></semantics></math>,
 with age. This option has two parameters that need to be specified for
 each pair of independent readers in the specifications (.spc)
 file.</p></li>
 <li><p><code>8</code> A linear change in the coefficient of variation of
-random age-reading error, <span class="math inline">\(CV_a\)</span> ,
-with age. This option has two parameters that need to be specified for
+random age-reading error,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><msub><mi>V</mi><mi>a</mi></msub></mrow><annotation encoding="application/x-tex">CV_a</annotation></semantics></math>
+, with age. This option has two parameters that need to be specified for
 each pair of independent readers in the specifications (.spc)
 file.</p></li>
 </ul>
@@ -395,8 +386,13 @@ which bias is being defined].</p>
 (1-2 &amp; 3-4) who are all specified to be unbiased
 (<code>BiasOpt=0</code>) with readers 1 and 2 having the same ageing
 precision <code>SigmaOpt=2</code>. This model requires three parameters
-to be specified (presumably <span class="math inline">\(\sigma_L\)</span>, <span class="math inline">\(\sigma_H\)</span>, and <span class="math inline">\(\delta\)</span>) for each pair of readers (in the
-case of Blue Grenadier the first and second reads from two readers).</p>
+to be specified (presumably
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>L</mi></msub><annotation encoding="application/x-tex">\sigma_L</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>H</mi></msub><annotation encoding="application/x-tex">\sigma_H</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>)
+for each pair of readers (in the case of Blue Grenadier the first and
+second reads from two readers).</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a># reader BiasOpt SigmaOpt </span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>       1       0        2            </span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>       2       0       -1            </span>
@@ -458,14 +454,11 @@ have each re-read their own reads (i.e. there are no inter-reader
 comparisons in the production data). In 2022, estimating ageing error
 for Blue Grenadier was challenging, requiring removal of problematic
 data, different models for each reader and improvements to the model
-source code. We work through this example below.</p>
-<p>The function to load the data file into R isn’t currently exported
-from the ageing error R package so we need to use <code>:::</code> to
-access it. Note we are using the data file with a single data set so we
-set <code>NDataSet=1</code>.</p>
+source code. We work through this example below. Note we are using the
+data file with a single data set so we set <code>NDataSet=1</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"AgeingError"</span><span class="op">)</span></span>
-<span><span class="va">BG2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.dat"</span><span class="op">)</span>,</span>
+<span><span class="va">BG2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"BG2022echo.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -519,10 +512,10 @@ the warning does not appear to be correct in this case. Possibly the
 they are &lt;0.</p>
 <p>Next we load the model specifications using the
 <code>CreateSpecs</code> function. This function is not exported either
-so again we need to call the package name and <code>:::</code> to access
+so again we need to call the package name and <code>::</code> to access
 it.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.spc"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">BG2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">BG2022_dat</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -623,13 +616,13 @@ saved in the output directory as an lda file with name
 <span><span class="co">##  $ hessian : logi FALSE</span></span>
 <span><span class="co">##  $ method  : chr "BFGS"</span></span>
 <span><span class="co">##  $ retape  :function (set.defaults = TRUE)  </span></span>
-<span><span class="co">##  $ env     :&lt;environment: 0x5582b87b7108&gt; </span></span>
+<span><span class="co">##  $ env     :&lt;environment: 0x55c64cb2e9e0&gt; </span></span>
 <span><span class="co">##  $ report  :function (par = last.par)  </span></span>
 <span><span class="co">##  $ simulate:function (par = last.par, complete = FALSE)  </span></span>
 <span><span class="co">##  $ fn_orig :function (x = last.par[lfixed()], ...)  </span></span>
 <span><span class="co">##  $ fitv    : num 40778</span></span></code></pre>
 <p>We then save the model output using the <code>ProcessResults</code>
-function, again using <code>:::</code> as this function also isn’t
+function, again using <code>::</code> as this function also isn’t
 exported. We want to specify that the effective sample size is estimated
 (<code>CalcEff = TRUE</code>) as this produces the fits to the
 individual data points which can be used to identify outliers that may
@@ -654,13 +647,15 @@ identical to reader <code>x</code>).</p></li>
 and model residuals.</p></li>
 </ul>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">BG2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>An examination of the report file (<code>BG2022.rpt</code>) shows the
 maximum gradient is -93.96, indicating the model has not converged.
-Ideally the gradient should be between <span class="math inline">\(\pm
-\text{1e-4}\)</span> and zero, however, in practice achieving this for
-some models can be very time consuming and involves removing
-progressively more data so we sometimes accept a gradient ~<span class="math inline">\(\pm \text{1e-3}\)</span>.</p>
+Ideally the gradient should be between
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>±</mo><mtext mathvariant="normal">1e-4</mtext></mrow><annotation encoding="application/x-tex">\pm \text{1e-4}</annotation></semantics></math>
+and zero, however, in practice achieving this for some models can be
+very time consuming and involves removing progressively more data so we
+sometimes accept a gradient
+~<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>±</mo><mtext mathvariant="normal">1e-3</mtext></mrow><annotation encoding="application/x-tex">\pm \text{1e-3}</annotation></semantics></math>.</p>
 <p>The residual plots show a large number of outliers exceeding the 95%
 confidence interval and the table of fits to the individual data points
 (bottom of the report file (only present when
@@ -683,7 +678,7 @@ model we considered acceptable.</p>
 <p>We refit the final model (<code>BG2022_trim_8_1</code>).</p>
 <p>Load the data file.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022final_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.dat"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">BG2022final_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  EchoFile <span class="op">=</span> <span class="st">"BG2022finalecho.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -728,7 +723,7 @@ in the data) we have specified a linear change in the standard deviation
 of random age-reading error (<code>SigmaOpt=7</code>) and fixed the
 first parameter at 0.2.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022final_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.spc"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">BG2022final_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">BG2022final_dat</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -799,7 +794,7 @@ first parameter at 0.2.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>As with the earlier model we save the results.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022final_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">BG2022final_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>This model is now close to convergence (gradient = -0.00143) and
 residual plots do not show any concerning features and the estimates of
 ageing error standard deviation are increasing with age.</p>
@@ -813,7 +808,7 @@ caught by trawl in the Great Australian Bight (Curin-Osorio and Burch
 re-read their own reads (i.e. there are no inter-reader comparisons in
 the data).</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.dat"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">REB2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"REB2022echo.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -858,7 +853,7 @@ warning about missing data.</p>
 <p>Next we load the model specifications using the
 <code>CreateSpecs</code> function.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.spc"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">REB2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
@@ -956,7 +951,7 @@ only need to provide one line of sigma parameters.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>We then save the Bight Redfish model output.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">REB2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>An examination of the report file (<code>REB2022.rpt</code>) shows
 the maximum gradient is 0.0221, indicating the model has not quite
 converged.</p>
@@ -967,11 +962,11 @@ data and model specifications as (<code>REB2022_trim.dat</code> and
 creation of output in this document).</p>
 <!-- set results="hide" -->
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_dat2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.dat"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">REB2022_dat2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>, EchoFile <span class="op">=</span> <span class="st">"REB2022_trimecho.out"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">REB2022_spc2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.spc"</span><span class="op">)</span>,</span>
+<span><span class="va">REB2022_spc2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat2</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">REB2022_mod2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
@@ -980,7 +975,7 @@ creation of output in this document).</p>
 <span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>, SlopeWght <span class="op">=</span> <span class="fl">0.01</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">REB2022_out2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span></span>
+<span><span class="va">REB2022_out2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"REB2022_final"</span>,</span>
 <span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -996,7 +991,7 @@ separate data sets and a spline model.</p>
 <p>Load the School Whiting data file, make sure to set the number of
 data sets to three (<code>NDataSet=3</code>).</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">WHS2_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.dat"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">WHS2_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"WHS2echo.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -1045,7 +1040,7 @@ data sets to three (<code>NDataSet=3</code>).</p>
 file.</p>
 <p>Load the specifications for School Whiting.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">WHS2_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.spc"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">WHS2_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">WHS2_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Spline used to define SD for reader  1 </span></span>
@@ -1137,7 +1132,7 @@ the initial parameter values are in log space.</p>
 <span>  AprobWght <span class="op">=</span> <span class="fl">1e-06</span>, SlopeWght <span class="op">=</span> <span class="fl">0.01</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">WHS2_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span></span>
+<span><span class="va">WHS2_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"WHS2"</span>,</span>
 <span>  SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -1155,7 +1150,7 @@ discussed with the ageing technicians.</p>
 <p>Sablefish (<em>Anoplopoma fimbria</em>) provides an example of using
 the bias option.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Sable_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.dat"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">Sable_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"SableEcho.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -1202,7 +1197,7 @@ This data set has several inter-reader comparisons.</p>
 <p>We load the model specifications using the <code>CreateSpecs</code>
 function.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Sable_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.spc"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">Sable_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">Sable_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
@@ -1310,7 +1305,7 @@ We don’t run it because this particular model is very slow.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">## save the model results</span></span>
-<span><span class="va">Sable_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">:::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"Sable"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">Sable_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"Sable"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -1364,10 +1359,11 @@ scalefish and shark fishery. <em>Canadian Journal of Fisheries and
 Aquatic Sciences</em> 65: 1991–2005. <a href="https://doi.org/10.1139/F08-111" class="external-link uri">https://doi.org/10.1139/F08-111</a></p>
 <p>Tuck, G.N., Bessell-Browne, P. (2022). Blue Grenadier (<em>Macruronus
 novaezelandiae</em>) stock assessment based on data up to 2021.
-Technical paper presented to theSERAG2, 29–-30<span class="math inline">\(^{th}\)</span> November 2022, Melbourne, Victoria.
-99pp.</p>
+Technical paper presented to theSERAG2,
+29–-30<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">^{th}</annotation></semantics></math>
+November 2022, Melbourne, Victoria. 99pp.</p>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -1378,15 +1374,15 @@ Technical paper presented to theSERAG2, 29–-30<span class="math inline">\(^{th
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
