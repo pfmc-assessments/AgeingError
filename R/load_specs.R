@@ -1,3 +1,21 @@
+#' Deprecated function renamed to load_specs()
+#'
+#' @param ... Any arguments associated with the deprecated function
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' CreateSpecs() has been renamed as [load_specs()] to better clarify its purpose
+#' @author Ian G. Taylor
+#' @export
+#' @seealso [load_specs()]
+CreateSpecs <-
+  function(...) {
+    lifecycle::deprecate_stop(
+      when = "2.1.0",
+      what = "CreateSpecs()",
+      with = "load_specs()"
+    )
+  }
+
 #' Read the ageing error specifications
 #'
 #' @param SpecsFile Filename for input specifications.
@@ -5,7 +23,7 @@
 #' @param verbose Return messages to the console (TRUE/FALSE)
 #' @export
 #' @author Andre E. Punt
-CreateSpecs <- function(SpecsFile = "data.spc",
+load_specs <- function(SpecsFile = "data.spc",
                         DataSpecs,
                         verbose = FALSE) {
   MatchTable <- function(Table,

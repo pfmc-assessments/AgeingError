@@ -1,4 +1,22 @@
-#' Read the ageing error data
+#' Deprecated function renamed to load_data()
+#'
+#' @param ... Any arguments associated with the deprecated function
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' CreateData() has been renamed as [load_data()] to better clarify its purpose
+#' @author Ian G. Taylor
+#' @export
+#' @seealso [load_data()]
+CreateData <-
+  function(...) {
+    lifecycle::deprecate_stop(
+      when = "2.1.0",
+      what = "CreateData()",
+      with = "load_data()"
+    )
+  }
+  
+#' Load the formatted ageing error data
 #'
 #' @param DataFile Filename for input data
 #' @param NDataSet Number of data sets within `DataFile`
@@ -11,7 +29,7 @@
 #'   `'EchoTMB.out'`.
 #' @export
 #' @author Andre E. Punt
-CreateData <- function(DataFile = "data.dat",
+load_data <- function(DataFile = "data.dat",
                        NDataSet = 1,
                        verbose = FALSE,
                        EchoFile = "") {
