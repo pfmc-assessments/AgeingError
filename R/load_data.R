@@ -15,7 +15,7 @@ CreateData <-
       with = "load_data()"
     )
   }
-  
+
 #' Load the formatted ageing error data
 #'
 #' @param DataFile Filename for input data
@@ -30,9 +30,9 @@ CreateData <-
 #' @export
 #' @author Andre E. Punt
 load_data <- function(DataFile = "data.dat",
-                       NDataSet = 1,
-                       verbose = FALSE,
-                       EchoFile = "") {
+                      NDataSet = 1,
+                      verbose = FALSE,
+                      EchoFile = "") {
   # Put a first line in the EchoFile if the file does not already exist
   if (!file.exists(EchoFile)) {
     write("", file = EchoFile)
@@ -97,7 +97,7 @@ load_data <- function(DataFile = "data.dat",
     Readers <- as.numeric(Data[IndexVals[Idataset] + 4, 1:NReaders[Idataset]])
     MaxReader <- max(MaxReader, Readers)
     if (verbose) {
-      cat("readers", Readers, "\n")
+      cli::cli_alert_info("readers {Readers}")
     }
   }
   ReadPnt <- matrix(0, nrow = NDataSet, ncol = MaxReader)
@@ -117,13 +117,7 @@ load_data <- function(DataFile = "data.dat",
       )
     }
     if (verbose) {
-      cat(
-        "Last line of data set",
-        Idataset,
-        "is",
-        TheData[Idataset, Npnt[Idataset], 1:(NReaders[Idataset] + 1)],
-        "\n"
-      )
+      cli::cli_alert_info("Last line of data set {Idataset} is {TheData[Idataset, Npnt[Idataset], 1:(NReaders[Idataset] + 1)]}")
     }
   }
 
@@ -148,10 +142,7 @@ load_data <- function(DataFile = "data.dat",
     }
   }
   if (NegVals == 1) {
-    cat(
-      "WARNING - there are some missing data;",
-      "the effective sample size calculation may be dubious, \n\n"
-    )
+    cli::cli_alert_warning("There are some missing data; the effective sample size calculation may be dubious")
   }
 
   # Create a tabular summary of the data
@@ -201,8 +192,7 @@ load_data <- function(DataFile = "data.dat",
       }
     }
   }
-  cat("Number of rows in NrowStruc", NrowStruc, "\n")
-  print(NrowStruc)
+  cli::cli_alert_info("Number of rows in NrowStruc {NrowStruc} = {NrowStruc}")
   ReaderStruc <- matrix(
     ReaderStruc[1:NrowStruc, ],
     nrow = NrowStruc,
@@ -211,7 +201,7 @@ load_data <- function(DataFile = "data.dat",
   print("ReaderStruc")
   print(ReaderStruc)
   for (II in 1:NrowStruc) {
-    write(ReaderStruc[II, ], EchoFile, append = TRUE, ncol = MaxReader + 2)
+    write(ReaderStruc[II, ], EchoFile, append = TRUE, ncolumns = MaxReader + 2)
   }
   print("ReaderSumm")
   print(ReaderSumm)
@@ -232,7 +222,7 @@ load_data <- function(DataFile = "data.dat",
     }
   }
   write("ReaderSumm", EchoFile, append = TRUE)
-  write(t(ReaderSumm), EchoFile, append = TRUE, ncol = 3)
+  write(t(ReaderSumm), EchoFile, append = TRUE, ncolumns = 3)
   print("ReaderSumm")
   print(ReaderSumm)
 
@@ -286,7 +276,7 @@ load_data <- function(DataFile = "data.dat",
             }
           }
           if (Ifound == 0) {
-            cat("Warning: Lines ", II, " and ", JJ, " have the same ages\n")
+            cli::cli_alert_warning("Lines {II} and {JJ} have the same ages")
             TheData[IDataSet, JJ, 1] <- TheData[IDataSet, JJ, 1] + TheData[
               IDataSet,
               II, 1
@@ -298,16 +288,7 @@ load_data <- function(DataFile = "data.dat",
       } # JJ
     }
     if (Problem == 1) {
-      cat(
-        "Duplicate entries found for data set ",
-        IDataSet,
-        "; corrected data set in Echo.File\n"
-      )
-      cat(
-        "Duplicate entries found for data set ",
-        IDataSet,
-        "; corrected data set follows\n"
-      )
+      cli::cli_alert_warning("Duplicate entries found for data set {IDataSet}; corrected data set in Echo.File")
       NLineOut <- 0
       for (II in 1:Npnt[IDataSet]) {
         if (TheData[IDataSet, II, 1] > 0) {
@@ -318,9 +299,6 @@ load_data <- function(DataFile = "data.dat",
       write(paste("New lines ", NLineOut), EchoFile, append = TRUE)
       OneProblem <- 1
     }
-  }
-  if (OneProblem == 1) {
-    AA
   }
 
   ## Counter for storage
