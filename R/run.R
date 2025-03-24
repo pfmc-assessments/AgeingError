@@ -1,9 +1,9 @@
 prepare_inputs <- function(file_data, file_specs) {
-  the_data <- CreateData(
+  the_data <- load_data(
     DataFile = file_data,
     NDataSet = determine_n_sets(file_data)
   )
-  the_specs <- CreateSpecs(
+  the_specs <- load_specs(
     SpecsFile = file_specs,
     DataSpecs = the_data
   )

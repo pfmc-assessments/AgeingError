@@ -9,7 +9,7 @@ load_specs(SpecsFile = "data.spc", DataSpecs, verbose = FALSE)
 \arguments{
 \item{SpecsFile}{Filename for input specifications.}
 
-\item{DataSpecs}{The output from CreateData()}
+\item{DataSpecs}{The output from load_data()}
 
 \item{verbose}{Return messages to the console (TRUE/FALSE)}
 }

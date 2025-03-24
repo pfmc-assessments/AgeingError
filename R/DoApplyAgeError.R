@@ -4,8 +4,8 @@
 #'   users will use the common name for the species of interest, especially if
 #'   you are saving files from multiple species in a single directory. Though,
 #'   the default is `"AgeingError"`.
-#' @param DataSpecs A data object returned from [CreateData()].
-#' @param ModelSpecsInp A specification object returned from [CreateSpecs()].
+#' @param DataSpecs A data object returned from [load_data()].
+#' @param ModelSpecsInp A specification object returned from [load_specs()].
 #' @param AprobWght,SlopeWght Numeric values passed to the model. The defaults
 #'   are 1e-06 and 0.01. Andre originally had these hard coded from his
 #'   workspace. TODO: decide if they should be passed in the specifications or

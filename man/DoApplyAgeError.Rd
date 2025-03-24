@@ -20,9 +20,9 @@ users will use the common name for the species of interest, especially if
 you are saving files from multiple species in a single directory. Though,
 the default is \code{"AgeingError"}.}
 
-\item{DataSpecs}{A data object returned from \code{\link[=CreateData]{CreateData()}}.}
+\item{DataSpecs}{A data object returned from \code{\link[=load_data]{load_data()}}.}
 
-\item{ModelSpecsInp}{A specification object returned from \code{\link[=CreateSpecs]{CreateSpecs()}}.}
+\item{ModelSpecsInp}{A specification object returned from \code{\link[=load_specs]{load_specs()}}.}
 
 \item{AprobWght, SlopeWght}{Numeric values passed to the model. The defaults
 are 1e-06 and 0.01. Andre originally had these hard coded from his
