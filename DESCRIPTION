@@ -33,6 +33,7 @@ Imports:
     dplyr,
     fs,
     lifecycle,
+    readr,
     stats,
     TMB (>= 1.8.0)
 Suggests:

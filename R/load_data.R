@@ -93,7 +93,16 @@ load_data <- function(DataFile = "data.dat",
     NReaders[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 2, 1])
     MinusA[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 3, 1])
     PlusA[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 3, 2])
+    if (PlusA <= MinusA) {
+      cli::cli_abort("Plus age must be greater than the minus age")
+    }
     RefAge[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 3, 3])
+    if (RefAge <= MinusA) {
+      cli::cli_abort("Reference age must be greater than the minimum age")
+    }
+    if (RefAge >= PlusA) {
+      cli::cli_abort("Reference age must be less than the maximum age")
+    }
     Readers <- as.numeric(Data[IndexVals[Idataset] + 4, 1:NReaders[Idataset]])
     MaxReader <- max(MaxReader, Readers)
     if (verbose) {

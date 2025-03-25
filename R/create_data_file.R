@@ -64,6 +64,9 @@ create_data_file <- function(
 
   # add count column if not already present
   if (!"count" %in% colnames(dat)) {
+    cli::cli_alert_info(
+      "Input 'dat' doesn't contain a column called 'count'; adding one via tally_repeats()"
+    )
     dat <- tally_repeats(dat)
   }
 
@@ -81,19 +84,25 @@ create_data_file <- function(
   # fill in any missing default values
   if (is.null(maxage)) {
     maxage <- ceiling(1.2 * maxobs / 5) * 5
-    cli::cli_alert_info("Max age not specified; using {maxage} which is the multiple of 5 which is >120% of the observed maximum")
+    cli::cli_alert_info(
+      "Max age not specified; using {maxage} which is the multiple of 5 which is >120% of the observed maximum"
+    )
   }
   if (is.null(minusage)) {
     minusage <- minobs
-    cli::cli_alert_info("Minus group set to the minimum observed age {minusage}")
+    cli::cli_alert_info(
+      "Minus group set to the minimum observed age {minusage}"
+    )
   }
   if (is.null(plusage)) {
     plusage <- maxobs
     cli::cli_alert_info("Plus group set to the maximum observed age {plusage}")
   }
   if (is.null(refage)) {
-    refage <- ceiling(plusage / 4)
-    cli::cli_alert_info("Reference age not specified; using {refage} = ceiling(plusage / 4)")
+    refage <- floor(median(c(minusage, plusage)))
+    cli::cli_alert_info(
+      "Reference age not specified; using {refage} = floor(median(c(minusage, plusage)))"
+    )
   }
 
   # create the header
@@ -104,7 +113,12 @@ create_data_file <- function(
     "Data_set_1",
     paste(nrow(dat), "# data points"),
     paste(nreaders, "# readers"),
-    paste(minusage, plusage, refage, "# minus group; plus group; reference age"),
+    paste(
+      minusage,
+      plusage,
+      refage,
+      "# minus group; plus group; reference age"
+    ),
     paste0("   ", 1:nreaders, collapse = " ")
   )
 

@@ -36,7 +36,7 @@ test_that("Can create a data file using create_data_file()", {
   testthat::expect_true(length(data_file_read) == 20)
 })
 
-test_that("Can create a data file create_data_file() without tally_repeats()", {
+test_that("Can create a data file using create_data_file() without tally_repeats()", {
   temp_dir <- file.path(tempdir(), "test_AgeingError")
   if (!dir.exists(temp_dir)) {
     dir.create(temp_dir)
@@ -51,7 +51,22 @@ test_that("Can create a data file create_data_file() without tally_repeats()", {
   testthat::expect_true(length(data_file_read) == 20)
 })
 
-# testing load_data()
+
+test_that("Can create a specifications file using create_specs_file()", {
+  temp_dir <- file.path(tempdir(), "test_AgeingError")
+  if (!dir.exists(temp_dir)) {
+    dir.create(temp_dir)
+  }
+  specs_file <- create_specs_file(dir = temp_dir, file_name = "test.spc", nreaders = 3)
+
+  testthat::expect_true(file.exists(specs_file))
+  specs_file_read <- readLines(specs_file)
+  testthat::expect_true(specs_file_read[1] == "# reader biasopt sigopt")
+  testthat::expect_true(specs_file_read[9] == "0.001 3 0.1 1")
+  testthat::expect_true(length(specs_file_read) == 9)
+})
+
+# testing load_data() and load_specs()
 test_that("Can load a data file using load_data()", {
   data_loaded <- load_data(
     DataFile = file.path(temp_dir, "test.dat"),
@@ -64,6 +79,16 @@ test_that("Can load a data file using load_data()", {
   testthat::expect_true(data_loaded$NReaders == 3)
   data_tallied <- data_test |> tally_repeats()
   testthat::expect_true(all(as.matrix(data_tallied) - data_loaded$TheData[1, , ] == 0))
+
+  specs_loaded <- load_specs(
+    SpecsFile = file.path(temp_dir, "test.spc"),
+    DataSpecs = data_loaded,
+    verbose = TRUE
+  )
+
+  testthat::expect_true(length(specs_loaded) == 7)
+  testthat::expect_true(specs_loaded$ModelSpecs[[2]]$SigOpt == -1)
+  testthat::expect_true(names(specs_loaded)[7] == "nknots")
 })
 
 test_that("Can load example data sets using load_data()", {
@@ -86,6 +111,7 @@ test_that("Can load example data sets using load_data()", {
 
 # test DoApplyAgeError()
 test_that("Can run DoApplyAgeError()", {
+  # test using example data set
   example_path <- system.file("extdata", package = "AgeingError")
   dat <- load_data(DataFile = file.path(example_path, "WHS2.dat"))
   spc <- load_specs(SpecsFile = file.path(example_path, "WHS2.spc"), DataSpecs = dat)
@@ -99,6 +125,18 @@ test_that("Can run DoApplyAgeError()", {
 
   testthat::expect_true(file.exists(file.path(temp_dir, "AgeingError.lda")))
   testthat::expect_equal(model$fitv, 3576.323, tolerance = 0.001)
+
+  # test using test data created above
+  model_test <- AgeingError::DoApplyAgeError(
+    Species = "test",
+    DataSpecs = data_loaded,
+    ModelSpecsInp = specs_loaded,
+    SaveDir = temp_dir,
+    verbose = TRUE
+  )
+
+  testthat::expect_true(file.exists(file.path(temp_dir, "test.lda")))
+  testthat::expect_equal(model_test$fitv, 50.68157, tolerance = 0.001)
 })
 
 # test ProcessResults()
