@@ -29,25 +29,27 @@ prepare_run <- function(inputs, directory) {
     CalcEff = FALSE,
     verbose = FALSE
   )
-  return(model)
+  return(Output)
 }
 
-#' Run ageing error routine
+#' Run ageng error routine
 #'
 #' A wrapper for running a TMB model to estimate ageing error for a given data
 #' set and specification file.
 #'
-#' @param file_data A string specifying the file path to a data file.
-#' @param file_specs A string specifying the file path to the specifications
-#'   file.
 #' @param directory A string specifying a file path to a directory where you
 #'   would like to save the results.
+#' @param file_data A string specifying the data file within 'directory'.
+#' @param file_specs A string specifying the specifications file within 'directory'.
 #'
 #' @export
 #' @author Kelli F. Johnson
 #' @return Invisibly return model output.
-run <- function(file_data, file_specs, directory) {
-  inputs <- prepare_inputs(file_data = file_data, file_specs = file_specs)
+run <- function(directory, file_data, file_specs) {
+  inputs <- prepare_inputs(
+    file_data = file.path(directory, file_data),
+    file_specs = file.path(directory, file_specs)
+  )
   outputs <- prepare_run(inputs = inputs, directory = directory)
   return(invisible(outputs))
 }

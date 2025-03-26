@@ -1,4 +1,4 @@
-#' Create a specifications file for the AgeingError package
+#' Write a specifications file for the AgeingError package
 #'
 #' The resulting file has the format required by the [load_specs()] function.
 #' In the future, this step could be bypassed by creating the list output
@@ -89,19 +89,19 @@
 #' @return Invisibly returns the path to the specifications file (`file.path(dir, file_name)`).
 #' @author Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export
-#' @seealso [load_specs()], [create_specs_file()]
+#' @seealso [load_specs()], [write_specs_file()]
 #' @examples
 #' data_test <- data.frame(
 #'   reader1 = c(7, 10, 7, 6, 6, 10, 7, 9, 8, 10, 10, 5, 6, 7, 9, 7, 7, 5, 8, 5),
 #'   reader2 = c(8, 10, 7, 6, 6, 10, 7, 9, 8, 10, 10, 5, 6, 7, 9, 7, 7, NA, NA, NA),
 #'   reader3 = c(7, 10, 7, 6, 6, 8, 7, 9, 8, 10, 10, 5, 6, 7, NA, NA, NA, 5, 8, 5)
 #' )
-#' data_file <- create_data_file(data_test, dir = tempdir(), file_name = "test.dat")
-#' specs_file <- create_specs_file(dir = tempdir(), nreaders = 3, file_name = "test.spc")
+#' data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
+#' specs_file <- write_specs_file(dir = tempdir(), nreaders = 3, file_name = "test.spc")
 #' data <- load_data(DataFile = data_file)
 #' specs <- load_specs()
 #'
-create_specs_file <- function(
+write_specs_file <- function(
     dir = getwd(),
     file_name = "data.spc",
     nreaders,
@@ -140,7 +140,7 @@ create_specs_file <- function(
   }
   if (any(sigopt %in% 5:6) && is.null(knotages)) {
     cli::cli_abort(
-      "'knotages' must be specified when 'sigopt' includes 5 or 6, but are not yet implemented in create_specs_file()"
+      "'knotages' must be specified when 'sigopt' includes 5 or 6, but are not yet implemented in write_specs_file()"
     )
   }
 

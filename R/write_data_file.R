@@ -1,4 +1,4 @@
-#' Create a data file for the AgeingError package
+#' Write a data file for the AgeingError package
 #'
 #' The resulting file has the format required by the [load_data()] function.
 #' In the future, this step could be bypassed by creating the list output
@@ -32,16 +32,16 @@
 #' @return Invisibly returns the path to the data file (`file.path(dir, file_name)`).
 #' @author Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export
-#' @seealso [load_data()], [tally_repeats()], [create_specs_file()]
+#' @seealso [load_data()], [tally_repeats()], [write_specs_file()]
 #' @examples
 #' data_test <- data.frame(
 #'   reader1 = c(7, 10, 7, 6, 6, 10, 7, 9, 8, 10, 10, 5, 6, 7, 9, 7, 7, 5, 8, 5),
 #'   reader2 = c(8, 10, 7, 6, 6, 10, 7, 9, 8, 10, 10, 5, 6, 7, 9, 7, 7, NA, NA, NA),
 #'   reader3 = c(7, 10, 7, 6, 6, 8, 7, 9, 8, 10, 10, 5, 6, 7, NA, NA, NA, 5, 8, 5)
 #' )
-#' data_file <- create_data_file(data_test, dir = tempdir(), file_name = "test.dat")
+#' data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
 #'
-create_data_file <- function(
+write_data_file <- function(
     dat,
     dir = getwd(),
     file_name = "data.dat",

@@ -2,18 +2,17 @@
 % Please edit documentation in R/run.R
 \name{run}
 \alias{run}
-\title{Run ageing error routine}
+\title{Run ageng error routine}
 \usage{
-run(file_data, file_specs, directory)
+run(directory, file_data, file_specs)
 }
 \arguments{
-\item{file_data}{A string specifying the file path to a data file.}
-
-\item{file_specs}{A string specifying the file path to the specifications
-file.}
-
 \item{directory}{A string specifying a file path to a directory where you
 would like to save the results.}
+
+\item{file_data}{A string specifying the data file within 'directory'.}
+
+\item{file_specs}{A string specifying the specifications file within 'directory'.}
 }
 \value{
 Invisibly return model output.

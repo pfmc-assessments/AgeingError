@@ -71,8 +71,8 @@ extension) and the specifications file (.spc extension). These are described
 below using Blue Grenadier (BG2022) as the example.
 
 The examples in this Vignette have input files that were already developed.
-For information on creating new input files, the new functions `create_data_file()`
-and `create_specs_file()` can help. See the reference for those functions for 
+For information on creating new input files, the new functions `write_data_file()`
+and `write_specs_file()` can help. See the reference for those functions for 
 more detail.
 
 ## Data file
@@ -89,7 +89,7 @@ an error.
 The input files are parsed by the software using keywords that need to match 
 exactly what is expected, so the text "Range_of_ages" is part of the input and
 not just a comment to help the user keep track of the format. 
-The `create_data_file()` function makes it easier to create a file which matches
+The `write_data_file()` function makes it easier to create a file which matches
 the required format.
 
 ````{verbatim}
