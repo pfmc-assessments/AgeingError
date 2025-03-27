@@ -111,7 +111,7 @@ test_that("Can load example data sets using load_data()", {
 
 # test DoApplyAgeError()
 test_that("Can run DoApplyAgeError()", {
-# test using test data created above
+  # test using test data created above
   data_loaded <- load_data(DataFile = file.path(temp_dir, "test.dat"))
   specs_loaded <- load_specs(SpecsFile = file.path(temp_dir, "test.spc"), DataSpecs = data_loaded)
   model_test <- AgeingError::DoApplyAgeError(
@@ -158,6 +158,28 @@ test_that("Can run ProcessResults()", {
   testthat::expect_equal(Output$ErrorAndBiasArray["CV", "Age 9", "Reader 1"], 0.4333151, tolerance = 0.0001)
   testthat::expect_true(file.exists(file.path(temp_dir, "WHS2.rpt")))
   testthat::expect_true(file.exists(file.path(temp_dir, "WHS2-DataSet-1TrueVsReadsByReader.png")))
+})
+
+# test write_files()
+testthat::test_that("write_files() works", {
+  write_files(
+    dat = data_test,
+    dir = temp_dir
+  )
+
+  data_file <- file.path(temp_dir, "data.dat")
+  specs_file <- file.path(temp_dir, "data.spc")
+  testthat::expect_true(file.exists(data_file))
+  data_file_read <- readLines(data_file)
+  testthat::expect_true(data_file_read[1] == "Range_of_ages")
+  testthat::expect_true(data_file_read[6] == "3 # readers")
+  testthat::expect_true(data_file_read[20] == "3 10 10 10")
+  testthat::expect_true(length(data_file_read) == 20)
+  testthat::expect_true(file.exists(specs_file))
+  specs_file_read <- readLines(specs_file)
+  testthat::expect_true(specs_file_read[1] == "# reader biasopt sigopt")
+  testthat::expect_true(specs_file_read[9] == "0.001 3 0.1 1")
+  testthat::expect_true(length(specs_file_read) == 9)
 })
 
 # test run()

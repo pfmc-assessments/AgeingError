@@ -67,7 +67,7 @@ data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
 
 }
 \seealso{
-\code{\link[=load_data]{load_data()}}, \code{\link[=tally_repeats]{tally_repeats()}}, \code{\link[=write_specs_file]{write_specs_file()}}
+\code{\link[=write_files]{write_files()}}, \code{\link[=write_specs_file]{write_specs_file()}}, \code{\link[=load_data]{load_data()}}, \code{\link[=tally_repeats]{tally_repeats()}}
 }
 \author{
 Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt

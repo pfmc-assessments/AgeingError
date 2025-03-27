@@ -89,7 +89,7 @@
 #' @return Invisibly returns the path to the specifications file (`file.path(dir, file_name)`).
 #' @author Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export
-#' @seealso [load_specs()], [write_specs_file()]
+#' @seealso [write_files()], [write_specs_file()], [load_specs()]
 #' @examples
 #' data_test <- data.frame(
 #'   reader1 = c(7, 10, 7, 6, 6, 10, 7, 9, 8, 10, 10, 5, 6, 7, 9, 7, 7, 5, 8, 5),
