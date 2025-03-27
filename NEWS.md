@@ -1,13 +1,12 @@
 # AgeingError development
 
 # AgeingError 2.1.0
-* Added new functions to help with creating the data and specs files
-  * `tally_repeats()`: Tally repeated age reading combinations in a new `count` column
-  * `create_data_file()`: Create a data file from a data frame of age readings that can be passed to `load_data()`
-  * `create_specs_file()`: Create a model specifications file that can be passed to `load_specs()`
 * Renamed some functions to have more accurate names and match the [tidyverse style guide](https://style.tidyverse.org/functions.html)
   * `CreateData()` -> `load_data()`
   * `CreateSpecs()` -> `load_specs()`
+* Added new functions to help with creating the data and specs files
+  * `tally_repeats()`: Tally repeated age reading combinations in a new `count` column
+  * `write_files()`: Create data and model specifications files from a data frame of age readings that can be passed to `run()` or `load_data()` and `load_specs()`
 * Added automated testing for the core functions
 
 

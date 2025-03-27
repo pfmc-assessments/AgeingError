@@ -14,6 +14,10 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+*Note: this vignette has not yet been updated to describe the new function
+`write_files()` which makes it easier to write the correctly-formatted input 
+files, and `run()` which makes it easy to run the model and process the 
+results. See the help pages for those functions for more detail.*
 
 # Introduction
 
@@ -69,11 +73,6 @@ are described below.
 There are two input files needed to run the software the data file (.dat 
 extension) and the specifications file (.spc extension). These are described 
 below using Blue Grenadier (BG2022) as the example.
-
-The examples in this Vignette have input files that were already developed.
-For information on creating new input files, the new functions `write_data_file()`
-and `write_specs_file()` can help. See the reference for those functions for 
-more detail.
 
 ## Data file
 
