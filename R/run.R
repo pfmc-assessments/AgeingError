@@ -32,7 +32,7 @@ prepare_run <- function(inputs, directory) {
   return(Output)
 }
 
-#' Run ageng error routine
+#' Run ageing error routine
 #'
 #' A wrapper for running a TMB model to estimate ageing error for a given data
 #' set and specification file.
@@ -42,6 +42,7 @@ prepare_run <- function(inputs, directory) {
 #' @param file_data A string specifying the data file within 'directory'.
 #' @param file_specs A string specifying the specifications file within 'directory'.
 #'
+#' @seealso [write_files()]
 #' @export
 #' @author Kelli F. Johnson
 #' @return Invisibly return model output.

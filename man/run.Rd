@@ -2,7 +2,7 @@
 % Please edit documentation in R/run.R
 \name{run}
 \alias{run}
-\title{Run ageng error routine}
+\title{Run ageing error routine}
 \usage{
 run(directory, file_data, file_specs)
 }
@@ -20,6 +20,9 @@ Invisibly return model output.
 \description{
 A wrapper for running a TMB model to estimate ageing error for a given data
 set and specification file.
+}
+\seealso{
+\code{\link[=write_files]{write_files()}}
 }
 \author{
 Kelli F. Johnson
