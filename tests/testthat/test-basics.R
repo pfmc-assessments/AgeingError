@@ -187,5 +187,6 @@ test_that("run() works", {
   example_path <- system.file("extdata", package = "AgeingError")
   Output <- run(file_data = "WHS2.dat", file_specs = "WHS2.spc", directory = example_path)
 
-  testthat::expect_equal(Output$ErrorAndBiasArray["CV", "Age 9", "Reader 1"], 0.4333151, tolerance = 0.0001)
+  testthat::expect_equal(Output$model$par[1] |> as.numeric(), -2.99073, tolerance = 0.0001)
+  testthat::expect_equal(Output$output$ErrorAndBiasArray["CV", "Age 9", "Reader 1"], 0.4333151, tolerance = 0.0001)
 })
