@@ -8,6 +8,7 @@
 #'
 #' @param dir Directory where the specifications file will be saved.
 #' @param file_name Name of the specifications file.
+#' @param nreaders An integer, specifying the number of readers.
 #' @param biasopt A vector with one entry for each reader specifying the
 #'   type of bias specific to each reader. Positive values lead to estimated
 #'   parameters and negative values are used for shared parameters between
@@ -19,7 +20,7 @@
 #'
 #'   Possible entries include the following:
 #'   \describe{
-#'     \item{-[0-9]+}{
+#'     \item{-\[0-9\]+}{
 #'       Mirror the bias of another reader, where the negative integer
 #'       corresponds to the column of the reader that is being mirrored
 #'       minus one, e.g., `-1` causes it to mirror reader 1. Only lower-numbered

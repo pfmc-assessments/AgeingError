@@ -60,7 +60,7 @@ all readers are unbiased.
 
 Possible entries include the following:
 \describe{
-\item{-\link{0-9}+}{
+\item{-[0-9]+}{
 Mirror the bias of another reader, where the negative integer
 corresponds to the column of the reader that is being mirrored
 minus one, e.g., \code{-1} causes it to mirror reader 1. Only lower-numbered
