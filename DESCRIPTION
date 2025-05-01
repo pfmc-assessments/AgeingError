@@ -19,8 +19,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-2821-1267"))
   )
 Description: Implements Generalized Linear Mixed Effect Models (GLMMs)
-    using TMB to estimate ageing error from double reads of otoliths.
-    The original analysis (Punt et al. 2008; <doi:10.1139/F08-111>) was
+    using TMB to estimate ageing error from double reads of otoliths.  The
+    original analysis (Punt et al. 2008; <doi:10.1139/F08-111>) was
     written in ADMB and focused on estimating imprecision and bias. The
     newer version of the software allows for random effects using TMB.
 License: GPL-3
@@ -37,8 +37,8 @@ Imports:
     stats,
     TMB (>= 1.8.0)
 Suggests:
-    litedown,
     knitr,
+    litedown,
     remotes,
     spelling,
     testthat (>= 3.0.0)
