@@ -99,7 +99,7 @@
 #' data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
 #' specs_file <- write_specs_file(dir = tempdir(), nreaders = 3, file_name = "test.spc")
 #' data <- load_data(DataFile = data_file)
-#' specs <- load_specs()
+#' specs <- load_specs(SpecsFile = specs_file, DataSpecs = data)
 #'
 write_specs_file <- function(
     dir = getwd(),
