@@ -245,7 +245,7 @@ ProcessResults <- function(Species = "AgeingError",
     write(paste("Matrix for reader# ", Ireader), ReportFile, append = TRUE)
     write(
       t(SaveAll$report$AgeErrOut[Ireader, , ]),
-      ncol = SaveAll$data$MaxAge + 1,
+      ncolumns = SaveAll$data$MaxAge + 1,
       ReportFile,
       append = TRUE
     )
@@ -256,7 +256,7 @@ ProcessResults <- function(Species = "AgeingError",
     names <- row.names(summary(SaveAll$sdreport))
     write(t(cbind(names, summary(SaveAll$sdreport))), ReportFile,
       append = TRUE,
-      ncol = 3
+      ncolumns = 3
     )
   }
 

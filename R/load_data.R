@@ -1,4 +1,22 @@
-#' Read the ageing error data
+#' Deprecated function renamed to load_data()
+#'
+#' @param ... Any arguments associated with the deprecated function
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' CreateData() has been renamed as [load_data()] to better clarify its purpose
+#' @author Ian G. Taylor
+#' @export
+#' @seealso [load_data()]
+CreateData <-
+  function(...) {
+    lifecycle::deprecate_stop(
+      when = "2.1.0",
+      what = "CreateData()",
+      with = "load_data()"
+    )
+  }
+
+#' Load the formatted ageing error data
 #'
 #' @param DataFile Filename for input data
 #' @param NDataSet Number of data sets within `DataFile`
@@ -11,10 +29,10 @@
 #'   `'EchoTMB.out'`.
 #' @export
 #' @author Andre E. Punt
-CreateData <- function(DataFile = "data.dat",
-                       NDataSet = 1,
-                       verbose = FALSE,
-                       EchoFile = "") {
+load_data <- function(DataFile = "data.dat",
+                      NDataSet = 1,
+                      verbose = FALSE,
+                      EchoFile = "") {
   # Put a first line in the EchoFile if the file does not already exist
   if (!file.exists(EchoFile)) {
     write("", file = EchoFile)
@@ -75,11 +93,20 @@ CreateData <- function(DataFile = "data.dat",
     NReaders[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 2, 1])
     MinusA[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 3, 1])
     PlusA[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 3, 2])
+    if (PlusA[Idataset] < MinusA[Idataset]) {
+      cli::cli_abort("Plus age must be greater than or equal to the minus age")
+    }
     RefAge[Idataset] <- as.numeric(Data[IndexVals[Idataset] + 3, 3])
+    if (RefAge[Idataset] <= MinusA[Idataset]) {
+      cli::cli_abort("Reference age must be greater than the minimum age")
+    }
+    if (RefAge[Idataset] >= PlusA[Idataset]) {
+      cli::cli_abort("Reference age must be less than the maximum age")
+    }
     Readers <- as.numeric(Data[IndexVals[Idataset] + 4, 1:NReaders[Idataset]])
     MaxReader <- max(MaxReader, Readers)
     if (verbose) {
-      cat("readers", Readers, "\n")
+      cli::cli_alert_info("readers {Readers}")
     }
   }
   ReadPnt <- matrix(0, nrow = NDataSet, ncol = MaxReader)
@@ -99,13 +126,7 @@ CreateData <- function(DataFile = "data.dat",
       )
     }
     if (verbose) {
-      cat(
-        "Last line of data set",
-        Idataset,
-        "is",
-        TheData[Idataset, Npnt[Idataset], 1:(NReaders[Idataset] + 1)],
-        "\n"
-      )
+      cli::cli_alert_info("Last line of data set {Idataset} is {TheData[Idataset, Npnt[Idataset], 1:(NReaders[Idataset] + 1)]}")
     }
   }
 
@@ -130,10 +151,7 @@ CreateData <- function(DataFile = "data.dat",
     }
   }
   if (NegVals == 1) {
-    cat(
-      "WARNING - there are some missing data;",
-      "the effective sample size calculation may be dubious, \n\n"
-    )
+    cli::cli_alert_warning("There are some missing data; the effective sample size calculation may be dubious")
   }
 
   # Create a tabular summary of the data
@@ -183,8 +201,7 @@ CreateData <- function(DataFile = "data.dat",
       }
     }
   }
-  cat("Number of rows in NrowStruc", NrowStruc, "\n")
-  print(NrowStruc)
+  cli::cli_alert_info("Number of rows in NrowStruc {NrowStruc} = {NrowStruc}")
   ReaderStruc <- matrix(
     ReaderStruc[1:NrowStruc, ],
     nrow = NrowStruc,
@@ -193,7 +210,7 @@ CreateData <- function(DataFile = "data.dat",
   print("ReaderStruc")
   print(ReaderStruc)
   for (II in 1:NrowStruc) {
-    write(ReaderStruc[II, ], EchoFile, append = TRUE, ncol = MaxReader + 2)
+    write(ReaderStruc[II, ], EchoFile, append = TRUE, ncolumns = MaxReader + 2)
   }
   print("ReaderSumm")
   print(ReaderSumm)
@@ -214,7 +231,7 @@ CreateData <- function(DataFile = "data.dat",
     }
   }
   write("ReaderSumm", EchoFile, append = TRUE)
-  write(t(ReaderSumm), EchoFile, append = TRUE, ncol = 3)
+  write(t(ReaderSumm), EchoFile, append = TRUE, ncolumns = 3)
   print("ReaderSumm")
   print(ReaderSumm)
 
@@ -268,7 +285,7 @@ CreateData <- function(DataFile = "data.dat",
             }
           }
           if (Ifound == 0) {
-            cat("Warning: Lines ", II, " and ", JJ, " have the same ages\n")
+            cli::cli_alert_warning("Lines {II} and {JJ} have the same ages")
             TheData[IDataSet, JJ, 1] <- TheData[IDataSet, JJ, 1] + TheData[
               IDataSet,
               II, 1
@@ -280,16 +297,7 @@ CreateData <- function(DataFile = "data.dat",
       } # JJ
     }
     if (Problem == 1) {
-      cat(
-        "Duplicate entries found for data set ",
-        IDataSet,
-        "; corrected data set in Echo.File\n"
-      )
-      cat(
-        "Duplicate entries found for data set ",
-        IDataSet,
-        "; corrected data set follows\n"
-      )
+      cli::cli_alert_warning("Duplicate entries found for data set {IDataSet}; corrected data set in Echo.File")
       NLineOut <- 0
       for (II in 1:Npnt[IDataSet]) {
         if (TheData[IDataSet, II, 1] > 0) {
@@ -300,9 +308,6 @@ CreateData <- function(DataFile = "data.dat",
       write(paste("New lines ", NLineOut), EchoFile, append = TRUE)
       OneProblem <- 1
     }
-  }
-  if (OneProblem == 1) {
-    AA
   }
 
   ## Counter for storage

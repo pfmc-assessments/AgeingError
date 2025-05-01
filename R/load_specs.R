@@ -1,13 +1,31 @@
+#' Deprecated function renamed to load_specs()
+#'
+#' @param ... Any arguments associated with the deprecated function
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' CreateSpecs() has been renamed as [load_specs()] to better clarify its purpose
+#' @author Ian G. Taylor
+#' @export
+#' @seealso [load_specs()]
+CreateSpecs <-
+  function(...) {
+    lifecycle::deprecate_stop(
+      when = "2.1.0",
+      what = "CreateSpecs()",
+      with = "load_specs()"
+    )
+  }
+
 #' Read the ageing error specifications
 #'
 #' @param SpecsFile Filename for input specifications.
-#' @param DataSpecs The output from CreateData()
+#' @param DataSpecs The output from load_data()
 #' @param verbose Return messages to the console (TRUE/FALSE)
 #' @export
 #' @author Andre E. Punt
-CreateSpecs <- function(SpecsFile = "data.spc",
-                        DataSpecs,
-                        verbose = FALSE) {
+load_specs <- function(SpecsFile = "data.spc",
+                       DataSpecs,
+                       verbose = FALSE) {
   MatchTable <- function(Table,
                          Char1 = NULL,
                          Char2 = NULL,
@@ -66,24 +84,14 @@ CreateSpecs <- function(SpecsFile = "data.spc",
 
     # Check for valud bias options
     if (DefaultList$BiasOpt >= 0 & !DefaultList$BiasOpt %in% c(0, 1, 2)) {
-      cat(
-        "Error specifying bias option for reader ",
-        Ireader,
-        "; Bias option ",
-        DefaultList$BiasOpt,
-        " is not implemented- stopping\n"
+      cli::cli_alert_warning(
+        "Error specifying bias option for reader {Ireader}; Bias option {DefaultList$BiasOpt} is not implemented- stopping"
       )
-      AA
     }
     if (DefaultList$SigOpt >= 0 & !DefaultList$SigOpt %in% c(1:8)) {
-      cat(
-        "Error specifying variance option for reader ",
-        Ireader,
-        "; Variance option ",
-        DefaultList$SigOpt,
-        " is not implemented- stopping\n"
+      cli::cli_alert_warning(
+        "Error specifying variance option for reader {Ireader}; Variance option {DefaultList$SigOpt} is not implemented- stopping"
       )
-      AA
     }
 
     IndexA <- IndexA + 1
@@ -107,10 +115,8 @@ CreateSpecs <- function(SpecsFile = "data.spc",
           2, IDcnt])
       }
       Index <- Index + 2
-      cat("Spline used to define SD for reader ", Ireader, "\n")
-      cat("Selected knots are located at ")
-      for (IDcnt in 1:nknots[Ireader]) cat(xvals[Ireader, IDcnt], " ")
-      cat("\n")
+      cli::cli_alert_info("Spline used to define SD for reader {Ireader}")
+      cli::cli_alert_info("Selected knots are located at {paste(xvals[Ireader, 1:nknots[Ireader]], collapse = ' ')}")
     }
   }
 
@@ -133,16 +139,13 @@ CreateSpecs <- function(SpecsFile = "data.spc",
       Index <- Index + 2
       if (xvalsL[Ireader, 1] != DataSpecs$MinAge) {
         print("First age must be 1")
-        AA
       }
       if (xvalsL[Ireader, nknotsL[Ireader]] != DataSpecs$MaxAge) {
         print("last age must be MaxAge")
-        AA
       }
-      cat("Linear interpolation used to define SD for reader ", Ireader, "\n")
-      cat("Selected knots are located at ")
-      for (IDcnt in 1:nknotsL[Ireader]) cat(xvalsL[Ireader, IDcnt], " ")
-      cat("\n")
+      cli::cli_alert_info("Linear interpolation used to define SD for reader {Ireader}")
+      cli::cli_alert_info("Selected knots are located at ")
+      cli::cli_alert_info("Selected knots are located at {paste(xvalsL[Ireader, 1:nknotsL[Ireader]], collapse = ' ')}")
     }
   }
 

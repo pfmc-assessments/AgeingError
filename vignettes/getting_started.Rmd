@@ -1,16 +1,23 @@
 ---
 title: "Estimating ageing error using the TMB model written by André Punt"
-author: "Paul Burch based on documentation written by André Punt"
-date: "8 September 2023"
+author: "Paul Burch and Ian Taylor based on documentation written by André Punt"
+date: "2025-03-21"
 output:
   html_document: default
   word_document: default
+vignette: >
+  %\VignetteEngine{litedown::vignette}
+  %\VignetteIndexEntry{Estimating ageing error using the TMB model written by André Punt}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+*Note: this vignette has not yet been updated to describe the new function
+`write_files()` which makes it easier to write the correctly-formatted input 
+files, and `run()` which makes it easy to run the model and process the 
+results. See the help pages for those functions for more detail.*
 
 # Introduction
 
@@ -21,6 +28,10 @@ documentation and examples of the Template Model Builder (TMB) implementation
 these methods, incorporating documentation written by André Punt.
 
 This vignette is illustrated using data and settings associated with three stocks in the Australian Southern and Eastern Scalefish and Shark Fishery (SESSF) fishery (Blue Grenadier, Bight Redfish, and School Whiting), as well as sablefish from the U.S. west coast.
+
+Note: in version 2.1.0, released in March 2025, several function names were 
+updated in the package: `CreateData()` was renamed to `load_data()`, 
+`CreateSpecs()` was renamed to `load_specs()`.
 
 # R package
 
@@ -76,7 +87,9 @@ an error.
 
 The input files are parsed by the software using keywords that need to match 
 exactly what is expected, so the text "Range_of_ages" is part of the input and
-not just a comment to help the user keep track of the format.
+not just a comment to help the user keep track of the format. 
+The `write_data_file()` function makes it easier to create a file which matches
+the required format.
 
 ````{verbatim}
 Range_of_ages
@@ -125,7 +138,7 @@ Data_set_1
 A second (and potentially a third) data set follow the same format as the first 
 data set, with the data being associated with the next pair of readers (see 
 below). The headers for each data set need to have headers numbered from 1 to 
-`NDataSet` which is an input to `CreateData()`. That is, if `NDataSet=3`, the 
+`NDataSet` which is an input to `load_data()`. That is, if `NDataSet=3`, the 
 data file needs to have sections with header `Data_set_1`, `Data_set_2`, and
 `Data_set_3`. 
 
@@ -190,7 +203,7 @@ They usually create the data file in Excel (using the summarised output from the
 R code) and then paste into a text file.
 
 The data file is read into R
-using the function `CreateData()` which is described in the examples below.
+using the function `load_data()` which is described in the examples below.
 
 ## Specifications file
 
@@ -363,7 +376,7 @@ set so we set `NDataSet=1`.
 
 ```{r}
 data_dir <- system.file("extdata", package = "AgeingError")
-BG2022_dat <- AgeingError::CreateData(file.path(data_dir, "BG2022.dat"),
+BG2022_dat <- AgeingError::load_data(file.path(data_dir, "BG2022.dat"),
   NDataSet = 1,
   verbose = TRUE, EchoFile = "BG2022echo.out"
 )
@@ -385,12 +398,10 @@ ages below the minimum age and above the maximum age, however, the warning does
 not appear to be correct in this case. Possibly the `-999` values in the data are
 causing the warning because they are <0.
 
-Next we load the model specifications using the `CreateSpecs` function. This 
-function is not exported either so again we need to call the package name and
-`::` to access it. 
+Next we load the model specifications using the `load_specs` function.
 
 ```{r}
-BG2022_spc <- AgeingError::CreateSpecs(file.path(data_dir, "BG2022.spc"),
+BG2022_spc <- AgeingError::load_specs(file.path(data_dir, "BG2022.spc"),
   DataSpecs = BG2022_dat,
   verbose = TRUE
 )
@@ -405,8 +416,7 @@ this function varies with the model that is specified (i.e. the knots will all b
 zero unless a spline or piecewise linear model is specified - sigma options 5 and 
 6).
 
-Ageing error is the estimated using the function `DoApplyAgeError`. This 
-function is exported from the R package so can be called directly. We need to
+Ageing error is the estimated using the function `DoApplyAgeError`. We need to
 provide a name (`Species` argument), the data, model specs, specify the weights
 (`AprobWght` and `SlopeWght`) and the name of a subdirectory to save the output 
 (it gets created if it doesn't exist). We set `verbose=FALSE` in this example as
@@ -435,8 +445,8 @@ Examine the structure of the model object
 str(BG2022_mod)
 ```
 
-We then save the model output using the `ProcessResults` function, again using
-`::` as this function also isn't exported. We want to specify that the effective
+We then save the model output using the `ProcessResults` function. 
+We want to specify that the effective
 sample size is estimated (`CalcEff = TRUE`) as this produces the fits to the 
 individual data points which can be used to identify outliers that may be 
 impacting model convergence. The model creates several output files that contain
@@ -490,7 +500,7 @@ We refit the final model (`BG2022_trim_8_1`).
 Load the data file.
 
 ```{r}
-BG2022final_dat <- AgeingError::CreateData(file.path(data_dir, "BG2022_trim_8_1.dat"),
+BG2022final_dat <- AgeingError::load_data(file.path(data_dir, "BG2022_trim_8_1.dat"),
   NDataSet = 1, verbose = TRUE,
   EchoFile = "BG2022finalecho.out"
 )
@@ -504,7 +514,7 @@ age-reading error (`SigmaOpt=7`) and fixed the first parameter at 0.2.
 
 
 ```{r}
-BG2022final_spc <- AgeingError::CreateSpecs(file.path(data_dir, "BG2022_trim_8_1.spc"),
+BG2022final_spc <- AgeingError::load_specs(file.path(data_dir, "BG2022_trim_8_1.spc"),
   DataSpecs = BG2022final_dat,
   verbose = TRUE
 )
@@ -543,7 +553,7 @@ readings from three separate readers who have each re-read their own reads (i.e.
 there are no inter-reader comparisons in the data). 
 
 ```{r}
-REB2022_dat <- AgeingError::CreateData(file.path(data_dir, "REB2022.dat"),
+REB2022_dat <- AgeingError::load_data(file.path(data_dir, "REB2022.dat"),
   NDataSet = 1,
   verbose = TRUE, EchoFile = "REB2022echo.out"
 )
@@ -553,10 +563,10 @@ We check the summary above against the information in the data file. There don't
 appear to be any problems, however, we are still getting the warning about 
 missing data.
 
-Next we load the model specifications using the `CreateSpecs` function. 
+Next we load the model specifications using the `load_specs` function. 
 
 ```{r}
-REB2022_spc <- AgeingError::CreateSpecs(file.path(data_dir, "REB2022.spc"),
+REB2022_spc <- AgeingError::load_specs(file.path(data_dir, "REB2022.spc"),
   DataSpecs = REB2022_dat, verbose = TRUE
 )
 ```
@@ -598,11 +608,11 @@ model (note we suppress the creation of output in this document).
 
 <!-- set results="hide" -->
 ```{r, results="hide"}
-REB2022_dat2 <- AgeingError::CreateData(file.path(data_dir, "REB2022_trim.dat"),
+REB2022_dat2 <- AgeingError::load_data(file.path(data_dir, "REB2022_trim.dat"),
   NDataSet = 1,
   verbose = FALSE, EchoFile = "REB2022_trimecho.out"
 )
-REB2022_spc2 <- AgeingError::CreateSpecs(file.path(data_dir, "REB2022_trim.spc"),
+REB2022_spc2 <- AgeingError::load_specs(file.path(data_dir, "REB2022_trim.spc"),
   DataSpecs = REB2022_dat2, verbose = FALSE
 )
 REB2022_mod2 <- AgeingError::DoApplyAgeError(
@@ -631,7 +641,7 @@ Load the School Whiting data file, make sure to set the number of data sets to
 three (`NDataSet=3`).
 
 ```{r}
-WHS2_dat <- AgeingError::CreateData(file.path(data_dir, "WHS2.dat"),
+WHS2_dat <- AgeingError::load_data(file.path(data_dir, "WHS2.dat"),
   NDataSet = 3,
   verbose = TRUE, EchoFile = "WHS2echo.out"
 )
@@ -642,7 +652,7 @@ Make sure to check the summary above against the values in the data file.
 Load the specifications for School Whiting.
 
 ```{r}
-WHS2_spc <- AgeingError::CreateSpecs(file.path(data_dir, "WHS2.spc"),
+WHS2_spc <- AgeingError::load_specs(file.path(data_dir, "WHS2.spc"),
   DataSpecs = WHS2_dat, verbose = TRUE
 )
 ```
@@ -679,7 +689,7 @@ appropriateness of this model should be discussed with the ageing technicians.
 Sablefish (_Anoplopoma fimbria_) provides an example of using the bias option.
 
 ```{r}
-Sable_dat <- AgeingError::CreateData(file.path(data_dir, "Sable.dat"),
+Sable_dat <- AgeingError::load_data(file.path(data_dir, "Sable.dat"),
   NDataSet = 1,
   verbose = TRUE, EchoFile = "SableEcho.out"
 )
@@ -688,10 +698,10 @@ Sable_dat <- AgeingError::CreateData(file.path(data_dir, "Sable.dat"),
 We check the summary above against the information in the data file. This data
 set has several inter-reader comparisons.
 
-We load the model specifications using the `CreateSpecs` function. 
+We load the model specifications using the `load_specs` function. 
 
 ```{r}
-Sable_spc <- AgeingError::CreateSpecs(file.path(data_dir, "Sable.spc"),
+Sable_spc <- AgeingError::load_specs(file.path(data_dir, "Sable.spc"),
   DataSpecs = Sable_dat, verbose = TRUE
 )
 ```
@@ -774,4 +784,4 @@ shark fishery. _Canadian Journal of Fisheries and Aquatic Sciences_ 65:
 
 Tuck, G.N., Bessell-Browne, P. (2022). Blue Grenadier (_Macruronus novaezelandiae_) 
 stock assessment based on data up to 2021. Technical paper presented to theSERAG2, 
-29–-30$^{th}$ November 2022, Melbourne, Victoria. 99pp.
+29--30$^{th}$ November 2022, Melbourne, Victoria. 99pp.

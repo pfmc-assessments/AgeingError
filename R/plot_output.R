@@ -315,7 +315,7 @@ plot_output <- function(Data,
         SaveDir,
         paste0(
           Species,
-          " SS3_format_",
+          "_SS3_format_",
           Main,
           ".csv",
           sep = ""

@@ -1,5 +1,15 @@
 # AgeingError development
 
+# AgeingError 2.1.0
+* Renamed some functions to have more accurate names and match the [tidyverse style guide](https://style.tidyverse.org/functions.html)
+  * `CreateData()` -> `load_data()`
+  * `CreateSpecs()` -> `load_specs()`
+* Added new functions to help with creating the data and specs files
+  * `tally_repeats()`: Tally repeated age reading combinations in a new `count` column
+  * `write_files()`: Create data and model specifications files from a data frame of age readings that can be passed to `run()` or `load_data()` and `load_specs()`
+* Added automated testing for the core functions
+
+
 # AgeingError 2.0.2
 * Switched to the new TMB version of the package in the main branch
 * Renamed github repository from nwfscAgeingError to AgeingError

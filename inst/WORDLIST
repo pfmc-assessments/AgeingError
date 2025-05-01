@@ -13,6 +13,7 @@ Bessell
 CSIRO
 Centroberyx
 CreateData
+CreateSpecs
 Curin
 Curvilinear
 Forsythe
@@ -26,6 +27,7 @@ MaxAge
 Menten
 Michaelis
 Moler
+NDataSet
 NOAA
 NWFSC
 Nreaders
@@ -37,6 +39,7 @@ Prespecify
 Redfish
 ReturnType
 Rtools
+RunFn
 SERAG
 SESSF
 Sablefish
@@ -53,7 +56,6 @@ agemat
 al
 cmd
 cpp
-cran
 csv
 curvilinear
 dat
@@ -65,7 +67,6 @@ frac
 gerrardi
 github
 hte
-https
 hyperdistribution
 lda
 maxage
@@ -87,6 +88,8 @@ spc
 summarised
 th
 theSERAG
+tibble
+tidyverse
 tpl
 von
 xvec
