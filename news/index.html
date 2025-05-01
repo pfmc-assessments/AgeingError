@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">AgeingError</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,25 @@
       <small>Source: <a href="https://github.com/pfmc-assessments/AgeingError/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.0" id="ageingerror-210">AgeingError 2.1.0<a class="anchor" aria-label="anchor" href="#ageingerror-210"></a></h2>
+<ul><li>Renamed some functions to have more accurate names and match the <a href="https://style.tidyverse.org/functions.html" class="external-link">tidyverse style guide</a>
+<ul><li>
+<code><a href="../reference/CreateData.html">CreateData()</a></code> -&gt; <code><a href="../reference/load_data.html">load_data()</a></code>
+</li>
+<li>
+<code><a href="../reference/CreateSpecs.html">CreateSpecs()</a></code> -&gt; <code><a href="../reference/load_specs.html">load_specs()</a></code>
+</li>
+</ul></li>
+<li>Added new functions to help with creating the data and specs files
+<ul><li>
+<code><a href="../reference/tally_repeats.html">tally_repeats()</a></code>: Tally repeated age reading combinations in a new <code>count</code> column</li>
+<li>
+<code><a href="../reference/write_files.html">write_files()</a></code>: Create data and model specifications files from a data frame of age readings that can be passed to <code><a href="../reference/run.html">run()</a></code> or <code><a href="../reference/load_data.html">load_data()</a></code> and <code><a href="../reference/load_specs.html">load_specs()</a></code>
+</li>
+</ul></li>
+<li>Added automated testing for the core functions</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.2" id="ageingerror-202">AgeingError 2.0.2<a class="anchor" aria-label="anchor" href="#ageingerror-202"></a></h2>
 <ul><li>Switched to the new TMB version of the package in the main branch</li>

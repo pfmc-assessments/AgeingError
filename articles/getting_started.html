@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">AgeingError</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,10 +57,10 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Estimating ageing error using the TMB model written by André Punt</h1>
-                        <h4 data-toc-skip class="author">Paul Burch
-based on documentation written by André Punt</h4>
+                        <h4 data-toc-skip class="author">Paul Burch and
+Ian Taylor based on documentation written by André Punt</h4>
             
-            <h4 data-toc-skip class="date">8 September 2023</h4>
+            <h4 data-toc-skip class="date">2025-03-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/pfmc-assessments/AgeingError/blob/main/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="d-none name"><code>getting_started.Rmd</code></div>
@@ -68,6 +68,11 @@ based on documentation written by André Punt</h4>
 
     
     
+<p><em>Note: this vignette has not yet been updated to describe the new
+function <code><a href="../reference/write_files.html">write_files()</a></code> which makes it easier to write the
+correctly-formatted input files, and <code><a href="../reference/run.html">run()</a></code> which makes it
+easy to run the model and process the results. See the help pages for
+those functions for more detail.</em></p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -81,6 +86,10 @@ documentation written by André Punt.</p>
 three stocks in the Australian Southern and Eastern Scalefish and Shark
 Fishery (SESSF) fishery (Blue Grenadier, Bight Redfish, and School
 Whiting), as well as sablefish from the U.S. west coast.</p>
+<p>Note: in version 2.1.0, released in March 2025, several function
+names were updated in the package: <code><a href="../reference/CreateData.html">CreateData()</a></code> was renamed
+to <code><a href="../reference/load_data.html">load_data()</a></code>, <code><a href="../reference/CreateSpecs.html">CreateSpecs()</a></code> was renamed to
+<code><a href="../reference/load_specs.html">load_specs()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="r-package">R package<a class="anchor" aria-label="anchor" href="#r-package"></a>
@@ -104,7 +113,7 @@ R-universe via</p>
 compile the package locally (which takes longer and requires <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> for
 Windows users).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"pfmc-assessments/AgeingError"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pfmc-assessments/AgeingError"</span><span class="op">)</span></span></code></pre></div>
 <p>The package can then be loaded.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pfmc-assessments.github.io/AgeingError/" class="external-link">AgeingError</a></span><span class="op">)</span></span></code></pre></div>
@@ -131,7 +140,8 @@ code will generate an error.</p>
 <p>The input files are parsed by the software using keywords that need
 to match exactly what is expected, so the text “Range_of_ages” is part
 of the input and not just a comment to help the user keep track of the
-format.</p>
+format. The <code><a href="../reference/write_data_file.html">write_data_file()</a></code> function makes it easier to
+create a file which matches the required format.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>Range_of_ages</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>0 25</span></code></pre></div>
 <p>The data can be entered with a separate data set for each pair of
@@ -175,7 +185,7 @@ columns for the other readers (if any) need to be filled with
 the first data set, with the data being associated with the next pair of
 readers (see below). The headers for each data set need to have headers
 numbered from 1 to <code>NDataSet</code> which is an input to
-<code><a href="../reference/CreateData.html">CreateData()</a></code>. That is, if <code>NDataSet=3</code>, the data
+<code><a href="../reference/load_data.html">load_data()</a></code>. That is, if <code>NDataSet=3</code>, the data
 file needs to have sections with header <code>Data_set_1</code>,
 <code>Data_set_2</code>, and <code>Data_set_3</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>Data_set_2</span>
@@ -237,7 +247,7 @@ version of this code is available from CSIRO. They usually create the
 data file in Excel (using the summarised output from the R code) and
 then paste into a text file.</p>
 <p>The data file is read into R using the function
-<code><a href="../reference/CreateData.html">CreateData()</a></code> which is described in the examples below.</p>
+<code><a href="../reference/load_data.html">load_data()</a></code> which is described in the examples below.</p>
 </div>
 </div>
 <div class="section level3">
@@ -458,17 +468,15 @@ source code. We work through this example below. Note we are using the
 data file with a single data set so we set <code>NDataSet=1</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"AgeingError"</span><span class="op">)</span></span>
-<span><span class="va">BG2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.dat"</span><span class="op">)</span>,</span>
+<span><span class="va">BG2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_data.html">load_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"BG2022echo.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## readers 1 2 3 4 </span></span>
-<span><span class="co">## Last line of data set 1 is 1 -999 -999 23 22 </span></span>
-<span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Number of rows in NrowStruc 2 </span></span>
-<span><span class="co">## [1] 2</span></span>
-<span><span class="co">## [1] "ReaderStruc"</span></span>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 1, 2, 3, and 4</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 1 is 1, -999, -999, 23, and 22</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #BBBB00;">!</span> There are some missing data; the effective sample size calculation may be dubious</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Number of rows in NrowStruc 2 = 2</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "ReaderStruc"</span></span>
 <span><span class="co">##      [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
 <span><span class="co">## [1,]    1 6099    1    2    0    0</span></span>
 <span><span class="co">## [2,]    1 4512    0    0    3    4</span></span>
@@ -511,11 +519,9 @@ the warning does not appear to be correct in this case. Possibly the
 <code>-999</code> values in the data are causing the warning because
 they are &lt;0.</p>
 <p>Next we load the model specifications using the
-<code>CreateSpecs</code> function. This function is not exported either
-so again we need to call the package name and <code>::</code> to access
-it.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.spc"</span><span class="op">)</span>,</span>
+<code>load_specs</code> function.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">BG2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_specs.html">load_specs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">BG2022_dat</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -582,15 +588,14 @@ function varies with the model that is specified (i.e. the knots will
 all be zero unless a spline or piecewise linear model is specified -
 sigma options 5 and 6).</p>
 <p>Ageing error is the estimated using the function
-<code>DoApplyAgeError</code>. This function is exported from the R
-package so can be called directly. We need to provide a name
+<code>DoApplyAgeError</code>. We need to provide a name
 (<code>Species</code> argument), the data, model specs, specify the
 weights (<code>AprobWght</code> and <code>SlopeWght</code>) and the name
 of a subdirectory to save the output (it gets created if it doesn’t
 exist). We set <code>verbose=FALSE</code> in this example as a large
 amount of output is printed to the screen.</p>
 <!-- The output of this function isn't useful, set results="hide" -->
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"BG2022"</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">BG2022_dat</span>,</span>
@@ -605,7 +610,7 @@ and this information along with the data and model specifications is
 saved in the output directory as an lda file with name
 <code>Species</code> (in this case “BG2022.lda”).</p>
 <p>Examine the structure of the model object</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">BG2022_mod</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 12</span></span>
 <span><span class="co">##  $ par     : Named num [1:31] 0.1672 0.2357 0.5399 0.2418 0.0247 ...</span></span>
@@ -616,14 +621,13 @@ saved in the output directory as an lda file with name
 <span><span class="co">##  $ hessian : logi FALSE</span></span>
 <span><span class="co">##  $ method  : chr "BFGS"</span></span>
 <span><span class="co">##  $ retape  :function (set.defaults = TRUE)  </span></span>
-<span><span class="co">##  $ env     :&lt;environment: 0x55f0ca6e25b0&gt; </span></span>
+<span><span class="co">##  $ env     :&lt;environment: 0x55cc7b2d2f60&gt; </span></span>
 <span><span class="co">##  $ report  :function (par = last.par)  </span></span>
 <span><span class="co">##  $ simulate:function (par = last.par, complete = FALSE)  </span></span>
 <span><span class="co">##  $ fn_orig :function (x = last.par[lfixed()], ...)  </span></span>
 <span><span class="co">##  $ fitv    : num 40778</span></span></code></pre>
 <p>We then save the model output using the <code>ProcessResults</code>
-function, again using <code>::</code> as this function also isn’t
-exported. We want to specify that the effective sample size is estimated
+function. We want to specify that the effective sample size is estimated
 (<code>CalcEff = TRUE</code>) as this produces the fits to the
 individual data points which can be used to identify outliers that may
 be impacting model convergence. The model creates several output files
@@ -646,7 +650,7 @@ identical to reader <code>x</code>).</p></li>
 <li><p>A series png file (.png extension) that contain plots of the data
 and model residuals.</p></li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>An examination of the report file (<code>BG2022.rpt</code>) shows the
 maximum gradient is -93.96, indicating the model has not converged.
@@ -662,11 +666,11 @@ confidence interval and the table of fits to the individual data points
 <code>CalcEff = TRUE</code>) shows a number of data points with
 predicted values of 0 (or very close to zero e.g. 10e-10), see line 2
 below (extracted from the report file).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>Data set:  1</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>Data_set Group Group Line Readers Obs  Obs_Numbers Pred_Numbers</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>Data Point:  1   1   1   1   0   0   -1   -1   9     15.6581407   9.241041710732  </span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>Data Point:  1   1   1   2   0   10  -1   -1   1    1.7397934   0  </span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>Data Point:  1   1   1   3   1   1   -1   -1   153   266.1883915 186.217154197499 </span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>Data set:  1</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>Data_set Group Group Line Readers Obs  Obs_Numbers Pred_Numbers</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>Data Point:  1   1   1   1   0   0   -1   -1   9     15.6581407   9.241041710732  </span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>Data Point:  1   1   1   2   0   10  -1   -1   1    1.7397934   0  </span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>Data Point:  1   1   1   3   1   1   -1   -1   153   266.1883915 186.217154197499 </span></code></pre></div>
 <p>To get closer to a converged model it was necessary to undertake data
 trimming<br>
 (removing observations values with predicted values of 0), specify a
@@ -677,18 +681,16 @@ results examined before more changes were made until we achieved a final
 model we considered acceptable.</p>
 <p>We refit the final model (<code>BG2022_trim_8_1</code>).</p>
 <p>Load the data file.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022final_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.dat"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">BG2022final_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_data.html">load_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  EchoFile <span class="op">=</span> <span class="st">"BG2022finalecho.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## readers 1 2 3 4 </span></span>
-<span><span class="co">## Last line of data set 1 is 1 -999 -999 23 22 </span></span>
-<span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Number of rows in NrowStruc 2 </span></span>
-<span><span class="co">## [1] 2</span></span>
-<span><span class="co">## [1] "ReaderStruc"</span></span>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 1, 2, 3, and 4</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 1 is 1, -999, -999, 23, and 22</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #BBBB00;">!</span> There are some missing data; the effective sample size calculation may be dubious</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Number of rows in NrowStruc 2 = 2</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "ReaderStruc"</span></span>
 <span><span class="co">##      [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
 <span><span class="co">## [1,]    1 6079    1    2    0    0</span></span>
 <span><span class="co">## [2,]    1 4512    0    0    3    4</span></span>
@@ -722,8 +724,8 @@ model we considered acceptable.</p>
 in the data) we have specified a linear change in the standard deviation
 of random age-reading error (<code>SigmaOpt=7</code>) and fixed the
 first parameter at 0.2.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BG2022final_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.spc"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">BG2022final_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_specs.html">load_specs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"BG2022_trim_8_1.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">BG2022final_dat</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -782,7 +784,7 @@ first parameter at 0.2.</p>
 <span><span class="co">## NULL</span></span></code></pre>
 <p>We run the final model.</p>
 <!-- The output of this function isn't useful, set results="hide" -->
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022final_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">BG2022final_dat</span>,</span>
@@ -793,7 +795,7 @@ first parameter at 0.2.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>As with the earlier model we save the results.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BG2022final_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"BG2022_trim_8_1"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>This model is now close to convergence (gradient = -0.00143) and
 residual plots do not show any concerning features and the estimates of
@@ -807,18 +809,16 @@ caught by trawl in the Great Australian Bight (Curin-Osorio and Burch
 2022). It has age readings from three separate readers who have each
 re-read their own reads (i.e. there are no inter-reader comparisons in
 the data).</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.dat"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">REB2022_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_data.html">load_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"REB2022echo.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## readers 1 2 3 4 5 6 </span></span>
-<span><span class="co">## Last line of data set 1 is 1 -999 -999 -999 -999 62 62 </span></span>
-<span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Number of rows in NrowStruc 3 </span></span>
-<span><span class="co">## [1] 3</span></span>
-<span><span class="co">## [1] "ReaderStruc"</span></span>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 1, 2, 3, 4, 5, and 6</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 1 is 1, -999, -999, -999, -999, 62, and 62</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #BBBB00;">!</span> There are some missing data; the effective sample size calculation may be dubious</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Number of rows in NrowStruc 3 = 3</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "ReaderStruc"</span></span>
 <span><span class="co">##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
 <span><span class="co">## [1,]    1  800    1    2    0    0    0    0</span></span>
 <span><span class="co">## [2,]    1  528    0    0    3    4    0    0</span></span>
@@ -851,9 +851,9 @@ the data).</p>
 There don’t appear to be any problems, however, we are still getting the
 warning about missing data.</p>
 <p>Next we load the model specifications using the
-<code>CreateSpecs</code> function.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.spc"</span><span class="op">)</span>,</span>
+<code>load_specs</code> function.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">REB2022_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_specs.html">load_specs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
@@ -939,7 +939,7 @@ same ageing uncertainty (readers 2–6 have <code>SigmaOpt=-1</code>), we
 only need to provide one line of sigma parameters.</p>
 <p>We estimate ageing error for Bight Redfish.</p>
 <!-- The output of this function isn't useful, set results="hide" -->
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">REB2022_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"REB2022"</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat</span>,</span>
@@ -950,7 +950,7 @@ only need to provide one line of sigma parameters.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>We then save the Bight Redfish model output.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">REB2022_out</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/ProcessResults.html">ProcessResults</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"REB2022"</span>, SaveDir <span class="op">=</span> <span class="st">"Results"</span>, CalcEff <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>An examination of the report file (<code>REB2022.rpt</code>) shows
 the maximum gradient is 0.0221, indicating the model has not quite
@@ -961,12 +961,15 @@ data and model specifications as (<code>REB2022_trim.dat</code> and
 <code>REB2022_trim.spc</code>) and rerun the model (note we suppress the
 creation of output in this document).</p>
 <!-- set results="hide" -->
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">REB2022_dat2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.dat"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">REB2022_dat2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_data.html">load_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>, EchoFile <span class="op">=</span> <span class="st">"REB2022_trimecho.out"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">REB2022_spc2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.spc"</span><span class="op">)</span>,</span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #BBBB00;">!</span> There are some missing data; the effective sample size calculation may be dubious</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Number of rows in NrowStruc 3 = 3</span></span></code></pre>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">REB2022_spc2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_specs.html">load_specs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"REB2022_trim.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">REB2022_dat2</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">REB2022_mod2</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
@@ -990,20 +993,19 @@ al. 2020). This species provides an example of a data file with three
 separate data sets and a spline model.</p>
 <p>Load the School Whiting data file, make sure to set the number of
 data sets to three (<code>NDataSet=3</code>).</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">WHS2_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.dat"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">WHS2_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_data.html">load_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"WHS2echo.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## readers 1 2 </span></span>
-<span><span class="co">## readers 3 4 </span></span>
-<span><span class="co">## readers 5 6 </span></span>
-<span><span class="co">## Last line of data set 1 is 1 9 9 </span></span>
-<span><span class="co">## Last line of data set 2 is 2 8 8 </span></span>
-<span><span class="co">## Last line of data set 3 is 1 8 7 </span></span>
-<span><span class="co">## Number of rows in NrowStruc 3 </span></span>
-<span><span class="co">## [1] 3</span></span>
-<span><span class="co">## [1] "ReaderStruc"</span></span>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 1 and 2</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 3 and 4</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 5 and 6</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 1 is 1, 9, and 9</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 2 is 2, 8, and 8</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 3 is 1, 8, and 7</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Number of rows in NrowStruc 3 = 3</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "ReaderStruc"</span></span>
 <span><span class="co">##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
 <span><span class="co">## [1,]    1 1882    1    2    0    0    0    0</span></span>
 <span><span class="co">## [2,]    2  366    3    4    0    0    0    0</span></span>
@@ -1039,13 +1041,13 @@ data sets to three (<code>NDataSet=3</code>).</p>
 <p>Make sure to check the summary above against the values in the data
 file.</p>
 <p>Load the specifications for School Whiting.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">WHS2_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.spc"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">WHS2_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_specs.html">load_specs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"WHS2.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">WHS2_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Spline used to define SD for reader  1 </span></span>
-<span><span class="co">## Selected knots are located at 0  3  5  7  9  </span></span>
-<span><span class="co">## List of 7</span></span>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Spline used to define SD for reader 1</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Selected knots are located at 0 3 5 7 9</span></span></code></pre>
+<pre><code><span><span class="co">## List of 7</span></span>
 <span><span class="co">##  $ ModelSpecs:List of 6</span></span>
 <span><span class="co">##   ..$ :List of 10</span></span>
 <span><span class="co">##   .. ..$ BiasOpt  : num 0</span></span>
@@ -1125,7 +1127,7 @@ file.</p>
 the initial parameter values are in log space.</p>
 <p>Fit the ageing error model and save the results</p>
 <!-- Set results="hide" -->
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WHS2_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"WHS2"</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">WHS2_dat</span>, ModelSpecsInp <span class="op">=</span> <span class="va">WHS2_spc</span>,</span>
@@ -1149,18 +1151,16 @@ discussed with the ageing technicians.</p>
 </h3>
 <p>Sablefish (<em>Anoplopoma fimbria</em>) provides an example of using
 the bias option.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Sable_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateData.html">CreateData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.dat"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Sable_dat</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_data.html">load_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.dat"</span><span class="op">)</span>,</span>
 <span>  NDataSet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, EchoFile <span class="op">=</span> <span class="st">"SableEcho.out"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## readers 1 2 3 4 5 6 </span></span>
-<span><span class="co">## Last line of data set 1 is 6 -999 -999 -999 -999 2 2 </span></span>
-<span><span class="co">## WARNING - there are some missing data; the effective sample size calculation may be dubious, </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Number of rows in NrowStruc 6 </span></span>
-<span><span class="co">## [1] 6</span></span>
-<span><span class="co">## [1] "ReaderStruc"</span></span>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> readers 1, 2, 3, 4, 5, and 6</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Last line of data set 1 is 6, -999, -999, -999, -999, 2, and 2</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #BBBB00;">!</span> There are some missing data; the effective sample size calculation may be dubious</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Number of rows in NrowStruc 6 = 6</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "ReaderStruc"</span></span>
 <span><span class="co">##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
 <span><span class="co">## [1,]    1 8659    1    2    0    0    0    0</span></span>
 <span><span class="co">## [2,]    1  282    0    2    3    0    0    0</span></span>
@@ -1194,10 +1194,10 @@ the bias option.</p>
 <span><span class="co">## NULL</span></span></code></pre>
 <p>We check the summary above against the information in the data file.
 This data set has several inter-reader comparisons.</p>
-<p>We load the model specifications using the <code>CreateSpecs</code>
+<p>We load the model specifications using the <code>load_specs</code>
 function.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Sable_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/CreateSpecs.html">CreateSpecs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.spc"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Sable_spc</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/load_specs.html">load_specs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"Sable.spc"</span><span class="op">)</span>,</span>
 <span>  DataSpecs <span class="op">=</span> <span class="va">Sable_dat</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 7</span></span>
@@ -1293,7 +1293,7 @@ manner as for the bias option (above).</p>
 <p>The code below can be used to fit the Sablefish ageing error model.
 We don’t run it because this particular model is very slow.</p>
 <!-- We don't run this code -->
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## run the Sablefish model</span></span>
 <span><span class="va">Sable_mod</span> <span class="op">&lt;-</span> <span class="fu">AgeingError</span><span class="fu">::</span><span class="fu"><a href="../reference/DoApplyAgeError.html">DoApplyAgeError</a></span><span class="op">(</span></span>
 <span>  Species <span class="op">=</span> <span class="st">"Sable"</span>,</span>
@@ -1360,7 +1360,7 @@ Aquatic Sciences</em> 65: 1991–2005. <a href="https://doi.org/10.1139/F08-111"
 <p>Tuck, G.N., Bessell-Browne, P. (2022). Blue Grenadier (<em>Macruronus
 novaezelandiae</em>) stock assessment based on data up to 2021.
 Technical paper presented to theSERAG2,
-29–-30<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">^{th}</annotation></semantics></math>
+29–30<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">^{th}</annotation></semantics></math>
 November 2022, Melbourne, Victoria. 99pp.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
