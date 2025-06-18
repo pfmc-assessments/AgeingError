@@ -62,7 +62,7 @@ prepare_run <- function(inputs, directory) {
 #' # ageing error matrix and a maxage <= maxage in the ageing error model)
 #' ss3_inputs <- r4ss::SS_read()
 #' maxage <- ss3_inputs$dat$Nages
-#' ss3_inputs$dat$ageerror <- 
+#' ss3_inputs$dat$ageerror <-
 #'   out$output$ErrorAndBiasArray[c("Expected_age", "SD"), 1 + 0:maxage, "Reader 1"] |>
 #'   as.data.frame()
 #' r4ss::SS_write(inputlist = ss3_inputs)
