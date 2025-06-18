@@ -267,7 +267,13 @@ template <class Type>
       {
        Diff = float(Age2) - TheBias(Ireader,Age1);
        PassIn = Diff/SDD1;
+       // this transformation is almost identical to x at small values but 
+       // avoids running pnorm(x) with an a crazy high or low value of x, 
+       // which can lead to NaNs. At large values, pnorm(x) is very close 
+       // to 0 or 1 anyway so the transformation does not matter
        tmp = -20.0 + 40.0/(1+exp(-0.1*PassIn));
+       // Differences pnorm(x)-pnorm(x-1) is appoximately the same as using 
+       // dnorm (as in the article) when you scale it.
        PassOut = pnorm(tmp,Type(0),Type(1));
        tmp1(Age2-1) = PassOut-tot;
        tot = PassOut;
@@ -388,7 +394,7 @@ Type objective_function<Type>::operator() ()
        // Prior probability * product over readers
        Prob1 = 1;
        for (int Ireader=1;Ireader<=Nread(IDataSet);Ireader++)
-        if (TheData(IDataSet,Ipnt,Ireader) >= 0 & Iperfect(IDataSet) != Ireader)
+        if ((TheData(IDataSet,Ipnt,Ireader) >= 0) & (Iperfect(IDataSet) != Ireader))
          {
           AgeA = TheData(IDataSet,Ipnt,Ireader);
           Jreader = ReadPnt(IDataSet,Ireader-1);
