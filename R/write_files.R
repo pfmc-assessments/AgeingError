@@ -16,18 +16,19 @@
 #' run(dir = tempdir())
 #'
 write_files <- function(
-    dat,
-    dir = getwd(),
-    file_dat = "data.dat",
-    file_specs = "data.spc",
-    minage = 0,
-    maxage = NULL,
-    refage = NULL,
-    minusage = NULL,
-    plusage = NULL,
-    biasopt = NULL,
-    sigopt = NULL,
-    knotages = NULL) {
+  dat,
+  dir = getwd(),
+  file_dat = "data.dat",
+  file_specs = "data.spc",
+  minage = 0,
+  maxage = NULL,
+  refage = NULL,
+  minusage = NULL,
+  plusage = NULL,
+  biasopt = NULL,
+  sigopt = NULL,
+  knotages = NULL
+) {
   write_data_file(
     dat = dat,
     dir = dir,

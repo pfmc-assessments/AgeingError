@@ -42,14 +42,15 @@
 #' data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
 #'
 write_data_file <- function(
-    dat,
-    dir = getwd(),
-    file_name = "data.dat",
-    minage = 0,
-    maxage = NULL,
-    refage = NULL,
-    minusage = NULL,
-    plusage = NULL) {
+  dat,
+  dir = getwd(),
+  file_name = "data.dat",
+  minage = 0,
+  maxage = NULL,
+  refage = NULL,
+  minusage = NULL,
+  plusage = NULL
+) {
   # check inputs
   if (!is.data.frame(dat)) {
     cli::cli_abort("Input 'dat' must be a data frame or tibble")

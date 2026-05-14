@@ -72,9 +72,10 @@
 #'   RecCv = 0.6, RecAr1 = 0.8, Amax = 100
 #' )
 SimulatorFn <- function(
-    Nreaders, M,
-    SelexForm, ErrorParams, BiasParams, SelexParams,
-    ReadsMat, RecCv = 0.6, RecAr1 = 0.8, Amax = 100) {
+  Nreaders, M,
+  SelexForm, ErrorParams, BiasParams, SelexParams,
+  ReadsMat, RecCv = 0.6, RecAr1 = 0.8, Amax = 100
+) {
   RecDev <- stats::rnorm(Amax, mean = 0, sd = RecCv)
   for (i in 2:length(RecDev)) {
     RecDev[i] <- RecDev[i] * sqrt(1 - RecAr1) + RecDev[i - 1] * sqrt(RecAr1)
