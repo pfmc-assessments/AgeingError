@@ -23,7 +23,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/pfmc-assessments/AgeingError/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/pfmc-assessments/AgeingError/blob/v2.1.1/inst/CITATION)
 
 Punt AE, Johnson KF, Taylor IG, Burch P (2026). *AgeingError: Estimating
 ageing error with 'TMB' from double reads*. R package version 2.1.1,
