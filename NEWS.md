@@ -1,5 +1,10 @@
 # AgeingError development
 
+# AgeingError 2.1.1
+* Deprecated two obsolete functions to reduce confusion
+  * `RunFn()` replaced by `run()`
+  * `PlotOutputFn()` replaced by `plot_output()`
+
 # AgeingError 2.1.0
 * Renamed some functions to have more accurate names and match the [tidyverse style guide](https://style.tidyverse.org/functions.html)
   * `CreateData()` -> `load_data()`

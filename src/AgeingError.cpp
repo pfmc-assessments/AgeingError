@@ -273,7 +273,7 @@ template <class Type>
        // to 0 or 1 anyway so the transformation does not matter
        tmp = -20.0 + 40.0/(1+exp(-0.1*PassIn));
        // Differences pnorm(x)-pnorm(x-1) is appoximately the same as using 
-       // dnorm (as in the article) when you scale it.
+       // dnorm (as in the original Punt et al paper) when scaled.
        PassOut = pnorm(tmp,Type(0),Type(1));
        tmp1(Age2-1) = PassOut-tot;
        tot = PassOut;
