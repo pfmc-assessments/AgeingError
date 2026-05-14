@@ -108,5 +108,5 @@ data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
 #> ℹ Minus group set to the minimum observed age 5
 #> ℹ Plus group set to the maximum observed age 10
 #> ℹ Reference age not specified; using 7 = floor(median(c(minusage, plusage)))
-#> ℹ Writing data file to /tmp/RtmpfhrUat/test.dat
+#> ℹ Writing data file to /tmp/Rtmpx7Ah1e/test.dat
 ```
