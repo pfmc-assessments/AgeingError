@@ -23,7 +23,6 @@ Hollings
 KrusicGolub
 Linf
 Macruronus
-MaxAge
 Menten
 Michaelis
 Moler
@@ -35,6 +34,7 @@ ORCID
 Osorio
 Pia
 Pinheiro
+PlotOutputFn
 Prespecify
 Redfish
 ReturnType
@@ -50,7 +50,6 @@ Sporcic
 Springer
 TMB
 TrueAge
-ag
 ageing
 agemat
 al
@@ -66,7 +65,6 @@ flindersi
 frac
 gerrardi
 github
-hte
 hyperdistribution
 lda
 maxage
