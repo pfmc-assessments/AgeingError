@@ -5,5 +5,4 @@ NULL
 #'
 #' @export
 #' @author Kelli F. Johnson
-fit <- function() {
-}
+fit <- function() {}
