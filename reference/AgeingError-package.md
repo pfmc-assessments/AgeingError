@@ -26,6 +26,9 @@ Useful links:
 
 Authors:
 
+- Ian G. Taylor <ian.taylor@noaa.gov>
+  ([ORCID](https://orcid.org/0000-0001-8489-2488))
+
 - Andre E. Punt ([ORCID](https://orcid.org/0000-0001-8489-2488))
 
 - Kelli F. Johnson ([ORCID](https://orcid.org/0000-0001-9563-1937))

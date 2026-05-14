@@ -195,10 +195,10 @@ write_files(dat = data_test, dir = tempdir())
 #> ℹ Minus group set to the minimum observed age 5
 #> ℹ Plus group set to the maximum observed age 10
 #> ℹ Reference age not specified; using 7 = floor(median(c(minusage, plusage)))
-#> ℹ Writing data file to /tmp/RtmpJp64hH/data.dat
+#> ℹ Writing data file to /tmp/RtmpfhrUat/data.dat
 #> ℹ 'biasopt' not specified; settings all readers to unbiased
 #> ℹ 'sigopt' not specified; settings all readers to share a constant CV parameter
-#> ℹ Writing specifications file to /tmp/RtmpJp64hH/data.spc
+#> ℹ Writing specifications file to /tmp/RtmpfhrUat/data.spc
 run(dir = tempdir())
 #> 
 #> ! There are some missing data; the effective sample size calculation may be dubious

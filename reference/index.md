@@ -9,11 +9,11 @@
 - [`DoApplyAgeError()`](http://pfmc-assessments.github.io/AgeingError/reference/DoApplyAgeError.md)
   : Run the ageing error optimization routine
 - [`PlotOutputFn()`](http://pfmc-assessments.github.io/AgeingError/reference/PlotOutputFn.md)
-  : Plot output
+  **\[deprecated\]** : Deprecated function replaced by plot_output()
 - [`ProcessResults()`](http://pfmc-assessments.github.io/AgeingError/reference/ProcessResults.md)
   : Process results of the ageing error estimation
 - [`RunFn()`](http://pfmc-assessments.github.io/AgeingError/reference/RunFn.md)
-  : Run ageing error model
+  **\[deprecated\]** : Deprecated function replaced by run()
 - [`SimulatorFn()`](http://pfmc-assessments.github.io/AgeingError/reference/SimulatorFn.md)
   : Simulate double reading data
 - [`StepwiseFn()`](http://pfmc-assessments.github.io/AgeingError/reference/StepwiseFn.md)

@@ -610,7 +610,7 @@ str(BG2022_mod)
     ##  $ hessian : logi FALSE
     ##  $ method  : chr "BFGS"
     ##  $ retape  :function (set.defaults = TRUE)  
-    ##  $ env     :<environment: 0x5567611fe200> 
+    ##  $ env     :<environment: 0x55f8be10ef60> 
     ##  $ report  :function (par = last.par)  
     ##  $ simulate:function (par = last.par, complete = FALSE)  
     ##  $ fn_orig :function (x = last.par[lfixed()], ...)  
