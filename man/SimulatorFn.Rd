@@ -26,10 +26,10 @@ SimulatorFn(
 (logistic selex-at-age is the only one that is implemented).}
 
 \item{ErrorParams}{Error type
-CV in the following equation:  Var\link{AgeRead} = (CV*TrueAge)^2}
+CV in the following equation:  \code{Var[AgeRead] = (CV*TrueAge)^2}}
 
 \item{BiasParams}{Bias type
-b in the following equation: E\link{AgeRead} = b*TrueAge}
+b in the following equation: \code{E[AgeRead] = b*TrueAge}}
 
 \item{SelexParams}{Selectivity parameters, which
 are standard to the logistic equation.}

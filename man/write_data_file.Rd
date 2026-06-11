@@ -17,8 +17,9 @@ write_data_file(
 }
 \arguments{
 \item{dat}{Dataframe or tibble with columns for each reader and rows for
-each age reading combination. This could either have a count column or
-not. If not, \code{\link[=tally_repeats]{tally_repeats()}} will be called to add a count column.
+each age reading combination. This could either have \code{count} as the first
+column or
+not. If not, \code{\link[=tally_repeats]{tally_repeats()}} will be called to add the \code{count} column.
 Order your reader/lab columns such that similar
 readers/labs are located next to one another because columns to the right
 can mirror columns to their immediate left in terms of parameter
@@ -30,7 +31,8 @@ estimates.}
 
 \item{minage}{An integer, specifying the minimum possible "true" age.}
 
-\item{maxage}{An integer, specifying the maximum possible "true" age.}
+\item{maxage}{An integer, specifying the maximum possible "true" age. If NULL,
+this will be set to the multiple of 5 which is >120\% of the observed maximum age.}
 
 \item{refage}{An arbitrarily chosen age from which "true" age-composition
 fixed-effects are calculated as an offset. This has no effect on the

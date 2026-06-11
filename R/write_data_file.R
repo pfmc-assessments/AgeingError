@@ -7,8 +7,9 @@
 #' version of this package.
 #'
 #' @param dat Dataframe or tibble with columns for each reader and rows for
-#'   each age reading combination. This could either have a count column or
-#'   not. If not, [tally_repeats()] will be called to add a count column.
+#'   each age reading combination. This could either have `count` as the first
+#'   column or
+#'   not. If not, [tally_repeats()] will be called to add the `count` column.
 #'   Order your reader/lab columns such that similar
 #'   readers/labs are located next to one another because columns to the right
 #'   can mirror columns to their immediate left in terms of parameter
@@ -16,7 +17,8 @@
 #' @param dir Directory where the data file will be saved.
 #' @param file_name Name of the data file.
 #' @param minage An integer, specifying the minimum possible "true" age.
-#' @param maxage An integer, specifying the maximum possible "true" age.
+#' @param maxage An integer, specifying the maximum possible "true" age. If NULL,
+#'  this will be set to the multiple of 5 which is >120% of the observed maximum age.
 #' @param refage An arbitrarily chosen age from which "true" age-composition
 #'   fixed-effects are calculated as an offset. This has no effect on the
 #'   answer but could potentially effect estimation speed. By default this will

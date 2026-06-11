@@ -20,7 +20,7 @@
 #'
 #'   Possible entries include the following:
 #'   \describe{
-#'     \item{-\[0-9\]+}{
+#'     \item{\code{-[0-9]+}}{
 #'       Mirror the bias of another reader, where the negative integer
 #'       corresponds to the column of the reader that is being mirrored
 #'       minus one, e.g., `-1` causes it to mirror reader 1. Only lower-numbered
@@ -54,7 +54,7 @@
 #'
 #'   Possible entries include the following:
 #'   \describe{
-#'     \item{-[0-9]+}{
+#'     \item{\code{-[0-9]+}}{
 #'       Mirror the standard deviation of another reader, where the negative
 #'       integer corresponds to the column of the reader that is being
 #'       mirrored minus one, e.g., `-1` causes it to mirror reader 1, for
@@ -78,15 +78,17 @@
 #'     }
 #'     \item{5}{
 #'       Spline with estimated slope at beginning and end where the number of
-#'       parameters is 2 + number of knots.
+#'       parameters is 2 + number of knots. NOT YET SUPPORTED BY THIS FUNCTION.
 #'     }
 #'     \item{6}{
 #'       Linear interpolation with a first knot of 1 and a last knot of the
-#'       maximum age, i.e., `MaxAge`.
+#'       maximum age, i.e., `MaxAge`. NOT YET SUPPORTED BY THIS FUNCTION.
 #'     }
 #' }
 #' @param knotages Ages associated with each knot. This is a necessary input
-#'   for `sigopt = 5` or `sigopt = 6`. Not implemented in this function yet.
+#'   for `sigopt = 5` or `sigopt = 6`. NOT YET IMPLEMENTED IN THIS FUNCTION.
+#' @param maxage An integer, specifying the maximum possible "true" age.
+#'   This is only required in the specificiations file if `biasopt = 2`.
 #' @return Invisibly returns the path to the specifications file (`file.path(dir, file_name)`).
 #' @author Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export
