@@ -121,16 +121,17 @@ Hollings-form relationship of coefficient of variation with true age.
 }
 \item{5}{
 Spline with estimated slope at beginning and end where the number of
-parameters is 2 + number of knots. NOT YET SUPPORTED BY THIS FUNCTION.
+parameters is 2 + number of knots. Supported when \code{knotages} is provided.
 }
 \item{6}{
 Linear interpolation with a first knot of 1 and a last knot of the
-maximum age, i.e., \code{MaxAge}. NOT YET SUPPORTED BY THIS FUNCTION.
+maximum age, i.e., \code{MaxAge}. Supported when \code{knotages} is provided.
 }
 }}
 
 \item{knotages}{Ages associated with each knot. This is a necessary input
-for \code{sigopt = 5} or \code{sigopt = 6}. NOT YET IMPLEMENTED IN THIS FUNCTION.}
+for \code{sigopt = 5} or \code{sigopt = 6}, and must be a list with one
+entry per reader.}
 }
 \value{
 Invisibly returns the path to the data file (\code{file.path(dir, file_name)}).
