@@ -1,0 +1,50 @@
+---
+title: "Setting up input files for AgeingError using helper functions"
+author: "Ian Taylor"
+date: "2025-03-25"
+output:
+  html_document: default
+  word_document: default
+vignette: >
+  %\VignetteEngine{litedown::vignette}
+  %\VignetteIndexEntry{Setting up input files for AgeingError}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE}
+DiagrammeR::mermaid('
+graph TD
+    A["data"] --> B["write_files()"];
+    B --> C["run()"];'
+)
+```
+
+```{r, echo=FALSE}
+DiagrammeR::mermaid('
+graph TD
+    A["data"] --> B;
+    subgraph write_files
+      B["write_data()"] --> C;
+    end
+    C["write_specs()"] --> D["run()"];'
+)
+```
+
+
+You can also write the specifications file from R using `write_specs_file()`.
+For spline or linear sigma options, provide `knotages` as a list with one
+entry per reader, using `NA` for readers that do not require knots.
+
+```{r}
+specs_file <- write_specs_file(
+  dir = tempdir(),
+  file_name = "example.spc",
+  nreaders = 4,
+  sigopt = c(5, -1, 7, 8),
+  knotages = list(c(0, 3, 5, 7, 9), NA, NA, NA)
+)
+```
+o
