@@ -127,11 +127,22 @@ parameters is 2 + number of knots. Supported when \code{knotages} is provided.
 Linear interpolation with a first knot of 1 and a last knot of the
 maximum age, i.e., \code{MaxAge}. Supported when \code{knotages} is provided.
 }
+\item{7}{
+A linear change in the standard deviation of random age-reading error,
+$\sigma_a$, with age. This option has two parameters that need to be
+specified for each pair of independent readers in the specifications
+file.
+}
+\item{8}{
+A linear change in the coefficient of variation of random age-reading
+error, $CV_a$ , with age. This option has two parameters that need to
+be specified for each pair of independent readers in the
+specifications file.
+}
 }}
 
-\item{knotages}{Ages associated with each knot. This is a necessary input
-for \code{sigopt = 5} or \code{sigopt = 6}, and must be a list with one
-entry per reader.}
+\item{knotages}{A list of knot ages for each reader. This is required when
+\code{sigopt = 5} or \code{sigopt = 6} and must have one element per reader.}
 }
 \value{
 Invisibly returns the path to the data file (\code{file.path(dir, file_name)}).

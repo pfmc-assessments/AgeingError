@@ -100,7 +100,7 @@
 #' @param knotages A list of knot ages for each reader. This is required when
 #'   `sigopt = 5` or `sigopt = 6` and must have one element per reader.
 #' @param maxage The maximum possible "true" age.
-#'   This is only required in the specificiations file if `biasopt = 2`.
+#'   This is only required in the specifications file if `biasopt = 2`.
 #' @return Invisibly returns the path to the specifications file (`file.path(dir, file_name)`).
 #' @author Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export

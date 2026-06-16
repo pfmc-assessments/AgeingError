@@ -14,7 +14,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Note: this vignette describes the AgeError package as a whole including all 
+*Note: this vignette describes the AgeingError package as a whole including all 
 the user options for data and specifications. See the separate vignette 
 [R-based workflow for the AgeingError package](helper_functions.html) which 
 details the `write_files()` function which makes it easier to write the 
