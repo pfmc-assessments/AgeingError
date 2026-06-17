@@ -37,11 +37,12 @@ SimulatorFn(
 
 - ErrorParams:
 
-  Error type CV in the following equation: VarAgeRead = (CV\*TrueAge)^2
+  Error type CV in the following equation:
+  `Var[AgeRead] = (CV*TrueAge)^2`
 
 - BiasParams:
 
-  Bias type b in the following equation: EAgeRead = b\*TrueAge
+  Bias type b in the following equation: `E[AgeRead] = b*TrueAge`
 
 - SelexParams:
 

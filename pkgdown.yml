@@ -3,7 +3,8 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   getting_started: getting_started.html
-last_built: 2026-05-14T22:57Z
+  helper_functions: helper_functions.html
+last_built: 2026-06-17T23:14Z
 urls:
   reference: http://pfmc-assessments.github.io/AgeingError/reference
   article: http://pfmc-assessments.github.io/AgeingError/articles

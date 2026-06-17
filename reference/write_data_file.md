@@ -29,13 +29,13 @@ write_data_file(
 - dat:
 
   Dataframe or tibble with columns for each reader and rows for each age
-  reading combination. This could either have a count column or not. If
-  not,
+  reading combination. This could either have `count` as the first
+  column or not. If not,
   [`tally_repeats()`](http://pfmc-assessments.github.io/AgeingError/reference/tally_repeats.md)
-  will be called to add a count column. Order your reader/lab columns
-  such that similar readers/labs are located next to one another because
-  columns to the right can mirror columns to their immediate left in
-  terms of parameter estimates.
+  will be called to add the `count` column. Order your reader/lab
+  columns such that similar readers/labs are located next to one another
+  because columns to the right can mirror columns to their immediate
+  left in terms of parameter estimates.
 
 - dir:
 
@@ -51,7 +51,9 @@ write_data_file(
 
 - maxage:
 
-  An integer, specifying the maximum possible "true" age.
+  An integer, specifying the maximum possible "true" age. If NULL, this
+  will be set to the multiple of 5 which is \>120% of the observed
+  maximum age.
 
 - refage:
 
@@ -108,5 +110,5 @@ data_file <- write_data_file(data_test, dir = tempdir(), file_name = "test.dat")
 #> ℹ Minus group set to the minimum observed age 5
 #> ℹ Plus group set to the maximum observed age 10
 #> ℹ Reference age not specified; using 7 = floor(median(c(minusage, plusage)))
-#> ℹ Writing data file to /tmp/Rtmpz5yknP/test.dat
+#> ℹ Writing data file to /tmp/Rtmpcca4rZ/test.dat
 ```

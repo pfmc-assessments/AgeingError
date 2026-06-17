@@ -27,13 +27,13 @@ write_files(
 - dat:
 
   Dataframe or tibble with columns for each reader and rows for each age
-  reading combination. This could either have a count column or not. If
-  not,
+  reading combination. This could either have `count` as the first
+  column or not. If not,
   [`tally_repeats()`](http://pfmc-assessments.github.io/AgeingError/reference/tally_repeats.md)
-  will be called to add a count column. Order your reader/lab columns
-  such that similar readers/labs are located next to one another because
-  columns to the right can mirror columns to their immediate left in
-  terms of parameter estimates.
+  will be called to add the `count` column. Order your reader/lab
+  columns such that similar readers/labs are located next to one another
+  because columns to the right can mirror columns to their immediate
+  left in terms of parameter estimates.
 
 - dir:
 
@@ -45,7 +45,9 @@ write_files(
 
 - maxage:
 
-  An integer, specifying the maximum possible "true" age.
+  An integer, specifying the maximum possible "true" age. If NULL, this
+  will be set to the multiple of 5 which is \>120% of the observed
+  maximum age.
 
 - refage:
 
@@ -80,7 +82,7 @@ write_files(
 
   Possible entries include the following:
 
-  -\[0-9\]+
+  `-[0-9]+`
 
   :   Mirror the bias of another reader, where the negative integer
       corresponds to the column of the reader that is being mirrored
@@ -118,7 +120,7 @@ write_files(
 
   Possible entries include the following:
 
-  -0-9+
+  `-[0-9]+`
 
   :   Mirror the standard deviation of another reader, where the
       negative integer corresponds to the column of the reader that is
@@ -150,17 +152,33 @@ write_files(
   5
 
   :   Spline with estimated slope at beginning and end where the number
-      of parameters is 2 + number of knots.
+      of parameters is 2 + number of knots. Supported when `knotages` is
+      provided.
 
   6
 
   :   Linear interpolation with a first knot of 1 and a last knot of the
-      maximum age, i.e., `MaxAge`.
+      maximum age, i.e., `MaxAge`. Supported when `knotages` is
+      provided.
+
+  7
+
+  :   A linear change in the standard deviation of random age-reading
+      error, \$\_a\$, with age. This option has two parameters that need
+      to be specified for each pair of independent readers in the
+      specifications file.
+
+  8
+
+  :   A linear change in the coefficient of variation of random
+      age-reading error, \$CV_a\$ , with age. This option has two
+      parameters that need to be specified for each pair of independent
+      readers in the specifications file.
 
 - knotages:
 
-  Ages associated with each knot. This is a necessary input for
-  `sigopt = 5` or `sigopt = 6`. Not implemented in this function yet.
+  A list of knot ages for each reader. This is required when
+  `sigopt = 5` or `sigopt = 6` and must have one element per reader.
 
 ## Value
 
@@ -186,158 +204,20 @@ data_test <- data.frame(
   reader3 = c(7, 10, 7, 6, 6, 8, 7, 9, 8, 10, 10, 5, 6, 7, NA, NA, NA, 5, 8, 5)
 )
 write_files(dat = data_test, dir = tempdir())
+#> ℹ Max age not specified; using NA which is the multiple of 5 which is >120% of the observed maximum
 #> ℹ Input 'dat' doesn't contain a column called 'count'; adding one via tally_repeats()
 #> ℹ Total observations: 20
 #> ℹ Aggregated unique combinations: 12
 #> ℹ Range of observed ages in the data: 5 - 10
 #> ℹ Number of readers: 3
-#> ℹ Max age not specified; using 15 which is the multiple of 5 which is >120% of the observed maximum
 #> ℹ Minus group set to the minimum observed age 5
 #> ℹ Plus group set to the maximum observed age 10
 #> ℹ Reference age not specified; using 7 = floor(median(c(minusage, plusage)))
-#> ℹ Writing data file to /tmp/Rtmpz5yknP/data.dat
+#> ℹ Writing data file to /tmp/Rtmpcca4rZ/data.dat
 #> ℹ 'biasopt' not specified; settings all readers to unbiased
 #> ℹ 'sigopt' not specified; settings all readers to share a constant CV parameter
-#> ℹ Writing specifications file to /tmp/Rtmpz5yknP/data.spc
+#> ℹ Writing specifications file to /tmp/Rtmpcca4rZ/data.spc
 run(dir = tempdir())
 #> 
-#> ! There are some missing data; the effective sample size calculation may be dubious
-#> Structure of the data set
-#> Data set # Entries Reader boolean
-#> ℹ Number of rows in NrowStruc 3 = 3
-#> [1] "ReaderStruc"
-#>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]    1    3    1    0    3
-#> [2,]    1   14    1    2    3
-#> [3,]    1    3    1    2    0
-#> 1 3 1 0 3
-#> 1 14 1 2 3
-#> 1 3 1 2 0
-#> [1] "ReaderSumm"
-#>      [,1] [,2] [,3]
-#> [1,]    0    0    3
-#> ReaderSumm
-#> 1 2 3
-#> [1] "ReaderSumm"
-#>      [,1] [,2] [,3]
-#> [1,]    1    2    3
-#> Number of reads by data set:        3
-#> Minimum and Maximum Ages:           5   10
-#> 
-#> total cells  256
-#> [1] 89.09485
-#> [1] 481.2413
-#> [1] 150.0598
-#> [1] 84.7052
-#> [1] 74.92202
-#> [1] 493.3396
-#> [1] 492.6485
-#> [1] 72.32722
-#> [1] 70.51958
-#> [1] 69.90354
-#> [1] 69.35269
-#> [1] 68.30155
-#> [1] 64.49775
-#> [1] 57.9512
-#> [1] 57.28665
-#> [1] 55.26544
-#> [1] 53.49773
-#> [1] 52.46171
-#> [1] 51.69157
-#> [1] 51.26842
-#> [1] 50.96094
-#> [1] 50.78005
-#> [1] 50.71023
-#> [1] 50.68466
-#> [1] 50.68283
-#> [1] 50.68261
-#> [1] 50.68259
-#> [1] 50.68252
-#> [1] 50.68238
-#> [1] 50.6821
-#> [1] 50.68178
-#> [1] 50.68161
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68169
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68156733
-#> [1] "looping"
-#> [1] 1e+20
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] "Objective fn:"
-#> [1] 50.68156733
-#> Difference 6.039613e-13 
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#> [1] 50.68157
-#>               [,1]          [,2]         [,3]         [,4]         [,5]
-#> [1,] -1.591821e-06 -2.259191e-08 9.664102e-09 2.355039e-08 3.528349e-09
-#>               [,6]          [,7]         [,8]
-#> [1,] -1.661678e-07 -3.615956e-08 1.339127e-07
-#>       SDPar       Slope       Slope       Probs       Probs       Probs 
-#>  0.03668531 -3.72104118 -3.73840006 -0.71364490 -0.68892753 -1.08530590 
-#>       Probs       Probs 
-#> -0.71204794 -0.68866006 
+#> Error in determine_n_sets(file_data): number_of_sets%%1 == 0 is not TRUE
 ```

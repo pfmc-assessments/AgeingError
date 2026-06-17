@@ -1,12 +1,15 @@
 # Estimating ageing error using the TMB model written by André Punt
 
-*Note: this vignette has not yet been updated to describe the new
-function
+*Note: this vignette describes the AgeingError package as a whole
+including all the user options for data and specifications. See the
+separate vignette [R-based workflow for the AgeingError
+package](http://pfmc-assessments.github.io/AgeingError/articles/helper_functions.md)
+which details the
 [`write_files()`](http://pfmc-assessments.github.io/AgeingError/reference/write_files.md)
-which makes it easier to write the correctly-formatted input files, and
+function which makes it easier to write the correctly-formatted input
+files, and
 [`run()`](http://pfmc-assessments.github.io/AgeingError/reference/run.md)
-which makes it easy to run the model and process the results. See the
-help pages for those functions for more detail.*
+which makes it easy to run the model and process the results.*
 
 ## Introduction
 
@@ -610,7 +613,7 @@ str(BG2022_mod)
     ##  $ hessian : logi FALSE
     ##  $ method  : chr "BFGS"
     ##  $ retape  :function (set.defaults = TRUE)  
-    ##  $ env     :<environment: 0x5561de3d6310> 
+    ##  $ env     :<environment: 0x55c9a05623f0> 
     ##  $ report  :function (par = last.par)  
     ##  $ simulate:function (par = last.par, complete = FALSE)  
     ##  $ fn_orig :function (x = last.par[lfixed()], ...)  

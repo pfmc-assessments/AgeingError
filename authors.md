@@ -23,17 +23,17 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/pfmc-assessments/AgeingError/blob/v2.1.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/pfmc-assessments/AgeingError/blob/main/inst/CITATION)
 
 Punt AE, Johnson KF, Taylor IG, Burch P (2026). *AgeingError: Estimating
-ageing error with 'TMB' from double reads*. R package version 2.1.1,
+ageing error with 'TMB' from double reads*. R package version 2.2.0,
 <https://pfmc-assessments.github.io/AgeingError/>.
 
     @Manual{,
       title = {AgeingError: Estimating ageing error with 'TMB' from double reads},
       author = {Andre E. Punt and Kelli F. Johnson and Ian G. Taylor and Paul Burch},
       year = {2026},
-      note = {R package version 2.1.1},
+      note = {R package version 2.2.0},
       url = {https://pfmc-assessments.github.io/AgeingError/},
     }
 
