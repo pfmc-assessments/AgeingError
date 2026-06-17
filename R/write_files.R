@@ -29,6 +29,19 @@ write_files <- function(
   sigopt = NULL,
   knotages = NULL
 ) {
+  # check inputs
+  if (!is.data.frame(dat)) {
+    cli::cli_abort("Input 'dat' must be a data frame or tibble")
+  }
+  maxobs <- max(dat[, -1])
+  # fill in any missing default values
+  if (is.null(maxage)) {
+    maxage <- ceiling(1.2 * maxobs / 5) * 5
+    cli::cli_alert_info(
+      "Max age not specified; using {maxage} which is the multiple of 5 which is >120% of the observed maximum"
+    )
+  }
+
   write_data_file(
     dat = dat,
     dir = dir,
@@ -45,6 +58,7 @@ write_files <- function(
     nreaders = ifelse(names(dat)[1] == "count", ncol(dat) - 1, ncol(dat)),
     biasopt = biasopt,
     sigopt = sigopt,
+    maxage = maxage,
     knotages = knotages
   )
 }

@@ -1,8 +1,8 @@
 Type: Package
 Package: AgeingError
 Title: Estimating ageing error with 'TMB' from double reads
-Version: 2.1.1
-Date: 2026-05-14
+Version: 2.2.0
+Date: 2026-06-16
 Authors@R: c(
     person(c("Andre", "E."), "Punt", role = "aut",
            comment = c(ORCID = "0000-0001-8489-2488")),
@@ -30,6 +30,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     cli,
+    DiagrammeR,
     dplyr,
     fs,
     lifecycle,

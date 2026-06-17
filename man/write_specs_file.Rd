@@ -10,7 +10,8 @@ write_specs_file(
   nreaders,
   biasopt = NULL,
   sigopt = NULL,
-  knotages = NULL
+  knotages = NULL,
+  maxage
 )
 }
 \arguments{
@@ -31,7 +32,7 @@ all readers are unbiased.
 
 Possible entries include the following:
 \describe{
-\item{-[0-9]+}{
+\item{\code{-[0-9]+}}{
 Mirror the bias of another reader, where the negative integer
 corresponds to the column of the reader that is being mirrored
 minus one, e.g., \code{-1} causes it to mirror reader 1. Only lower-numbered
@@ -66,7 +67,7 @@ specifies a constant CV in ageing error which is shared among all readers.
 
 Possible entries include the following:
 \describe{
-\item{-\link{0-9}+}{
+\item{\code{-[0-9]+}}{
 Mirror the standard deviation of another reader, where the negative
 integer corresponds to the column of the reader that is being
 mirrored minus one, e.g., \code{-1} causes it to mirror reader 1, for
@@ -90,16 +91,31 @@ Hollings-form relationship of coefficient of variation with true age.
 }
 \item{5}{
 Spline with estimated slope at beginning and end where the number of
-parameters is 2 + number of knots.
+parameters is 2 + number of knots. Supported when \code{knotages} is provided.
 }
 \item{6}{
 Linear interpolation with a first knot of 1 and a last knot of the
-maximum age, i.e., \code{MaxAge}.
+maximum age, i.e., \code{MaxAge}. Supported when \code{knotages} is provided.
+}
+\item{7}{
+A linear change in the standard deviation of random age-reading error,
+$\sigma_a$, with age. This option has two parameters that need to be
+specified for each pair of independent readers in the specifications
+file.
+}
+\item{8}{
+A linear change in the coefficient of variation of random age-reading
+error, $CV_a$ , with age. This option has two parameters that need to
+be specified for each pair of independent readers in the
+specifications file.
 }
 }}
 
-\item{knotages}{Ages associated with each knot. This is a necessary input
-for \code{sigopt = 5} or \code{sigopt = 6}. Not implemented in this function yet.}
+\item{knotages}{A list of knot ages for each reader. This is required when
+\code{sigopt = 5} or \code{sigopt = 6} and must have one element per reader.}
+
+\item{maxage}{The maximum possible "true" age.
+This is only required in the specifications file if \code{biasopt = 2}.}
 }
 \value{
 Invisibly returns the path to the specifications file (\code{file.path(dir, file_name)}).

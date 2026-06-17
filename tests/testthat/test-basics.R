@@ -66,6 +66,44 @@ test_that("Can create a specifications file using write_specs_file()", {
   testthat::expect_true(length(specs_file_read) == 9)
 })
 
+test_that("Can create a spline specifications file using write_specs_file()", {
+  temp_dir <- file.path(tempdir(), "test_AgeingError")
+  if (!dir.exists(temp_dir)) {
+    dir.create(temp_dir)
+  }
+  specs_file <- write_specs_file(
+    dir = temp_dir,
+    file_name = "test_spline.spc",
+    nreaders = 2,
+    sigopt = c(5, -1),
+    knotages = list(c(0, 3, 5), NA)
+  )
+
+  testthat::expect_true(file.exists(specs_file))
+  specs_file_read <- readLines(specs_file)
+  testthat::expect_true(any(grepl("# Spline specifications", specs_file_read)))
+  testthat::expect_true(any(grepl("0 3 5", specs_file_read)))
+  testthat::expect_true(sum(grepl("-10 40 0 1", specs_file_read)) == 3)
+})
+
+test_that("Can create a linear-change sigma specifications file using write_specs_file()", {
+  temp_dir <- file.path(tempdir(), "test_AgeingError")
+  if (!dir.exists(temp_dir)) {
+    dir.create(temp_dir)
+  }
+  specs_file <- write_specs_file(
+    dir = temp_dir,
+    file_name = "test_sigopt7_8.spc",
+    nreaders = 4,
+    sigopt = c(1, 7, -1, 8)
+  )
+
+  testthat::expect_true(file.exists(specs_file))
+  specs_file_read <- readLines(specs_file)
+  testthat::expect_true(sum(grepl("0 1 0.2 1", specs_file_read)) == 2)
+  testthat::expect_true(sum(grepl("0 2 0.5 1", specs_file_read)) == 2)
+})
+
 # testing load_data() and load_specs()
 test_that("Can load a data file using load_data()", {
   data_loaded <- load_data(

@@ -7,9 +7,9 @@
 #' @param SelexForm Form of selectivity-at-age
 #' (logistic selex-at-age is the only one that is implemented).
 #' @param ErrorParams Error type
-#' CV in the following equation:  Var[AgeRead] = (CV*TrueAge)^2
+#' CV in the following equation:  \code{Var[AgeRead] = (CV*TrueAge)^2}
 #' @param BiasParams Bias type
-#' b in the following equation: E[AgeRead] = b*TrueAge
+#' b in the following equation: \code{E[AgeRead] = b*TrueAge}
 #' @param SelexParams Selectivity parameters, which
 #' are standard to the logistic equation.
 #' @param ReadsMat Matrix describing number of reads per reader combination.

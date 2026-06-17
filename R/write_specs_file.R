@@ -20,7 +20,7 @@
 #'
 #'   Possible entries include the following:
 #'   \describe{
-#'     \item{-\[0-9\]+}{
+#'     \item{\code{-[0-9]+}}{
 #'       Mirror the bias of another reader, where the negative integer
 #'       corresponds to the column of the reader that is being mirrored
 #'       minus one, e.g., `-1` causes it to mirror reader 1. Only lower-numbered
@@ -54,7 +54,7 @@
 #'
 #'   Possible entries include the following:
 #'   \describe{
-#'     \item{-[0-9]+}{
+#'     \item{\code{-[0-9]+}}{
 #'       Mirror the standard deviation of another reader, where the negative
 #'       integer corresponds to the column of the reader that is being
 #'       mirrored minus one, e.g., `-1` causes it to mirror reader 1, for
@@ -78,15 +78,29 @@
 #'     }
 #'     \item{5}{
 #'       Spline with estimated slope at beginning and end where the number of
-#'       parameters is 2 + number of knots.
+#'       parameters is 2 + number of knots. Supported when `knotages` is provided.
 #'     }
 #'     \item{6}{
 #'       Linear interpolation with a first knot of 1 and a last knot of the
-#'       maximum age, i.e., `MaxAge`.
+#'       maximum age, i.e., `MaxAge`. Supported when `knotages` is provided.
 #'     }
-#' }
-#' @param knotages Ages associated with each knot. This is a necessary input
-#'   for `sigopt = 5` or `sigopt = 6`. Not implemented in this function yet.
+#'     \item{7}{
+#'       A linear change in the standard deviation of random age-reading error,
+#'       $\sigma_a$, with age. This option has two parameters that need to be
+#'       specified for each pair of independent readers in the specifications
+#'       file.
+#'     }
+#'     \item{8}{
+#'        A linear change in the coefficient of variation of random age-reading
+#'        error, $CV_a$ , with age. This option has two parameters that need to
+#'        be specified for each pair of independent readers in the
+#'        specifications file.
+#'     }
+#'   }
+#' @param knotages A list of knot ages for each reader. This is required when
+#'   `sigopt = 5` or `sigopt = 6` and must have one element per reader.
+#' @param maxage The maximum possible "true" age.
+#'   This is only required in the specifications file if `biasopt = 2`.
 #' @return Invisibly returns the path to the specifications file (`file.path(dir, file_name)`).
 #' @author Ian G. Taylor, James T. Thorson, Ian J. Stewart, Andre E. Punt
 #' @export
@@ -103,13 +117,13 @@
 #' specs <- load_specs(SpecsFile = specs_file, DataSpecs = data)
 #'
 write_specs_file <- function(
-  dir = getwd(),
-  file_name = "data.spc",
-  nreaders,
-  biasopt = NULL,
-  sigopt = NULL,
-  knotages = NULL
-) {
+    dir = getwd(),
+    file_name = "data.spc",
+    nreaders,
+    biasopt = NULL,
+    sigopt = NULL,
+    knotages = NULL,
+    maxage) {
   # check inputs
   if (!dir.exists(dir)) {
     cli::cli_alert_info("Directory does not exist; creating it")
@@ -121,10 +135,11 @@ write_specs_file <- function(
   if (!is.numeric(nreaders)) {
     cli::cli_abort("Input 'nreaders' must be a numeric value")
   }
-  if (
-    !is.null(biasopt) && !is.numeric(biasopt) && length(biasopt) != nreaders
-  ) {
-    cli::cli_abort("Input 'biasopt' must be a vector of length 'nreaders'")
+  if (!is.null(biasopt) && (!is.numeric(biasopt) || length(biasopt) != nreaders)) {
+    cli::cli_abort("Input 'biasopt' must be a numeric vector of length 'nreaders'")
+  }
+  if (!is.null(sigopt) && (!is.numeric(sigopt) || length(sigopt) != nreaders)) {
+    cli::cli_abort("Input 'sigopt' must be a numeric vector of length 'nreaders'")
   }
 
   # fill in any missing default values
@@ -140,10 +155,20 @@ write_specs_file <- function(
       "'sigopt' not specified; settings all readers to share a constant CV parameter"
     )
   }
-  if (any(sigopt %in% 5:6) && is.null(knotages)) {
-    cli::cli_abort(
-      "'knotages' must be specified when 'sigopt' includes 5 or 6, but are not yet implemented in write_specs_file()"
-    )
+  if (any(sigopt %in% 5:6)) {
+    if (is.null(knotages)) {
+      cli::cli_abort("'knotages' must be specified when 'sigopt' includes 5 or 6")
+    }
+    if (!is.list(knotages) || length(knotages) != nreaders) {
+      cli::cli_abort("'knotages' must be a list with one element per reader")
+    }
+    for (ireader in which(sigopt %in% 5:6)) {
+      if (!is.numeric(knotages[[ireader]]) || length(knotages[[ireader]]) < 2) {
+        cli::cli_abort(
+          "knotages[[{ireader}]] must be a numeric vector with at least two knot ages for sigopt {sigopt[ireader]}"
+        )
+      }
+    }
   }
 
   # create reader specs table
@@ -206,23 +231,42 @@ write_specs_file <- function(
         on_off = 1
       )
     }
-
-    ### code below from RunFn.R not yet updated to new style/approach
-
-    # # Spline with estimated derivative at beginning and end
-    # # (Params 1-N: knot parameters; N+1 and N+2: derivative at beginning and end)
-    # if (sigopt[ireader] == 5) {
-    #   for (ParI in 1:(2 + length(KnotAges[[SigI]]))) {
-    #     writeTable(rMx(c(-10.0, 10.0, 1.0, 1)))
-    #   }
-    # }
-    # # Spline with derivative at beginning and end fixed at zero
-    # # (Params 1-N: knot parameters)
-    # if (sigopt[ireader] == 6) {
-    #   for (ParI in 1:length(KnotAges[[SigI]])) {
-    #     writeTable(rMx(c(-10.0, 10.0, 1.0, 1)))
-    #   }
-    # }
+    # Spline with estimated derivative at beginning and end
+    if (sigopt[ireader] == 5) {
+      newpars <- data.frame(
+        low = rep(-10, length(knotages[[ireader]])),
+        high = rep(40, length(knotages[[ireader]])),
+        init = rep(0, length(knotages[[ireader]])),
+        on_off = 1
+      )
+    }
+    # Piecewise linear with specified knots
+    if (sigopt[ireader] == 6) {
+      newpars <- data.frame(
+        low = rep(-10, length(knotages[[ireader]])),
+        high = rep(40, length(knotages[[ireader]])),
+        init = rep(0, length(knotages[[ireader]])),
+        on_off = 1
+      )
+    }
+    # Linear change in SD with age
+    if (sigopt[ireader] == 7) {
+      newpars <- data.frame(
+        low = c(0, 0),
+        high = c(1, 2),
+        init = c(0.2, 0.5),
+        on_off = 1
+      )
+    }
+    # Linear change in CV with age
+    if (sigopt[ireader] == 8) {
+      newpars <- data.frame(
+        low = c(0, 0),
+        high = c(1, 2),
+        init = c(0.2, 0.5),
+        on_off = 1
+      )
+    }
     sigpars <- rbind(sigpars, newpars)
   }
 
@@ -237,6 +281,56 @@ write_specs_file <- function(
     file = file.path(dir, file_name),
     quote = "none"
   )
+
+  # write knot specifications for spline/linear sigma options
+  if (any(sigopt == 5)) {
+    readr::write_lines(
+      c(" ", "# Spline specifications"),
+      file = file.path(dir, file_name),
+      append = TRUE
+    )
+    for (ireader in which(sigopt == 5)) {
+      readr::write_lines(
+        as.character(length(knotages[[ireader]])),
+        file = file.path(dir, file_name),
+        append = TRUE
+      )
+      readr::write_lines(
+        paste(knotages[[ireader]], collapse = " "),
+        file = file.path(dir, file_name),
+        append = TRUE
+      )
+    }
+    readr::write_lines(
+      " ",
+      file = file.path(dir, file_name),
+      append = TRUE
+    )
+  }
+  if (any(sigopt == 6)) {
+    readr::write_lines(
+      c(" ", "# Linear specifications"),
+      file = file.path(dir, file_name),
+      append = TRUE
+    )
+    for (ireader in which(sigopt == 6)) {
+      readr::write_lines(
+        as.character(length(knotages[[ireader]])),
+        file = file.path(dir, file_name),
+        append = TRUE
+      )
+      readr::write_lines(
+        paste(knotages[[ireader]], collapse = " "),
+        file = file.path(dir, file_name),
+        append = TRUE
+      )
+    }
+    readr::write_lines(
+      " ",
+      file = file.path(dir, file_name),
+      append = TRUE
+    )
+  }
 
   # write bias parameters
   readr::write_lines(
