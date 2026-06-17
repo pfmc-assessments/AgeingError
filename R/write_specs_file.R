@@ -117,13 +117,14 @@
 #' specs <- load_specs(SpecsFile = specs_file, DataSpecs = data)
 #'
 write_specs_file <- function(
-    dir = getwd(),
-    file_name = "data.spc",
-    nreaders,
-    biasopt = NULL,
-    sigopt = NULL,
-    knotages = NULL,
-    maxage) {
+  dir = getwd(),
+  file_name = "data.spc",
+  nreaders,
+  biasopt = NULL,
+  sigopt = NULL,
+  knotages = NULL,
+  maxage
+) {
   # check inputs
   if (!dir.exists(dir)) {
     cli::cli_alert_info("Directory does not exist; creating it")
