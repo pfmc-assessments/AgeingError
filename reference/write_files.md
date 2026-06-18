@@ -213,10 +213,10 @@ write_files(dat = data_test, dir = tempdir())
 #> ℹ Minus group set to the minimum observed age 5
 #> ℹ Plus group set to the maximum observed age 10
 #> ℹ Reference age not specified; using 7 = floor(median(c(minusage, plusage)))
-#> ℹ Writing data file to /tmp/Rtmpcca4rZ/data.dat
+#> ℹ Writing data file to /tmp/RtmpAxCs7p/data.dat
 #> ℹ 'biasopt' not specified; settings all readers to unbiased
 #> ℹ 'sigopt' not specified; settings all readers to share a constant CV parameter
-#> ℹ Writing specifications file to /tmp/Rtmpcca4rZ/data.spc
+#> ℹ Writing specifications file to /tmp/RtmpAxCs7p/data.spc
 run(dir = tempdir())
 #> 
 #> Error in determine_n_sets(file_data): number_of_sets%%1 == 0 is not TRUE
