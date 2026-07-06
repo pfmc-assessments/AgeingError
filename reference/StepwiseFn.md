@@ -95,9 +95,8 @@ James T. Thorson
 
 ``` r
 
-example(RunFn)
-#> Warning: ‘RunFn’ has a help file but no examples
 if (FALSE) { # \dontrun{
+example(RunFn)
 ##### Run the model (MAY TAKE 5-10 MINUTES)
 fileloc <- file.path(tempdir(), "age")
 dir.create(fileloc, showWarnings = FALSE)
@@ -116,13 +115,11 @@ PlotOutputFn(
   Data = AgeReads2, MaxAge = MaxAge,
   SaveFile = fileloc, PlotType = "PDF"
 )
-} # }
 
 ##### Stepwise selection
 
 # Parameters
 MaxAge <- ceiling(max(AgeReads2) / 10) * 10
-#> Error: object 'AgeReads2' not found
 MinAge <- 1
 
 ##### Stepwise selection
@@ -147,28 +144,20 @@ SearchMat <- array(NA,
     paste("Option", 1:7)
   )
 )
-#> Error: object 'Nreaders' not found
 # Readers 1 and 3 search across options 1-3 for ERROR
 SearchMat[c(1, 3), 1:3] <- rep(1, 2) %o% c(1, 2, 3)
-#> Error: object 'SearchMat' not found
 # Reader 2 mirrors reader 1
 SearchMat[2, 1] <- -1
-#> Error: object 'SearchMat' not found
 # Reader 4 mirrors reader 3
 SearchMat[4, 1] <- -3
-#> Error: object 'SearchMat' not found
 # Reader 1 has no BIAS
 SearchMat[5, 1] <- 0
-#> Error: object 'SearchMat' not found
 # Reader 2 mirrors reader 1
 SearchMat[6, 1] <- -1
-#> Error: object 'SearchMat' not found
 # Reader 3 search across options 0-2 for BIAS
 SearchMat[7, 1:3] <- c(1, 2, 0)
-#> Error: object 'SearchMat' not found
 # Reader 4 mirrors reader 3
 SearchMat[8, 1] <- -3
-#> Error: object 'SearchMat' not found
 # MinusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
 SearchMat[9, 1:7] <- c(
   StartMinusAge,
@@ -179,11 +168,9 @@ SearchMat[9, 1:7] <- c(
   StartMinusAge + 4,
   StartMinusAge + 10
 )
-#> Error: object 'SearchMat' not found
 SearchMat[9, 1:7] <- ifelse(SearchMat[9, 1:7] < MinAge,
   NA, SearchMat[9, 1:7]
 )
-#> Error: object 'SearchMat' not found
 # PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
 SearchMat[10, 1:7] <- c(
   StartPlusAge,
@@ -194,11 +181,9 @@ SearchMat[10, 1:7] <- c(
   StartPlusAge + 4,
   StartPlusAge + 10
 )
-#> Error: object 'SearchMat' not found
 SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
   NA, SearchMat[10, 1:7]
 )
-#> Error: object 'SearchMat' not found
 
 # Run model selection
 # This outputs a series of files
@@ -214,7 +199,6 @@ SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
 # 3. Standard plots for each loop
 # WARNING: One run of this stepwise model building example can take
 # 8+ hours, and should be run overnight
-if (FALSE) { # \dontrun{
 StepwiseFn(
   SearchMat = SearchMat, Data = AgeReads2,
   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge,
