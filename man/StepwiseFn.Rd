@@ -63,8 +63,8 @@ biologically plausible.
 }
 \examples{
 
-example(RunFn)
 \dontrun{
+example(RunFn)
 ##### Run the model (MAY TAKE 5-10 MINUTES)
 fileloc <- file.path(tempdir(), "age")
 dir.create(fileloc, showWarnings = FALSE)
@@ -83,7 +83,6 @@ PlotOutputFn(
   Data = AgeReads2, MaxAge = MaxAge,
   SaveFile = fileloc, PlotType = "PDF"
 )
-}
 
 ##### Stepwise selection
 
@@ -168,7 +167,6 @@ SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
 # 3. Standard plots for each loop
 # WARNING: One run of this stepwise model building example can take
 # 8+ hours, and should be run overnight
-\dontrun{
 StepwiseFn(
   SearchMat = SearchMat, Data = AgeReads2,
   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge,
