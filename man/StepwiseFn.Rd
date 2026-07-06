@@ -62,7 +62,6 @@ tested for sablefish, where AIC lead to a true proportion at age that was
 biologically plausible.
 }
 \examples{
-
 \dontrun{
 example(RunFn)
 ##### Run the model (MAY TAKE 5-10 MINUTES)

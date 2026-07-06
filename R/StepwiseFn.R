@@ -51,7 +51,6 @@
 #' * `PlotOutputFn()` will help summarize the output from `RunFn()`.
 #'
 #' @examples
-#'
 #' \dontrun{
 #' example(RunFn)
 #' ##### Run the model (MAY TAKE 5-10 MINUTES)
