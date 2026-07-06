@@ -94,7 +94,6 @@ James T. Thorson
 ## Examples
 
 ``` r
-
 if (FALSE) { # \dontrun{
 example(RunFn)
 ##### Run the model (MAY TAKE 5-10 MINUTES)
