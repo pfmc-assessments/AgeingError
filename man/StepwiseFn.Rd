@@ -2,193 +2,19 @@
 % Please edit documentation in R/StepwiseFn.R
 \name{StepwiseFn}
 \alias{StepwiseFn}
-\title{Step-wise model selection}
+\title{Deprecated function replaced by stepwise()}
 \usage{
-StepwiseFn(
-  SearchMat,
-  Data,
-  NDataSets,
-  KnotAges,
-  MinAge,
-  MaxAge,
-  RefAge,
-  MaxSd,
-  MaxExpectedAge,
-  SaveFile,
-  EffSampleSize = 0,
-  Intern = TRUE,
-  InformationCriterion = c("AIC", "AICc", "BIC"),
-  SelectAges = TRUE
-)
+StepwiseFn(...)
 }
 \arguments{
-\item{SearchMat}{A matrix explaining stepwise model selection options. One
-row for each readers error and one row for each readers bias + 2 rows, one
-for \code{MinusAge}, i.e., the age where the proportion at age begins to
-decrease exponentially with decreasing age, and one for \code{PlusAge}, i.e.,
-the age where the proportion-at-age begins to decrease exponentially with
-increasing age.
-
-Each element of a given row is a possible value to search across for that
-reader. So, the number of columns of \code{SearchMat} will be the maximum
-number of options that you want to include. Think of it as several vectors
-stacked row-wise where shorter rows are filled in with \code{NA} values. If
-reader two only has two options that the analyst wants to search over the
-remainder of the columns should be filled with \code{NA} values for that row.}
-
-\item{InformationCriterion}{A string specifying the type of information
-criterion that should be used to choose the best model. The default is to
-use AIC, though AIC corrected for small sample sizes and BIC are also
-available.}
-
-\item{SelectAges}{A logical input specifying if the boundaries should be
-based on \code{MinusAge} and \code{PlusAge}. The default is \code{TRUE}.}
+\item{...}{Any arguments associated with the deprecated function}
 }
 \description{
-Run step-wise model selection to facilitate the exploration of several
-modelling configurations using Akaike information criterion (AIC).
-}
-\details{
-AIC seems like an appropriate method to select among possible
-values for \code{PlusAge}, i.e., the last row of \code{SearchMat}, because \code{PlusAge}
-determines the number of estimated fixed-effect hyperparameters that are
-used to define the true proportion-at-age hyperdistribution. This
-hyperdistribution is in turn used as a prior when integrating across a true
-age associated with each otolith. This true age, which is a latent effect,
-can be interpreted as a random effect with one for each observation. So, the
-use of AIC to select among parameterizations of the fixed effects defining
-this hyperdistribution is customary (Pinheiro and Bates, 2009). This was
-tested for sablefish, where AIC lead to a true proportion at age that was
-biologically plausible.
-}
-\examples{
-\dontrun{
-example(RunFn)
-##### Run the model (MAY TAKE 5-10 MINUTES)
-fileloc <- file.path(tempdir(), "age")
-dir.create(fileloc, showWarnings = FALSE)
-RunFn(
-  Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
-  BiasOpt = BiasOpt,
-  NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,
-  MinusAge = 1, PlusAge = 30, SaveFile = fileloc,
-  AdmbFile = file.path(system.file("executables",
-    package = "nwfscAgeingError"
-  ), .Platform$file.sep),
-  EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"
-)
-# Plot output
-PlotOutputFn(
-  Data = AgeReads2, MaxAge = MaxAge,
-  SaveFile = fileloc, PlotType = "PDF"
-)
-
-##### Stepwise selection
-
-# Parameters
-MaxAge <- ceiling(max(AgeReads2) / 10) * 10
-MinAge <- 1
-
-##### Stepwise selection
-StartMinusAge <- 1
-StartPlusAge <- 30
-
-# Define matrix explaining stepwise model selection options
-# One row for each reader + 2 rows for
-# PlusAge (age where the proportion-at-age begins to
-# decrease exponentially with increasing age) and
-# MinusAge (the age where the proportion-at-age begins to
-# decrease exponentially with decreasing age)
-# Each element of a given row is a possible value to search
-# across for that reader
-SearchMat <- array(NA,
-  dim = c(Nreaders * 2 + 2, 7),
-  dimnames = list(
-    c(
-      paste("Error_Reader", 1:Nreaders),
-      paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"
-    ),
-    paste("Option", 1:7)
-  )
-)
-# Readers 1 and 3 search across options 1-3 for ERROR
-SearchMat[c(1, 3), 1:3] <- rep(1, 2) \%o\% c(1, 2, 3)
-# Reader 2 mirrors reader 1
-SearchMat[2, 1] <- -1
-# Reader 4 mirrors reader 3
-SearchMat[4, 1] <- -3
-# Reader 1 has no BIAS
-SearchMat[5, 1] <- 0
-# Reader 2 mirrors reader 1
-SearchMat[6, 1] <- -1
-# Reader 3 search across options 0-2 for BIAS
-SearchMat[7, 1:3] <- c(1, 2, 0)
-# Reader 4 mirrors reader 3
-SearchMat[8, 1] <- -3
-# MinusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-SearchMat[9, 1:7] <- c(
-  StartMinusAge,
-  StartMinusAge - 10,
-  StartMinusAge - 4,
-  StartMinusAge - 1,
-  StartMinusAge + 1,
-  StartMinusAge + 4,
-  StartMinusAge + 10
-)
-SearchMat[9, 1:7] <- ifelse(SearchMat[9, 1:7] < MinAge,
-  NA, SearchMat[9, 1:7]
-)
-# PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-SearchMat[10, 1:7] <- c(
-  StartPlusAge,
-  StartPlusAge - 10,
-  StartPlusAge - 4,
-  StartPlusAge - 1,
-  StartPlusAge + 1,
-  StartPlusAge + 4,
-  StartPlusAge + 10
-)
-SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
-  NA, SearchMat[10, 1:7]
-)
-
-# Run model selection
-# This outputs a series of files
-# 1. "Stepwise - Model loop X.txt" --
-#   Shows the AIC/BIC/AICc value for all different combinations
-#   of parameters arising from changing one parameter at a time
-#   according to SearchMat during loop X
-# 2. "Stepwise - Record.txt" --
-#   The Xth row of IcRecord shows the record of the
-#   Information Criterion for all trials in loop X,
-#   while the Xth row of StateRecord shows the current selected values
-#   for all parameters at the end of loop X
-# 3. Standard plots for each loop
-# WARNING: One run of this stepwise model building example can take
-# 8+ hours, and should be run overnight
-StepwiseFn(
-  SearchMat = SearchMat, Data = AgeReads2,
-  NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge,
-  RefAge = 10, MaxSd = 40, MaxExpectedAge = MaxAge + 10,
-  SaveFile = fileloc, InformationCriterion = c("AIC", "AICc", "BIC")[3]
-)
-}
-
-}
-\references{
-Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
-Quantifying age-reading error for use in fisheries stock assessments,
-with application to species in Australia's southern and eastern scalefish
-and shark fishery. Can. J. Fish. Aquat. Sci. 65: 1991-2005.
-
-Pinheiro, J.C., and Bates, D. 2009. Mixed-Effects Models in S and S-PLUS.
-Springer, Germany.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+StepwiseFn() has been replaced by \code{\link[=stepwise]{stepwise()}}
 }
 \seealso{
-\itemize{
-\item \code{RunFn()} will run a single model, where this function runs multiple models.
-\item \code{PlotOutputFn()} will help summarize the output from \code{RunFn()}.
-}
+\code{\link[=stepwise]{stepwise()}}
 }
 \author{
 James T. Thorson

@@ -134,7 +134,7 @@ test_that("Can load a data file using load_data()", {
 test_that("Can load example data sets using load_data()", {
   example_path <- system.file("extdata", package = "AgeingError")
   data_files <- list.files(example_path, pattern = "dat", full.names = TRUE)
-  for (i in 1:length(data_files)) {
+  for (i in seq_along(data_files)) {
     data_loaded <- load_data(
       DataFile = data_files[i],
       NDataSet = 1,
@@ -229,4 +229,57 @@ test_that("run() works", {
 
   testthat::expect_equal(Output$model$par[1] |> as.numeric(), -2.99073, tolerance = 0.0001)
   testthat::expect_equal(Output$output$ErrorAndBiasArray["CV", "Age 9", "Reader 1"], 0.4333151, tolerance = 0.0001)
+})
+
+# test stepwise()
+test_that("stepwise() works with TMB workflow", {
+  skip_on_cran()
+
+  stepwise_dir <- file.path(tempdir(), "test_AgeingError_stepwise")
+  if (!dir.exists(stepwise_dir)) {
+    dir.create(stepwise_dir)
+  }
+
+  stepwise_data <- tally_repeats(data_test)
+  nreaders <- ncol(stepwise_data) - 1
+  search_mat <- array(NA,
+    dim = c(nreaders * 2 + 2, 2),
+    dimnames = list(
+      c(
+        paste("Error_Reader", 1:nreaders),
+        paste("Bias_Reader", 1:nreaders),
+        "MinusAge",
+        "PlusAge"
+      ),
+      c("Option1", "Option2")
+    )
+  )
+
+  # keep stepwise search small for runtime while allowing at least one update.
+  search_mat[1:nreaders, 1] <- c(1, -1, -1)
+  search_mat[(nreaders + 1):(2 * nreaders), 1] <- c(0, -1, -1)
+  search_mat[2 * nreaders + 1, ] <- c(5, 6)
+  search_mat[2 * nreaders + 2, ] <- c(10, 11)
+
+  out <- stepwise(
+    SearchMat = search_mat,
+    Data = stepwise_data,
+    NDataSets = 1,
+    KnotAges = list(NA, NA, NA),
+    MinAge = 0,
+    MaxAge = 15,
+    RefAge = 8,
+    MaxSd = 40,
+    MaxExpectedAge = 20,
+    SaveFile = stepwise_dir,
+    InformationCriterion = "AIC",
+    SelectAges = FALSE
+  )
+
+  testthat::expect_true(is.list(out))
+  testthat::expect_true(all(c("IcRecord", "StateRecord", "BestParameters", "InformationCriterion") %in% names(out)))
+  testthat::expect_identical(out$InformationCriterion, "AIC")
+  testthat::expect_true(length(out$BestParameters) == nrow(search_mat))
+  testthat::expect_true(file.exists(file.path(stepwise_dir, "Stepwise - Record.txt")))
+  testthat::expect_true(file.exists(file.path(stepwise_dir, "AgeingError.rpt")))
 })

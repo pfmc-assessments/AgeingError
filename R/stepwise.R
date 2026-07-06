@@ -1,7 +1,7 @@
 #' Step-wise model selection
 #'
 #' Run step-wise model selection to facilitate the exploration of several
-#' modelling configurations using Akaike information criterion (AIC).
+#' modeling configurations using Akaike information criterion (AIC).
 #'
 #' @details AIC seems like an appropriate method to select among possible
 #' values for `PlusAge`, i.e., the last row of `SearchMat`, because `PlusAge`
@@ -47,30 +47,30 @@
 #'
 #' @export
 #' @seealso
-#' * `RunFn()` will run a single model, where this function runs multiple models.
-#' * `PlotOutputFn()` will help summarize the output from `RunFn()`.
+#' * `run()` will run a single model, where this function runs multiple models.
+#' * `plot_output()` is called internally by `run()` when processing results.
 #'
 #' @examples
+#'
 #' \dontrun{
-#' example(RunFn)
+#' example(run)
 #' ##### Run the model (MAY TAKE 5-10 MINUTES)
 #' fileloc <- file.path(tempdir(), "age")
 #' dir.create(fileloc, showWarnings = FALSE)
-#' RunFn(
-#'   Data = AgeReads2, SigOpt = SigOpt, KnotAges = KnotAges,
-#'   BiasOpt = BiasOpt,
-#'   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge, RefAge = 10,
-#'   MinusAge = 1, PlusAge = 30, SaveFile = fileloc,
-#'   AdmbFile = file.path(system.file("executables",
-#'     package = "nwfscAgeingError"
-#'   ), .Platform$file.sep),
-#'   EffSampleSize = 0, Intern = FALSE, JustWrite = FALSE, CallType = "shell"
+#' write_files(
+#'   dat = AgeReads2,
+#'   dir = fileloc,
+#'   minage = MinAge,
+#'   maxage = MaxAge,
+#'   refage = 10,
+#'   minusage = 1,
+#'   plusage = 30,
+#'   biasopt = BiasOpt,
+#'   sigopt = SigOpt,
+#'   knotages = KnotAges
 #' )
-#' # Plot output
-#' PlotOutputFn(
-#'   Data = AgeReads2, MaxAge = MaxAge,
-#'   SaveFile = fileloc, PlotType = "PDF"
-#' )
+#' out <- run(directory = fileloc)
+#' out$output$ModelSelection
 #'
 #' ##### Stepwise selection
 #'
@@ -155,7 +155,7 @@
 #' # 3. Standard plots for each loop
 #' # WARNING: One run of this stepwise model building example can take
 #' # 8+ hours, and should be run overnight
-#' StepwiseFn(
+#' stepwise(
 #'   SearchMat = SearchMat, Data = AgeReads2,
 #'   NDataSets = 1, MinAge = MinAge, MaxAge = MaxAge,
 #'   RefAge = 10, MaxSd = 40, MaxExpectedAge = MaxAge + 10,
@@ -163,7 +163,7 @@
 #' )
 #' }
 #'
-StepwiseFn <- function(SearchMat,
+stepwise <- function(SearchMat,
                        Data,
                        NDataSets,
                        KnotAges,
@@ -177,11 +177,67 @@ StepwiseFn <- function(SearchMat,
                        Intern = TRUE,
                        InformationCriterion = c("AIC", "AICc", "BIC"),
                        SelectAges = TRUE) {
+
+  # stepwise currently assumes one aggregated data set per run. The helper
+  # file-writing functions can encode multiple sets, but this workflow has not
+  # been generalized or tested for that case yet.
+  if (NDataSets != 1) {
+    cli::cli_abort("stepwise() currently supports only NDataSets = 1 with the TMB workflow.")
+  }
+
   InformationCriterion <- match.arg(InformationCriterion)
-  # Define variables
-  Nages <- MaxAge + 1
+
+  if (!is.matrix(SearchMat)) {
+    cli::cli_abort("SearchMat must be a matrix.")
+  }
+
+  if (!is.data.frame(Data)) {
+    Data <- as.data.frame(Data)
+  }
+
+  # Downstream code expects the historical missing-value sentinel rather than
+  # NA. Do this once up front so every trial uses identical cleaned input data.
+  Data[is.na(Data)] <- -999
+
+  # Infer reader count from the standard data format:
+  # first column = count, remaining columns = reader observations.
   Nreaders <- ncol(Data) - 1
+
+  # SearchMat rows are expected in this order:
+  # [reader sigmas][reader biases][MinusAge][PlusAge].
+  if (nrow(SearchMat) != (2 * Nreaders + 2)) {
+    cli::cli_abort(
+      "SearchMat must have 2 * Nreaders + 2 rows, where Nreaders = ncol(Data) - 1."
+    )
+  }
+
+  # Keep all stepwise artifacts under SaveFile.
+  fs::dir_create(SaveFile)
+
+  # Current best parameter vector starts from the first option in each row.
   ParamVecOpt <- SearchMat[, 1]
+  NsearchCols <- ncol(SearchMat)
+
+  # Rebuild age-boundary search options after each loop.
+  # The first element is always the current best age, then nearby values from
+  # the legacy kernel (0, -10, -4, -1, +1, +4, +10) are used where possible.
+  # Output is padded or truncated to match the number of SearchMat columns.
+  make_age_options <- function(current_age, min_age = -Inf, max_age = Inf, select_ages = TRUE) {
+    if (!select_ages) {
+      return(c(current_age, rep(NA_real_, NsearchCols - 1)))
+    }
+
+    kernel <- c(0, -10, -4, -1, 1, 4, 10)
+    options <- current_age + kernel
+    options[options < min_age | options > max_age] <- NA_real_
+
+    if (NsearchCols <= length(options)) {
+      return(options[seq_len(NsearchCols)])
+    }
+
+    c(options, rep(NA_real_, NsearchCols - length(options)))
+  }
+
   Stop <- FALSE
   IcRecord <- NULL
   StateRecord <- NULL
@@ -189,67 +245,90 @@ StepwiseFn <- function(SearchMat,
 
   # Continue searching until Stop==TRUE
   while (Stop == FALSE) {
-    # Increment and intialize variables
+    # Per-loop bookkeeping objects.
     OuterIndex <- OuterIndex + 1
     Index <- 0
     IcVec <- NULL
     ParamMat <- NULL
-    Rep <- NULL
+    Reports <- list()
     ParamVecOptPreviouslyEstimates <- FALSE
 
-    # Loop across all combinations of parameters obtained from one change in the current parameters
-    for (VarI in 1:nrow(SearchMat)) {
-      for (ValueI in 1:length(stats::na.omit(SearchMat[VarI, ]))) {
+    # Evaluate all one-step neighbors of the current parameter vector.
+    # For each row of SearchMat, try each non-NA option while holding all
+    # other parameters fixed.
+    for (VarI in seq_len(nrow(SearchMat))) {
+      for (ValueI in seq_along(stats::na.omit(SearchMat[VarI, ]))) {
         # Update the current vector of parameters
         ParamVecCurrent <- ParamVecOpt
         ParamVecCurrent[VarI] <- stats::na.omit(SearchMat[VarI, ])[ValueI]
 
-        # Decide if this ParamVecCurrent should be run
-        if (all(ParamVecCurrent == ParamVecOpt) & ParamVecOptPreviouslyEstimates == FALSE | !all(ParamVecCurrent == ParamVecOpt)) {
+        # Run each unique candidate once per loop. This avoids duplicate model
+        # fits when the selected value is repeated in SearchMat.
+        if ((all(ParamVecCurrent == ParamVecOpt) && ParamVecOptPreviouslyEstimates == FALSE) || !all(ParamVecCurrent == ParamVecOpt)) {
           # If running the current optimum, change so that it won't run again this loop
           if (all(ParamVecCurrent == ParamVecOpt)) ParamVecOptPreviouslyEstimates <- TRUE
 
-          # Make a new file for ADMB
-          if (!grepl(paste0(.Platform$file.sep, "$"), SaveFile)) {
-            SaveFile <- paste0(SaveFile, .Platform$file.sep)
-          }
-          RunFile <- paste(SaveFile, "Run\\", sep = "")
-          dir.create(RunFile, showWarnings = FALSE)
-          file.copy(from = paste(SaveFile, "agemat.exe", sep = ""), to = paste(RunFile, "agemat.exe", sep = ""))
+          # Use one working directory per trial; files are overwritten each run.
+          RunFile <- file.path(SaveFile, "Run")
+          fs::dir_create(RunFile)
 
           # Increment Index
           Index <- Index + 1
           print(paste("Loop=", OuterIndex, " Run=", Index, " StartTime=", date(), sep = ""))
 
-          # Configure and run model
-          SigOpt <- ParamVecCurrent[1:Nreaders]
-          BiasOpt <- ParamVecCurrent[Nreaders + 1:Nreaders]
+          # Split full parameter vector into components expected by write_files().
+          SigOpt <- as.numeric(ParamVecCurrent[1:Nreaders])
+          BiasOpt <- as.numeric(ParamVecCurrent[Nreaders + (1:Nreaders)])
           MinusAge <- ParamVecCurrent[2 * Nreaders + 1]
           PlusAge <- ParamVecCurrent[2 * Nreaders + 2]
-          RunFn(SigOpt = SigOpt, KnotAges = KnotAges, BiasOpt = BiasOpt, Data = Data, NDataSets = NDataSets, MinAge = MinAge, MaxAge = MaxAge, RefAge = RefAge, MinusAge = MinusAge, PlusAge = PlusAge, MaxSd = MaxSd, MaxExpectedAge = MaxExpectedAge, SaveFile = RunFile)
 
-          # Compute information criteria
-          Df <- as.numeric(scan(paste(RunFile, "agemat.par", sep = ""), comment.char = "%", what = "character", quiet = TRUE)[6])
-          Nll <- as.numeric(scan(paste(RunFile, "agemat.par", sep = ""), comment.char = "%", what = "character", quiet = TRUE)[11])
-          n <- sum(ifelse(Data[, -1] == -999, 0, 1))
-          Aic <- 2 * Nll + 2 * Df
-          Aicc <- Aic + 2 * Df * (Df + 1) / (n - Df - 1)
-          Bic <- 2 * Nll + Df * log(n)
+          # Build fresh .dat/.spc files and run one TMB fit for this candidate.
+          write_files(
+            dat = Data,
+            dir = RunFile,
+            file_dat = "data.dat",
+            file_specs = "data.spc",
+            minage = MinAge,
+            maxage = MaxAge,
+            refage = RefAge,
+            minusage = MinusAge,
+            plusage = PlusAge,
+            biasopt = BiasOpt,
+            sigopt = SigOpt,
+            knotages = KnotAges
+          )
+
+          Out <- run(
+            directory = RunFile,
+            file_data = "data.dat",
+            file_specs = "data.spc"
+          )
+
+          # Pull model selection metrics from run() output.
+          Aic <- Out$output$ModelSelection$AIC
+          Aicc <- Out$output$ModelSelection$AICc
+          Bic <- Out$output$ModelSelection$BIC
           if (InformationCriterion == "AIC") IcVec <- c(IcVec, Aic)
           if (InformationCriterion == "AICc") IcVec <- c(IcVec, Aicc)
           if (InformationCriterion == "BIC") IcVec <- c(IcVec, Bic)
+
+          # Store tested parameter vectors in the same order as IcVec.
           ParamMat <- rbind(ParamMat, ParamVecCurrent)
           utils::write.table(cbind(IcVec, ParamMat),
-            paste0(SaveFile, "Stepwise - Model loop ", OuterIndex, ".txt"),
+            file.path(SaveFile, paste0("Stepwise - Model loop ", OuterIndex, ".txt")),
             sep = "\t", row.names = FALSE
           )
 
-          # Input misclassification matrices
-          Rep[[Index]] <- readLines(paste(RunFile, "agemat.rep", sep = ""))
+          # Keep report from the selected run for loop-level output
+          ReportPath <- file.path(RunFile, "AgeingError.rpt")
+          if (file.exists(ReportPath)) {
+            Reports[[Index]] <- readLines(ReportPath)
+          }
         } # End if-statement for only running ParamVecOpt once per loop
       }
     } # End loop accross VarI and ValueI
 
+    # Append this loop's criterion values and current selected state.
     IcRecord <- rbind(IcRecord, IcVec)
     StateRecord <- rbind(StateRecord, ParamVecOpt)
     utils::capture.output(
@@ -257,33 +336,75 @@ StepwiseFn <- function(SearchMat,
         IcRecord = IcRecord,
         StateRecord = StateRecord
       ),
-      file = paste0(SaveFile, "Stepwise - Record.txt")
+      file = file.path(SaveFile, "Stepwise - Record.txt")
     )
 
-    # Change current vector of optimum parameters
-    Max <- which.max(IcVec)
-    if (all(ParamMat[Max, ] == ParamVecOpt)) Stop <- TRUE
-    ParamVecOpt <- ParamMat[Max, ]
+    # Select the best candidate under the chosen criterion (smaller is better).
+    Min <- which.min(IcVec)
+    # Stop once no one-step neighbor improves the objective.
+    if (all(ParamMat[Min, ] == ParamVecOpt)) Stop <- TRUE
+    ParamVecOpt <- ParamMat[Min, ]
 
-    # Change boundaries for MinusAge parameter
+    # Refresh MinusAge options around the selected value for the next loop.
     CurrentMinusAge <- ParamVecOpt[length(ParamVecOpt) - 1]
-    if (SelectAges == TRUE) {
-      SearchMat[length(ParamVecOpt) - 1, 1:7] <- c(CurrentMinusAge, CurrentMinusAge - 10, CurrentMinusAge - 4, CurrentMinusAge - 1, CurrentMinusAge + 1, CurrentMinusAge + 4, CurrentMinusAge + 10)
-      SearchMat[length(ParamVecOpt) - 1, 1:7] <- ifelse(SearchMat[length(ParamVecOpt) - 1, 1:7] < MinAge, NA, SearchMat[length(ParamVecOpt) - 1, 1:7])
-    } else {
-      SearchMat[length(ParamVecOpt) - 1, 1:7] <- c(CurrentMinusAge, rep(NA, 6))
+    SearchMat[length(ParamVecOpt) - 1, ] <- make_age_options(
+      current_age = CurrentMinusAge,
+      min_age = MinAge,
+      max_age = Inf,
+      select_ages = SelectAges
+    )
+
+    # Refresh PlusAge options around the selected value for the next loop.
+    CurrentPlusAge <- ParamVecOpt[length(ParamVecOpt)]
+    SearchMat[length(ParamVecOpt), ] <- make_age_options(
+      current_age = CurrentPlusAge,
+      min_age = -Inf,
+      max_age = MaxAge,
+      select_ages = SelectAges
+    )
+    # Persist the report from the selected candidate for this loop.
+    if (length(Reports) >= Min && !is.null(Reports[[Min]])) {
+      writeLines(Reports[[Min]], con = file.path(SaveFile, "AgeingError.rpt"))
     }
 
-    # Change boundaries for PlusAge parameter
-    CurrentPlusAge <- ParamVecOpt[length(ParamVecOpt)]
-    if (SelectAges == TRUE) {
-      SearchMat[length(ParamVecOpt), 1:7] <- c(CurrentPlusAge, CurrentPlusAge - 10, CurrentPlusAge - 4, CurrentPlusAge - 1, CurrentPlusAge + 1, CurrentPlusAge + 4, CurrentPlusAge + 10)
-      SearchMat[length(ParamVecOpt), 1:7] <- ifelse(SearchMat[length(ParamVecOpt), 1:7] > MaxAge, NA, SearchMat[length(ParamVecOpt), 1:7])
-    } else {
-      SearchMat[length(ParamVecOpt), 1:7] <- c(CurrentPlusAge, rep(NA, 6))
+    # Copy final files from the best run to the SaveFile directory.
+    RunFile <- file.path(SaveFile, "Run")
+    FilesToCopy <- list.files(
+      RunFile,
+      pattern = "^AgeingError(\\.|-|_SS3_format_)",
+      full.names = TRUE
+    )
+    if (length(FilesToCopy) > 0) {
+      file.copy(FilesToCopy, to = SaveFile, overwrite = TRUE)
     }
-    # Save image for each while loop
-    writeLines(Rep[[Max]], con = paste(SaveFile, "agemat.rep", sep = ""))
-    PlotOutputFn(Data = Data, MaxAge = MaxAge, SaveFile = SaveFile, PlotType = "JPG")
   } # End while statement
-} # End StepwiseFn
+
+  # Return full trace of the search path for downstream inspection.
+  invisible(
+    list(
+      IcRecord = IcRecord,
+      StateRecord = StateRecord,
+      BestParameters = ParamVecOpt,
+      InformationCriterion = InformationCriterion
+    )
+  )
+} # End stepwise
+
+
+#' Deprecated function replaced by stepwise()
+#'
+#' @param ... Any arguments associated with the deprecated function
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' StepwiseFn() has been replaced by [stepwise()]
+#' @author James T. Thorson
+#' @export
+#' @seealso [stepwise()]
+StepwiseFn <- function(...) {
+  lifecycle::deprecate_warn(
+    when = "2.2.1",
+    what = "StepwiseFn()",
+    with = "stepwise()"
+  )
+  stepwise(...)
+}
