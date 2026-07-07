@@ -8,3 +8,4 @@ src/agemat.tpl
 ^pkgdown$
 ^Results$
 ^Makefile$
+^.Rscripts$

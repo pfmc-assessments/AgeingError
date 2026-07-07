@@ -22,19 +22,25 @@ stepwise(
 )
 }
 \arguments{
-\item{SearchMat}{A matrix explaining stepwise model selection options. One
-row for each readers error and one row for each readers bias + 2 rows, one
-for \code{MinusAge}, i.e., the age where the proportion at age begins to
-decrease exponentially with decreasing age, and one for \code{PlusAge}, i.e.,
-the age where the proportion-at-age begins to decrease exponentially with
-increasing age.
+\item{SearchMat}{A data frame explaining stepwise model selection options.
+The final column must be named \code{label} and contain a unique label for each
+parameter row (e.g., \code{Error_Reader1}, ..., \code{Bias_Reader1}, ...,
+\code{MinusAge}, \code{PlusAge}). All preceding columns are candidate numeric
+options to search.
 
-Each element of a given row is a possible value to search across for that
-reader. So, the number of columns of \code{SearchMat} will be the maximum
-number of options that you want to include. Think of it as several vectors
-stacked row-wise where shorter rows are filled in with \code{NA} values. If
-reader two only has two options that the analyst wants to search over the
-remainder of the columns should be filled with \code{NA} values for that row.}
+There should be one label for each readers error and one for each readers
+bias + 2 labels, one for \code{MinusAge}, i.e., the age where the proportion at
+age begins to decrease exponentially with decreasing age, and one for
+\code{PlusAge}, i.e., the age where the proportion-at-age begins to decrease
+exponentially with increasing age.
+
+Each element of a given options row is a possible value to search across for
+that reader. So, the number of option columns of \code{SearchMat} will be the
+maximum number of options that you want to include. Think of it as several
+vectors stacked row-wise where shorter rows are filled in with \code{NA}
+values. If reader two only has two options that the analyst wants to search
+over the remainder of the columns should be filled with \code{NA} values for
+that row.}
 
 \item{InformationCriterion}{A string specifying the type of information
 criterion that should be used to choose the best model. The default is to
@@ -50,7 +56,8 @@ modeling configurations using Akaike information criterion (AIC).
 }
 \details{
 AIC seems like an appropriate method to select among possible
-values for \code{PlusAge}, i.e., the last row of \code{SearchMat}, because \code{PlusAge}
+values for \code{PlusAge}, identified by the \code{PlusAge} entry in
+\code{SearchMat$label}, because \code{PlusAge}
 determines the number of estimated fixed-effect hyperparameters that are
 used to define the true proportion-at-age hyperdistribution. This
 hyperdistribution is in turn used as a prior when integrating across a true
@@ -93,7 +100,7 @@ MinAge <- 1
 StartMinusAge <- 1
 StartPlusAge <- 30
 
-# Define matrix explaining stepwise model selection options
+# Define data frame explaining stepwise model selection options
 # One row for each reader + 2 rows for
 # PlusAge (age where the proportion-at-age begins to
 # decrease exponentially with increasing age) and
@@ -101,32 +108,28 @@ StartPlusAge <- 30
 # decrease exponentially with decreasing age)
 # Each element of a given row is a possible value to search
 # across for that reader
-SearchMat <- array(NA,
-  dim = c(Nreaders * 2 + 2, 7),
-  dimnames = list(
-    c(
-      paste("Error_Reader", 1:Nreaders),
-      paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"
-    ),
-    paste("Option", 1:7)
-  )
+SearchMat <- as.data.frame(array(NA, dim = c(Nreaders * 2 + 2, 7)))
+names(SearchMat) <- paste("Option", 1:7)
+SearchMat$label <- c(
+  paste("Error_Reader", 1:Nreaders),
+  paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"
 )
 # Readers 1 and 3 search across options 1-3 for ERROR
-SearchMat[c(1, 3), 1:3] <- rep(1, 2) \%o\% c(1, 2, 3)
+SearchMat[c(1, 3), c("Option 1", "Option 2", "Option 3")] <- rep(1, 2) \%o\% c(1, 2, 3)
 # Reader 2 mirrors reader 1
-SearchMat[2, 1] <- -1
+SearchMat[2, "Option 1"] <- -1
 # Reader 4 mirrors reader 3
-SearchMat[4, 1] <- -3
+SearchMat[4, "Option 1"] <- -3
 # Reader 1 has no BIAS
-SearchMat[5, 1] <- 0
+SearchMat[5, "Option 1"] <- 0
 # Reader 2 mirrors reader 1
-SearchMat[6, 1] <- -1
+SearchMat[6, "Option 1"] <- -1
 # Reader 3 search across options 0-2 for BIAS
-SearchMat[7, 1:3] <- c(1, 2, 0)
+SearchMat[7, c("Option 1", "Option 2", "Option 3")] <- c(1, 2, 0)
 # Reader 4 mirrors reader 3
-SearchMat[8, 1] <- -3
+SearchMat[8, "Option 1"] <- -3
 # MinusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-SearchMat[9, 1:7] <- c(
+SearchMat[9, paste("Option", 1:7)] <- c(
   StartMinusAge,
   StartMinusAge - 10,
   StartMinusAge - 4,
@@ -135,11 +138,11 @@ SearchMat[9, 1:7] <- c(
   StartMinusAge + 4,
   StartMinusAge + 10
 )
-SearchMat[9, 1:7] <- ifelse(SearchMat[9, 1:7] < MinAge,
-  NA, SearchMat[9, 1:7]
+SearchMat[9, paste("Option", 1:7)] <- ifelse(SearchMat[9, paste("Option", 1:7)] < MinAge,
+  NA, SearchMat[9, paste("Option", 1:7)]
 )
 # PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-SearchMat[10, 1:7] <- c(
+SearchMat[10, paste("Option", 1:7)] <- c(
   StartPlusAge,
   StartPlusAge - 10,
   StartPlusAge - 4,
@@ -148,8 +151,8 @@ SearchMat[10, 1:7] <- c(
   StartPlusAge + 4,
   StartPlusAge + 10
 )
-SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
-  NA, SearchMat[10, 1:7]
+SearchMat[10, paste("Option", 1:7)] <- ifelse(SearchMat[10, paste("Option", 1:7)] > MaxAge,
+  NA, SearchMat[10, paste("Option", 1:7)]
 )
 
 # Run model selection

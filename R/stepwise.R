@@ -15,19 +15,24 @@
 #' tested for sablefish, where AIC lead to a true proportion at age that was
 #' biologically plausible.
 #' @inheritParams RunFn
-#' @param SearchMat A matrix explaining stepwise model selection options. One
-#'   row for each readers error and one row for each readers bias + 2 rows, one
-#'   for `MinusAge`, i.e., the age where the proportion at age begins to
-#'   decrease exponentially with decreasing age, and one for `PlusAge`, i.e.,
-#'   the age where the proportion-at-age begins to decrease exponentially with
-#'   increasing age.
+#' @param SearchMat A data frame explaining stepwise model selection options.
+#'   The final column must be named `label` and contain a unique label for each
+#'   parameter row (e.g., `Error_Reader1`, ..., `Bias_Reader1`, ..., `MinusAge`,
+#'   `PlusAge`). All preceding columns are candidate numeric options to search.
 #'
-#'   Each element of a given row is a possible value to search across for that
-#'   reader. So, the number of columns of `SearchMat` will be the maximum
-#'   number of options that you want to include. Think of it as several vectors
-#'   stacked row-wise where shorter rows are filled in with `NA` values. If
-#'   reader two only has two options that the analyst wants to search over the
-#'   remainder of the columns should be filled with `NA` values for that row.
+#'   There should be one label for each readers error and one for each readers
+#'   bias + 2 labels, one for `MinusAge`, i.e., the age where the proportion at
+#'   age begins to decrease exponentially with decreasing age, and one for
+#'   `PlusAge`, i.e., the age where the proportion-at-age begins to decrease
+#'   exponentially with increasing age.
+#'
+#'   Each element of a given options row is a possible value to search across
+#'   for that reader. So, the number of option columns of `SearchMat` will be
+#'   the maximum number of options that you want to include. Think of it as
+#'   several vectors stacked row-wise where shorter rows are filled in with
+#'   `NA` values. If reader two only has two options that the analyst wants to
+#'   search over the remainder of the columns should be filled with `NA` values
+#'   for that row.
 #' @param InformationCriterion A string specifying the type of information
 #'   criterion that should be used to choose the best model. The default is to
 #'   use AIC, though AIC corrected for small sample sizes and BIC are also
@@ -82,7 +87,7 @@
 #' StartMinusAge <- 1
 #' StartPlusAge <- 30
 #'
-#' # Define matrix explaining stepwise model selection options
+#' # Define data frame explaining stepwise model selection options
 #' # One row for each reader + 2 rows for
 #' # PlusAge (age where the proportion-at-age begins to
 #' # decrease exponentially with increasing age) and
@@ -90,32 +95,28 @@
 #' # decrease exponentially with decreasing age)
 #' # Each element of a given row is a possible value to search
 #' # across for that reader
-#' SearchMat <- array(NA,
-#'   dim = c(Nreaders * 2 + 2, 7),
-#'   dimnames = list(
-#'     c(
-#'       paste("Error_Reader", 1:Nreaders),
-#'       paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"
-#'     ),
-#'     paste("Option", 1:7)
-#'   )
+#' SearchMat <- as.data.frame(array(NA, dim = c(Nreaders * 2 + 2, 7)))
+#' names(SearchMat) <- paste("Option", 1:7)
+#' SearchMat$label <- c(
+#'   paste("Error_Reader", 1:Nreaders),
+#'   paste("Bias_Reader", 1:Nreaders), "MinusAge", "PlusAge"
 #' )
 #' # Readers 1 and 3 search across options 1-3 for ERROR
-#' SearchMat[c(1, 3), 1:3] <- rep(1, 2) %o% c(1, 2, 3)
+#' SearchMat[c(1, 3), c("Option 1", "Option 2", "Option 3")] <- rep(1, 2) %o% c(1, 2, 3)
 #' # Reader 2 mirrors reader 1
-#' SearchMat[2, 1] <- -1
+#' SearchMat[2, "Option 1"] <- -1
 #' # Reader 4 mirrors reader 3
-#' SearchMat[4, 1] <- -3
+#' SearchMat[4, "Option 1"] <- -3
 #' # Reader 1 has no BIAS
-#' SearchMat[5, 1] <- 0
+#' SearchMat[5, "Option 1"] <- 0
 #' # Reader 2 mirrors reader 1
-#' SearchMat[6, 1] <- -1
+#' SearchMat[6, "Option 1"] <- -1
 #' # Reader 3 search across options 0-2 for BIAS
-#' SearchMat[7, 1:3] <- c(1, 2, 0)
+#' SearchMat[7, c("Option 1", "Option 2", "Option 3")] <- c(1, 2, 0)
 #' # Reader 4 mirrors reader 3
-#' SearchMat[8, 1] <- -3
+#' SearchMat[8, "Option 1"] <- -3
 #' # MinusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-#' SearchMat[9, 1:7] <- c(
+#' SearchMat[9, paste("Option", 1:7)] <- c(
 #'   StartMinusAge,
 #'   StartMinusAge - 10,
 #'   StartMinusAge - 4,
@@ -124,11 +125,11 @@
 #'   StartMinusAge + 4,
 #'   StartMinusAge + 10
 #' )
-#' SearchMat[9, 1:7] <- ifelse(SearchMat[9, 1:7] < MinAge,
-#'   NA, SearchMat[9, 1:7]
+#' SearchMat[9, paste("Option", 1:7)] <- ifelse(SearchMat[9, paste("Option", 1:7)] < MinAge,
+#'   NA, SearchMat[9, paste("Option", 1:7)]
 #' )
 #' # PlusAge searches with a search kernal of -10,-4,-1,+0,+1,+4,+10
-#' SearchMat[10, 1:7] <- c(
+#' SearchMat[10, paste("Option", 1:7)] <- c(
 #'   StartPlusAge,
 #'   StartPlusAge - 10,
 #'   StartPlusAge - 4,
@@ -137,8 +138,8 @@
 #'   StartPlusAge + 4,
 #'   StartPlusAge + 10
 #' )
-#' SearchMat[10, 1:7] <- ifelse(SearchMat[10, 1:7] > MaxAge,
-#'   NA, SearchMat[10, 1:7]
+#' SearchMat[10, paste("Option", 1:7)] <- ifelse(SearchMat[10, paste("Option", 1:7)] > MaxAge,
+#'   NA, SearchMat[10, paste("Option", 1:7)]
 #' )
 #'
 #' # Run model selection
@@ -187,9 +188,39 @@ stepwise <- function(SearchMat,
 
   InformationCriterion <- match.arg(InformationCriterion)
 
-  if (!is.matrix(SearchMat)) {
-    cli::cli_abort("SearchMat must be a matrix.")
+  if (is.matrix(SearchMat)) {
+    SearchMat <- as.data.frame(SearchMat)
   }
+
+  if (!is.data.frame(SearchMat)) {
+    cli::cli_abort("SearchMat must be a data frame.")
+  }
+
+  if (!"label" %in% names(SearchMat)) {
+    cli::cli_abort("SearchMat must include a final column named 'label'.")
+  }
+
+  if (tail(names(SearchMat), 1) != "label") {
+    cli::cli_abort("SearchMat must include 'label' as the final column.")
+  }
+
+  if (ncol(SearchMat) < 2) {
+    cli::cli_abort("SearchMat must include at least one option column and a final label column.")
+  }
+
+  RowLabels <- as.character(SearchMat$label)
+  if (anyNA(RowLabels) || any(trimws(RowLabels) == "")) {
+    cli::cli_abort("SearchMat labels must be non-missing, non-empty strings.")
+  }
+
+  if (anyDuplicated(RowLabels)) {
+    cli::cli_abort("SearchMat labels must be unique.")
+  }
+
+  OptionCols <- names(SearchMat)[names(SearchMat) != "label"]
+  SearchMat <- as.matrix(SearchMat[, OptionCols, drop = FALSE])
+  storage.mode(SearchMat) <- "numeric"
+  rownames(SearchMat) <- RowLabels
 
   if (!is.data.frame(Data)) {
     Data <- as.data.frame(Data)
@@ -213,6 +244,20 @@ stepwise <- function(SearchMat,
 
   # Keep all stepwise artifacts under SaveFile.
   fs::dir_create(SaveFile)
+
+  ErrorRows <- grep("^Error_Reader[0-9]+$", RowLabels)
+  BiasRows <- grep("^Bias_Reader[0-9]+$", RowLabels)
+  MinusRow <- match("MinusAge", RowLabels)
+  PlusRow <- match("PlusAge", RowLabels)
+
+  if (length(ErrorRows) != Nreaders || length(BiasRows) != Nreaders || is.na(MinusRow) || is.na(PlusRow)) {
+    cli::cli_abort(
+      "SearchMat labels must include Error_Reader1..N, Bias_Reader1..N, MinusAge, and PlusAge."
+    )
+  }
+
+  ErrorRows <- ErrorRows[order(as.integer(sub("^Error_Reader", "", RowLabels[ErrorRows])))]
+  BiasRows <- BiasRows[order(as.integer(sub("^Bias_Reader", "", RowLabels[BiasRows])))]
 
   # Current best parameter vector starts from the first option in each row.
   ParamVecOpt <- SearchMat[, 1]
@@ -277,10 +322,10 @@ stepwise <- function(SearchMat,
           print(paste("Loop=", OuterIndex, " Run=", Index, " StartTime=", date(), sep = ""))
 
           # Split full parameter vector into components expected by write_files().
-          SigOpt <- as.numeric(ParamVecCurrent[1:Nreaders])
-          BiasOpt <- as.numeric(ParamVecCurrent[Nreaders + (1:Nreaders)])
-          MinusAge <- ParamVecCurrent[2 * Nreaders + 1]
-          PlusAge <- ParamVecCurrent[2 * Nreaders + 2]
+          SigOpt <- as.numeric(ParamVecCurrent[ErrorRows])
+          BiasOpt <- as.numeric(ParamVecCurrent[BiasRows])
+          MinusAge <- ParamVecCurrent[MinusRow]
+          PlusAge <- ParamVecCurrent[PlusRow]
 
           # Build fresh .dat/.spc files and run one TMB fit for this candidate.
           write_files(
@@ -346,8 +391,8 @@ stepwise <- function(SearchMat,
     ParamVecOpt <- ParamMat[Min, ]
 
     # Refresh MinusAge options around the selected value for the next loop.
-    CurrentMinusAge <- ParamVecOpt[length(ParamVecOpt) - 1]
-    SearchMat[length(ParamVecOpt) - 1, ] <- make_age_options(
+    CurrentMinusAge <- ParamVecOpt[MinusRow]
+    SearchMat[MinusRow, ] <- make_age_options(
       current_age = CurrentMinusAge,
       min_age = MinAge,
       max_age = Inf,
@@ -355,8 +400,8 @@ stepwise <- function(SearchMat,
     )
 
     # Refresh PlusAge options around the selected value for the next loop.
-    CurrentPlusAge <- ParamVecOpt[length(ParamVecOpt)]
-    SearchMat[length(ParamVecOpt), ] <- make_age_options(
+    CurrentPlusAge <- ParamVecOpt[PlusRow]
+    SearchMat[PlusRow, ] <- make_age_options(
       current_age = CurrentPlusAge,
       min_age = -Inf,
       max_age = MaxAge,
@@ -385,6 +430,7 @@ stepwise <- function(SearchMat,
       IcRecord = IcRecord,
       StateRecord = StateRecord,
       BestParameters = ParamVecOpt,
+      Label = RowLabels,
       InformationCriterion = InformationCriterion
     )
   )

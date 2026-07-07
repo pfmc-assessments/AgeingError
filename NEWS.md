@@ -1,5 +1,18 @@
 # AgeingError development
 
+# AgeingError 2.3.0
+* Modernized step-wise model selection to use the TMB workflow and other recent changes to the package
+  + now uses `write_files()` and `run()` instead of deprecated ADMB-era wrappers
+  + function renamed from `StepwiseFn()` to `stepwise()` to align with current function naming conventions and make clear that the function has changed
+  + added example use in new vignette
+  + added tests for step-wise model selection
+
+# AgeingError 2.2.0
+* Maintenance release focused on code style, readability, and documentation updates.
+* Refined package examples and supporting materials for the TMB workflow.
+* Updated package website and vignette content to better align with current function names and usage patterns.
+* Improved package metadata and release artifacts to support smoother downstream publishing and checks.
+
 # AgeingError 2.1.1
 * Deprecated two obsolete functions to reduce confusion
   * `RunFn()` replaced by `run()`

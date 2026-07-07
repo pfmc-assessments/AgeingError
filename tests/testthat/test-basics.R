@@ -242,17 +242,15 @@ test_that("stepwise() works with TMB workflow", {
 
   stepwise_data <- tally_repeats(data_test)
   nreaders <- ncol(stepwise_data) - 1
-  search_mat <- array(NA,
-    dim = c(nreaders * 2 + 2, 2),
-    dimnames = list(
-      c(
-        paste("Error_Reader", 1:nreaders),
-        paste("Bias_Reader", 1:nreaders),
-        "MinusAge",
-        "PlusAge"
-      ),
-      c("Option1", "Option2")
-    )
+  search_mat <- as.data.frame(array(NA,
+    dim = c(nreaders * 2 + 2, 2)
+  ))
+  names(search_mat) <- c("Option1", "Option2")
+  search_mat$label <- c(
+    paste("Error_Reader", 1:nreaders),
+    paste("Bias_Reader", 1:nreaders),
+    "MinusAge",
+    "PlusAge"
   )
 
   # keep stepwise search small for runtime while allowing at least one update.
@@ -277,9 +275,10 @@ test_that("stepwise() works with TMB workflow", {
   )
 
   testthat::expect_true(is.list(out))
-  testthat::expect_true(all(c("IcRecord", "StateRecord", "BestParameters", "InformationCriterion") %in% names(out)))
+  testthat::expect_true(all(c("IcRecord", "StateRecord", "BestParameters", "Label", "InformationCriterion") %in% names(out)))
   testthat::expect_identical(out$InformationCriterion, "AIC")
   testthat::expect_true(length(out$BestParameters) == nrow(search_mat))
+  testthat::expect_true(length(out$Label) == nrow(search_mat))
   testthat::expect_true(file.exists(file.path(stepwise_dir, "Stepwise - Record.txt")))
   testthat::expect_true(file.exists(file.path(stepwise_dir, "AgeingError.rpt")))
 })
