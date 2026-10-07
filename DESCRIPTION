@@ -11,7 +11,7 @@ Authors@R: c(
     person(c("James", "T."), "Thorson", role = c("ctb", "cph"),
            comment = c(ORCID = "0000-0001-7415-1010")),
     person(c("Ian", "G."), "Taylor", , "ian.taylor@noaa.gov", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-8489-2488")),
+           comment = c(ORCID = "0000-0002-4232-5669")),
     person("Paul", "Burch", role = "aut",
            comment = c(ORCID = "0000-0002-9853-462X")),
     person(c("Ian", "J."), "Stewart", role = "ctb"),
