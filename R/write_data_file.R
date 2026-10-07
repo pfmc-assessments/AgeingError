@@ -75,11 +75,11 @@ write_data_file <- function(
 
   # replace any NA values with -999 otherwise the tally gets messed up
   if (any(is.na((dat)))) {
-    test_data[is.na(dat)] <- -999
+    dat[is.na(dat)] <- -999
   }
 
   minobs <- min(abs(dat[, -1])) # abs is to avoid counting the -999 values
-  maxobs <- max(dat[, -1])
+  maxobs <- max(dat[, -1], na.rm = TRUE)
   nreaders <- ncol(dat) - 1
   cli::cli_alert_info("Range of observed ages in the data: {minobs} - {maxobs}")
   cli::cli_alert_info("Number of readers: {nreaders}")

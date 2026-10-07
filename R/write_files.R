@@ -33,7 +33,7 @@ write_files <- function(
   if (!is.data.frame(dat)) {
     cli::cli_abort("Input 'dat' must be a data frame or tibble")
   }
-  maxobs <- max(dat[, -1])
+  maxobs <- max(dat[, -1], na.rm = TRUE)
   # fill in any missing default values
   if (is.null(maxage)) {
     maxage <- ceiling(1.2 * maxobs / 5) * 5

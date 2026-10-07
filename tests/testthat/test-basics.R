@@ -31,6 +31,8 @@ test_that("Can create a data file using write_data_file()", {
   testthat::expect_true(file.exists(data_file))
   data_file_read <- readLines(data_file)
   testthat::expect_true(data_file_read[1] == "Range_of_ages")
+  testthat::expect_true(data_file_read[2] == "0 15")
+  testthat::expect_equal(AgeingError:::determine_n_sets(data_file), 1L)
   testthat::expect_true(data_file_read[6] == "3 # readers")
   testthat::expect_true(data_file_read[20] == "3 10 10 10")
   testthat::expect_true(length(data_file_read) == 20)
