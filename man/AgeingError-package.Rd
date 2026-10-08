@@ -23,11 +23,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ian G. Taylor \email{ian.taylor@noaa.gov} (\href{https://orcid.org/0000-0001-8489-2488}{ORCID})
+\strong{Maintainer}: Ian G. Taylor \email{ian.taylor@noaa.gov} (\href{https://orcid.org/0000-0002-4232-5669}{ORCID})
 
 Authors:
 \itemize{
-  \item Ian G. Taylor \email{ian.taylor@noaa.gov} (\href{https://orcid.org/0000-0001-8489-2488}{ORCID})
+  \item Ian G. Taylor \email{ian.taylor@noaa.gov} (\href{https://orcid.org/0000-0002-4232-5669}{ORCID})
   \item Andre E. Punt (\href{https://orcid.org/0000-0001-8489-2488}{ORCID})
   \item Kelli F. Johnson (\href{https://orcid.org/0000-0001-9563-1937}{ORCID})
   \item Paul Burch (\href{https://orcid.org/0000-0002-9853-462X}{ORCID})
