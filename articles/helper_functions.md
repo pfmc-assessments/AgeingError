@@ -165,3 +165,13 @@ internally, then passes the resulting objects to
 and
 [`ProcessResults()`](http://pfmc-assessments.github.io/AgeingError/reference/ProcessResults.md).
 These functions could be called directly as needed.
+
+## Adding data to an SS3 or FIMS model
+
+The output in SS3 format is stored in `out$output$ErrorAndBiasArray`,
+which can be added to an SS3 model as described on the [`run()`
+reference
+page](http://pfmc-assessments.github.io/AgeingError/reference/run.md).
+The output in FIMS format is stored in `out$output$ageing_error_fims`,
+with one matrix per reader, and can be added to a FIMS model similarly;
+that page also explains how to extract and use the ageing error results.

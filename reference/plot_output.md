@@ -76,7 +76,10 @@ plot_output(
 
 ## Value
 
-Returns AIC, AICc, and BIC for fitted model.
+A list containing AIC, AICc, and BIC; the SS3-format
+`ErrorAndBiasArray`; and `ageing_error_fims`, a tibble of FIMS-format
+probability matrices with one column per reader (`reader1`, `reader2`,
+etc.).
 
 ## References
 

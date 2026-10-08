@@ -20,6 +20,8 @@
   : Step-wise model selection
 - [`ageing_comparison()`](http://pfmc-assessments.github.io/AgeingError/reference/ageing_comparison.md)
   : Plot comparison of double age readings
+- [`ageing_error_matrix_to_fims()`](http://pfmc-assessments.github.io/AgeingError/reference/ageing_error_matrix_to_fims.md)
+  : Format an ageing-error probability matrix for FIMS
 - [`cMx()`](http://pfmc-assessments.github.io/AgeingError/reference/cMx.md)
   : Make a column matrix
 - [`determine_n_sets()`](http://pfmc-assessments.github.io/AgeingError/reference/determine_n_sets.md)
