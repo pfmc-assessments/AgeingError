@@ -75,7 +75,7 @@ plot_output <- function(Data,
       )
     }),
     paste0("reader", seq_len(Nreaders))
-  ) |> tibble::as_tibble()
+  ) |> dplyr::as_tibble()
 
   # Estimated age-structure
   AgeStruct <- cbind(0:MaxAge, t(Report$Aprob))
