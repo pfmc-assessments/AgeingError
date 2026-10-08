@@ -17,7 +17,10 @@
 #' @param SaveDir Directory for fitted model
 #' @param verbose Report messages as function runs.
 #' @param ... Additional arguments passed to [ageing_comparison()].
-#' @return Returns AIC, AICc, and BIC for fitted model.
+#' @return A list containing AIC, AICc, and BIC; the SS3-format
+#'   `ErrorAndBiasArray`; and `ageing_error_fims`, a tibble of FIMS-format
+#'   probability matrices with one column per reader (`reader1`, `reader2`,
+#'   etc.).
 #'
 #' @references Punt, A.E., Smith, D.C., KrusicGolub, K., and Robertson, S. 2008.
 #' Quantifying age-reading error for use in fisheries stock assessments,
@@ -64,6 +67,15 @@ plot_output <- function(Data,
   for (i in 1:Nreaders) {
     MisclassArray[i, , ] <- Report$AgeErrOut[i, , ]
   }
+  ageing_error_fims <- stats::setNames(
+    lapply(seq_len(Nreaders), function(ReadI) {
+      ageing_error_matrix_to_fims(
+        probabilities = MisclassArray[ReadI, , ],
+        ages = 0:MaxAge
+      )
+    }),
+    paste0("reader", seq_len(Nreaders))
+  ) |> tibble::as_tibble()
 
   # Estimated age-structure
   AgeStruct <- cbind(0:MaxAge, t(Report$Aprob))
@@ -329,7 +341,8 @@ plot_output <- function(Data,
   ModelSelection <- list(AIC = Aic, AICc = Aicc, BIC = Bic)
   Output <- list(
     ModelSelection = ModelSelection,
-    ErrorAndBiasArray = ErrorAndBiasArray
+    ErrorAndBiasArray = ErrorAndBiasArray,
+    ageing_error_fims = ageing_error_fims
   )
   return(Output)
 }

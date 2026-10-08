@@ -9,6 +9,7 @@ export(RunFn)
 export(SimulatorFn)
 export(StepwiseFn)
 export(ageing_comparison)
+export(ageing_error_matrix_to_fims)
 export(cMx)
 export(estgrowth.vb)
 export(fit)
@@ -22,17 +23,25 @@ export(tally_repeats)
 export(write_data_file)
 export(write_files)
 export(write_specs_file)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,png)
-importFrom(grDevices,rgb)
-importFrom(graphics,hist)
-importFrom(graphics,lines)
-importFrom(graphics,mtext)
-importFrom(graphics,par)
-importFrom(stats,dnorm)
-importFrom(stats,nlminb)
-importFrom(stats,optim)
-importFrom(utils,read.table)
-importFrom(utils,str)
-importFrom(utils,write.csv)
+importFrom(grDevices,
+  dev.off,
+  png,
+  rgb
+)
+importFrom(graphics,
+  hist,
+  lines,
+  mtext,
+  par
+)
+importFrom(stats,
+  dnorm,
+  nlminb,
+  optim
+)
+importFrom(utils,
+  read.table,
+  str,
+  write.csv
+)
 useDynLib(AgeingError, .registration = TRUE)
