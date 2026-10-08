@@ -67,7 +67,7 @@ prepare_run <- function(inputs, directory) {
 #'   out$output$ErrorAndBiasArray[c("Expected_age", "SD"), 1 + 0:maxage, "Reader 1"] |>
 #'   as.data.frame()
 #' r4ss::SS_write(inputlist = ss3_inputs)
-#' 
+#'
 #' # see ageing error in FIMS format (one separate matrix per reader)
 #' out$output$ageing_error_fims[["reader1"]]
 #' # add to a FIMS model (depends on matching the range of ages)
