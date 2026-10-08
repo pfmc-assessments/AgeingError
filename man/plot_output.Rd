@@ -48,7 +48,10 @@ If you pass a vector of strings, the vector must be the same length as
 \item{...}{Additional arguments passed to \code{\link[=ageing_comparison]{ageing_comparison()}}.}
 }
 \value{
-Returns AIC, AICc, and BIC for fitted model.
+A list containing AIC, AICc, and BIC; the SS3-format
+\code{ErrorAndBiasArray}; and \code{ageing_error_fims}, a tibble of FIMS-format
+probability matrices with one column per reader (\code{reader1}, \code{reader2},
+etc.).
 }
 \description{
 Plots age comparisons and results from the fitted Ageing Error model
