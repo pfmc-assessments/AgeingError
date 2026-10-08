@@ -22,12 +22,12 @@ Useful links:
 ## Author
 
 **Maintainer**: Ian G. Taylor <ian.taylor@noaa.gov>
-([ORCID](https://orcid.org/0000-0001-8489-2488))
+([ORCID](https://orcid.org/0000-0002-4232-5669))
 
 Authors:
 
 - Ian G. Taylor <ian.taylor@noaa.gov>
-  ([ORCID](https://orcid.org/0000-0001-8489-2488))
+  ([ORCID](https://orcid.org/0000-0002-4232-5669))
 
 - Andre E. Punt ([ORCID](https://orcid.org/0000-0001-8489-2488))
 

@@ -11,7 +11,7 @@
   [](https://orcid.org/0000-0001-7415-1010)
 
 - **Ian G. Taylor**. Author, maintainer.
-  [](https://orcid.org/0000-0001-8489-2488)
+  [](https://orcid.org/0000-0002-4232-5669)
 
 - **Paul Burch**. Author. [](https://orcid.org/0000-0002-9853-462X)
 
